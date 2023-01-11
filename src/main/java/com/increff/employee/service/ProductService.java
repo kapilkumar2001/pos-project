@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.increff.employee.dao.ProductDao;
+import com.increff.employee.pojo.BrandCategoryPojo;
+import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.util.StringUtil;
 
 @Service
-public class ProductService {
+public class ProductService{
 
 	@Autowired
 	ProductDao dao;
@@ -29,9 +31,17 @@ public class ProductService {
 		else if(StringUtil.isEmpty(String.valueOf(p.getMrp()))) {
 			throw new ApiException("mrp cannot be empty");
 		}
-		else if(StringUtil.isEmpty(String.valueOf(p.getBrand_category()))) {
-			throw new ApiException("brandcategory doesn't exiist");
+		else if(StringUtil.isEmpty(String.valueOf(p.getBrand()))) {
+			throw new ApiException("brand cannot be empty");
 		}
+		else if(StringUtil.isEmpty(String.valueOf(p.getCategory()))) {
+			throw new ApiException("category cannot be empty");
+		}
+		int id = dao.getBrandCategory(p).getId();
+		if(id==0) {
+			throw new ApiException("brand category doesn't exist");
+		}
+		p.setBrand_category(id);
 		dao.insert(p);
 	}
 	
@@ -42,12 +52,23 @@ public class ProductService {
 	
 	@Transactional(rollbackOn = ApiException.class)
 	public ProductPojo get(int id) throws ApiException {
-		return getCheck(id);
+		ProductPojo p = getCheck(id);
+		BrandCategoryPojo b = dao.getBrandCategoryById(p.getBrand_category());
+		p.setBrand(b.getBrand());
+		p.setCategory(b.getCategory());
+		return p;
 	}
 
-	@Transactional
-	public List<ProductPojo> getAll() {
-		return dao.selectAll();
+	@Transactional(rollbackOn = ApiException.class)
+	public List<ProductPojo> getAll() throws ApiException{
+		List<ProductPojo> products = dao.selectAll();
+	    for(ProductPojo p: products)  {
+	    	BrandCategoryPojo b = dao.getBrandCategoryById(p.getBrand_category());
+			p.setBrand(b.getBrand());
+			p.setCategory(b.getCategory());
+		}
+		return products;
+		
 	}
 	
 	@Transactional(rollbackOn  = ApiException.class)
@@ -55,7 +76,9 @@ public class ProductService {
 		normalize(p);
 		ProductPojo ex = getCheck(id);
 		ex.setBarcode(p.getBarcode());
-		ex.setBrand_category(p.getBrand_category());
+		ex.setBrand(p.getBrand());
+		ex.setCategory(p.getCategory());
+		ex.setBrand_category(dao.getBrandCategory(p).getId());
 		ex.setMrp(p.getMrp());
 		ex.setName(p.getName());
 		dao.update(ex);

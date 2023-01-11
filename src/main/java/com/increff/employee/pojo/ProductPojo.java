@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 @Entity
 public class ProductPojo {
@@ -15,6 +16,10 @@ public class ProductPojo {
 	private int brand_category;
 	private String name;
 	private double mrp;
+	@Transient
+	private String brand;
+	@Transient
+	private String category;
 	
 	public int getId() {
 		return id;
@@ -46,5 +51,19 @@ public class ProductPojo {
 	public void setMrp(double mrp) {
 		this.mrp = mrp;
 	}
+	public String getBrand() {
+		return brand;
+	}
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	
+	
 	
 }

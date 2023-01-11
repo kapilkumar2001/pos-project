@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 @Entity
 public class OrderItemPojo {
@@ -15,7 +16,15 @@ public class OrderItemPojo {
 	private int productId;
 	private int quantity;
 	private int sellingPrice;
+	@Transient
+	private String barcode;
 	
+	public String getBarcode() {
+		return barcode;
+	}
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
+	}
 	public int getId() {
 		return id;
 	}

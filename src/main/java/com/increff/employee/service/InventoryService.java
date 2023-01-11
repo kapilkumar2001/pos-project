@@ -30,17 +30,31 @@ public class InventoryService {
 		else if(StringUtil.isEmpty(barcode)) {
 			throw new ApiException("barcode cannot be empty");
 		}
-		dao.insert(p, barcode);
+		InventoryPojo inv = get(barcode);
+		if(inv==null)
+		{
+			dao.insert(p, barcode);
+		}
+		else
+		{
+			update(barcode, inv.getQuantity()+p.getQuantity());
+		}
 	}
 	
 	@Transactional(rollbackOn = ApiException.class)
 	public InventoryPojo get(String barcode) throws ApiException {
-		return getCheck(barcode);
+		InventoryPojo p =  getCheck(barcode);
+		p.setBarcode(barcode);
+		return p;
 	}
 
 	@Transactional
 	public List<InventoryPojo> getAll() {
-		return dao.selectAll();
+		List<InventoryPojo> inventories =  dao.selectAll();
+		for(InventoryPojo p: inventories) {
+			p.setBarcode(dao.getProductById(p.getId()).getBarcode());
+		}
+		return inventories;
 	}
 	
 	@Transactional(rollbackOn  = ApiException.class)
@@ -49,7 +63,6 @@ public class InventoryService {
 	    ex.setQuantity(quantity);
 		dao.update(ex);
 	}
-	
 	
 	@Transactional
 	public InventoryPojo getCheck(String barcode) throws ApiException {

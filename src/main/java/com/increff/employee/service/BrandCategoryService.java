@@ -44,6 +44,11 @@ public class BrandCategoryService{
 		return dao.selectAll();
 	}
 	
+	@Transactional
+	public List<BrandCategoryPojo> getCategories(String brand) {
+		return dao.selectCategories(brand);
+	}
+	
 	@Transactional(rollbackOn  = ApiException.class)
 	public void update(int id, BrandCategoryPojo p) throws ApiException {
 		normalize(p);

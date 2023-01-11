@@ -64,6 +64,28 @@ public class BrandCategoryApiController {
 		service.update(id, p);
 	}
 	
+	@ApiOperation(value = "Gets list of all brands")
+	@RequestMapping(path = "/api/brandcategory/get-brands", method = RequestMethod.GET)
+	public List<String> getAllBrands() {
+		List<BrandCategoryPojo> list = service.getAll();
+		List<String> list2 = new ArrayList<String>();
+		for (BrandCategoryPojo p : list) {
+			list2.add(p.getBrand());
+		}
+		return list2;
+	}
+
+	@ApiOperation(value = "Gets list of all categories by brands")
+	@RequestMapping(path = "/api/brandcategory/get-categories/{brand}", method = RequestMethod.GET)
+	public List<String> getCategories(@PathVariable String brand) {
+		List<BrandCategoryPojo> list = service.getCategories(brand);
+		List<String> list2 = new ArrayList<String>();
+		for (BrandCategoryPojo p : list) {
+			list2.add(p.getCategory());
+		}
+		return list2;
+	}
+	
 	private static BrandCategoryData convert(BrandCategoryPojo p) {
 		BrandCategoryData d = new BrandCategoryData();
 		d.setId(p.getId());

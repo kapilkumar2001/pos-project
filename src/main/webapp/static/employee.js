@@ -32,10 +32,11 @@ function updateEmployee(event){
 	//Get the ID
 	var id = $("#employee-edit-form input[name=id]").val();	
 	var url = getEmployeeUrl() + "/" + id;
-
+    console.log(url)
 	//Set the values to update
 	var $form = $("#employee-edit-form");
 	var json = toJson($form);
+	console.log(json);
 
 	$.ajax({
 	   url: url,

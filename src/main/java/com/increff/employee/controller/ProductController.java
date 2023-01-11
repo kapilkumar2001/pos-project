@@ -48,7 +48,7 @@ public class ProductController {
 
 	@ApiOperation(value = "Gets list of all products")
 	@RequestMapping(path = "/api/product", method = RequestMethod.GET)
-	public List<ProductData> getAll() {
+	public List<ProductData> getAll() throws ApiException {
 		List<ProductPojo> list = service.getAll();
 		List<ProductData> list2 = new ArrayList<ProductData>();
 		for (ProductPojo p : list) {
@@ -69,16 +69,19 @@ public class ProductController {
 		d.setId(p.getId());
 		d.setName(p.getName());
 		d.setBarcode(p.getBarcode());
-		d.setBrand_category(p.getBrand_category());
 		d.setMrp(p.getMrp());
+		d.setBrand(p.getBrand());
+		d.setCategory(p.getCategory());
+		d.setBrandCategory(p.getBrand_category());
 		return d;
 	}
 
 	private static ProductPojo convert(ProductForm f) {
 		ProductPojo p = new ProductPojo();
 		p.setBarcode(f.getBarcode());
-		p.setBrand_category(f.getBrand_category());
 		p.setMrp(f.getMrp());
+		p.setBrand(f.getBrand());
+		p.setCategory(f.getCategory());
 		p.setName(f.getName());
 		return p;
 	}

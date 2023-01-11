@@ -25,5 +25,4 @@ public class OrderPojo {
 		this.time = time;
 	}
 	
-	
 }
