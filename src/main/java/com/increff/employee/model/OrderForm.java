@@ -1,15 +1,17 @@
 package com.increff.employee.model;
 
+import java.util.List;
+
+
 public class OrderForm {
-
-	private String time;
-
-	public String getTime() {
-		return time;
-	}
-
-	public void setTime(String time) {
-		this.time = time;
-	}
+//	private List<OrderItemForm> orders;
+//
+//	public List<OrderItemForm> getOrders() {
+//		return orders;
+//	}
+//
+//	public void setOrders(List<OrderItemForm> orders) {
+//		this.orders = orders;
+//	}
 	
 }

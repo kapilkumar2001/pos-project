@@ -32,7 +32,7 @@ public class InventoryApiController {
 	@RequestMapping(path = "/api/inventory", method= RequestMethod.POST)
 	public void add(@RequestBody InventoryForm form) throws ApiException{
 		InventoryPojo  p = convert(form);
-		service.add(p, form.getBarcode());
+		service.add(p);
 	}
 
 	@ApiOperation(value = "Gets inventory by barcode")
@@ -70,6 +70,7 @@ public class InventoryApiController {
 	private static InventoryPojo convert(InventoryForm f) {
 		InventoryPojo p = new InventoryPojo();
 		p.setQuantity(f.getQuantity());
+		p.setBarcode(f.getBarcode());
 		return p;
 	}
 	

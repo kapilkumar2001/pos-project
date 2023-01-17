@@ -15,7 +15,7 @@ public class OrderItemPojo {
 	private int orderId;
 	private int productId;
 	private int quantity;
-	private int sellingPrice;
+	private double sellingPrice;
 	@Transient
 	private String barcode;
 	
@@ -49,10 +49,10 @@ public class OrderItemPojo {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	public int getSellingPrice() {
+	public double getSellingPrice() {
 		return sellingPrice;
 	}
-	public void setSellingPrice(int sellingPrice) {
+	public void setSellingPrice(double sellingPrice) {
 		this.sellingPrice = sellingPrice;
 	}
 	

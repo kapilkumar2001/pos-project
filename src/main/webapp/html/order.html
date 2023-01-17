@@ -1,0 +1,234 @@
+<!doctype html>
+
+<html lang="en">
+
+<head th:replace="snippets.html :: name_head"></head>
+
+<body>
+
+<nav th:replace="snippets.html :: name_app_navbar"></nav>
+
+<div class="container">
+
+<h3>Orders</h3>
+
+ <!-- Top row with form -->
+
+ <div class="row">
+	 <div class="col-12">
+			<form class="form-inline" id="orders-form">
+                <!-- <div class="form-group">
+                    <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" name="name" id="inputName" placeholder="enter name">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputAge" class="col-sm-2 col-form-label">Age</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" name="age" id="inputAge" placeholder="enter age">
+                    </div>
+                  </div> -->
+			  <button type="button" class="btn btn-primary" id="refresh-data">Refresh</button>
+			  &nbsp;
+			  <button type="button" class="btn btn-primary" id="create-order-button">Create Order</button>
+			</form>
+	 </div>	
+</div> 
+
+
+<!-- Blank Row -->
+<div class="row">
+	&nbsp;
+</div>
+<div class="row">
+
+ <!-- Table -->
+ <div class="col-12">
+	<table class="table table-striped" id="order-table">
+	  <thead>
+	    <tr>
+	      <th scope="col">Order ID</th>
+	      <th scope="col">Order created at</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    <tr>
+	      <td>1</td>
+	      <td>12.30 PM 31-12-2022</td>
+        </tr>
+	  </tbody>
+	</table>
+</div>
+</div>
+
+<!-- order create Modal -->
+<div class="modal" tabindex="-1" role="dialog" id="create-order-modal">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create Order</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+		    <div class="row">
+				<button type="button" class="btn btn-warning" id="add-item" style='margin-left:32px'>Add Item</button>
+			</div>
+		    <div class="row">
+				&nbsp;
+			</div>
+			<!-- order item table -->
+			<div class="col-12">
+				<form class="form-inline" id="order-list-form">
+					<table class="table table-striped" id="order-item-table">
+						<thead>
+							<tr>
+							<th scope="col">Barcode</th>
+							<th scope="col">Quantity</th>
+							<th scope="col">Mrp</th>
+							</tr>
+						</thead>
+						<tbody>
+					    </tbody>
+				    </table>
+			    </form>
+			</div>
+      </div>
+      <div class="modal-footer">
+		<button type="button" class="btn btn-secondary" id="cancel-order">Cancel Order</button>
+        <button type="button" class="btn btn-primary" id="create-order">Create Order</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- view order Modal -->
+<div class="modal" tabindex="-1" role="dialog" id="view-order-modal">
+	<div class="modal-dialog modal-lg" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title">View Order</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">  
+			  <!-- order item table -->
+			  <div class="col-12">
+				  <table class="table table-striped" id="view-order-table">
+				  <thead>
+					  <tr>
+					  <th scope="col">Barcode</th>
+					  <th scope="col">Quantity</th>
+					  <th scope="col">Mrp</th>
+					  </tr>
+				  </thead>
+				  <tbody>
+					  <tr>
+					  <td>qwerty</td>
+					  <td>12</td>
+					  <td>54</td>
+					  </tr>
+				  </tbody>
+				  </table>
+			  </div>
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		</div>
+	  </div>
+	</div>
+  </div>
+  
+
+
+
+
+</div> <!-- Container end-->
+
+<footer th:replace="snippets.html :: name_footer"></footer>
+
+<script th:src="@{/static/order.js}"/></script>
+
+</body>	
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <form class="form-inline" id="order-create-form">
+					<div class="form-group">
+					  <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
+					  <div class="col-sm-10">
+						<input type="text" class="form-control" name="barcode" id="barcode" placeholder="enter barcode">
+					  </div>
+					</div>
+					&nbsp;
+					<div class="form-group">
+					  <label for="inputPrice" class="col-sm-2 col-form-label">Price</label>
+					  <div class="col-sm-10">
+						<input type="number" class="form-control" name="sellingPrice" id="sellingPrice" placeholder="enter price">
+					  </div>
+					</div>
+					&nbsp;
+					<div class="form-group">
+					  <label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label>
+					  <div class="col-sm-10">
+						<input type="number" class="form-control" name="quantity" id="quantity" placeholder="enter quantity">
+					  </div>
+					</div>
+				</form>  -->
+
+
+<!-- order Edit Modal -->
+<!-- <div class="modal" tabindex="-1" role="dialog" id="upload-order-modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title">Upload Order</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+      	<div class="employee-file">
+		  <input type="file" class="custom-file-input" id="employeeFile">
+		  <label class="custom-file-label" for="employeeFile" id="employeeFileName">Choose file</label>
+		</div>
+		<a th:href="@{/sample/employee.tsv}" target="_blank">Download Sample</a> 
+		<br>
+		Rows: <span id="rowCount">0</span>, 
+		Processed: <span id="processCount">0</span>, 
+		Errors: <span id="errorCount">0</span>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="process-data">Upload</button>
+        <button type="button" class="btn btn-warning" id="download-errors">Download Errors</button>
+      </div>
+    </div>
+  </div>
+</div> -->

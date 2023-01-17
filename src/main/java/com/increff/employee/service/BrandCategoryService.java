@@ -15,23 +15,27 @@ import com.increff.employee.util.StringUtil;
 public class BrandCategoryService{
 
 	@Autowired
-	BrandCategoryDao dao;
+	BrandCategoryDao brandCategoryDao;
 	
 	@Transactional(rollbackOn = ApiException.class)
-	public void add(BrandCategoryPojo p) throws ApiException {
-		normalize(p);
-		if(StringUtil.isEmpty(p.getBrand())) {
+	public void add(BrandCategoryPojo brandCategoryPojo) throws ApiException {
+		normalize(brandCategoryPojo);
+		if(StringUtil.isEmpty(brandCategoryPojo.getBrand())) {
 			throw new ApiException("brand name cannot be empty");
 		}
-		else if(StringUtil.isEmpty(p.getCategory())) {
+		else if(StringUtil.isEmpty(brandCategoryPojo.getCategory())) {
 			throw new ApiException("category name cannot be empty");
 		}
-		dao.insert(p);
+		BrandCategoryPojo p = brandCategoryDao.getBrandCategory(brandCategoryPojo.getBrand(), brandCategoryPojo.getCategory());
+		if(p!=null) {
+			throw new ApiException("Brand and Category already exists");
+		}
+		brandCategoryDao.insert(brandCategoryPojo);
 	}
 	
 	@Transactional
 	public void delete(int id) {
-		dao.delete(id);
+		brandCategoryDao.delete(id);
 	}
 	
 	@Transactional(rollbackOn = ApiException.class)
@@ -41,34 +45,46 @@ public class BrandCategoryService{
 
 	@Transactional
 	public List<BrandCategoryPojo> getAll() {
-		return dao.selectAll();
+		return brandCategoryDao.selectAll();
 	}
 	
 	@Transactional
 	public List<BrandCategoryPojo> getCategories(String brand) {
-		return dao.selectCategories(brand);
+		return brandCategoryDao.selectCategories(brand);
 	}
 	
 	@Transactional(rollbackOn  = ApiException.class)
-	public void update(int id, BrandCategoryPojo p) throws ApiException {
-		normalize(p);
-		BrandCategoryPojo ex = getCheck(id);
-		ex.setBrand(p.getBrand());
-		ex.setCategory(p.getCategory());
-		dao.update(ex);
+	public void update(int id, BrandCategoryPojo brandCategoryPojo) throws ApiException {
+		normalize(brandCategoryPojo);
+		
+		if(StringUtil.isEmpty(brandCategoryPojo.getBrand())) {
+			throw new ApiException("brand name cannot be empty");
+		}
+		else if(StringUtil.isEmpty(brandCategoryPojo.getCategory())) {
+			throw new ApiException("category name cannot be empty");
+		}
+		BrandCategoryPojo p = brandCategoryDao.getBrandCategory(brandCategoryPojo.getBrand(), brandCategoryPojo.getCategory());
+		if(p!=null && (p.getId()!=id)) {
+			throw new ApiException("Brand and Category already exists");
+		}
+		
+		BrandCategoryPojo newPojo = getCheck(id);
+		newPojo.setBrand(brandCategoryPojo.getBrand());
+		newPojo.setCategory(brandCategoryPojo.getCategory());
+		brandCategoryDao.update(newPojo);
 	}
 	
 	@Transactional
 	public BrandCategoryPojo getCheck(int id) throws ApiException {
-		BrandCategoryPojo p = dao.select(id);
-		if (p == null) {
+		BrandCategoryPojo brandCategoryPojo = brandCategoryDao.select(id);
+		if (brandCategoryPojo == null) {
 			throw new ApiException("ID does not exit, id: " + id);
 		}
-		return p;
+		return brandCategoryPojo;
 	}
 	
-	protected static void normalize(BrandCategoryPojo p) {
-		p.setBrand(StringUtil.toLowerCase(p.getBrand()));
-		p.setCategory(StringUtil.toLowerCase(p.getCategory()));
+	protected static void normalize(BrandCategoryPojo brandCategoryPojo) {
+		brandCategoryPojo.setBrand(StringUtil.toLowerCase(brandCategoryPojo.getBrand()));
+		brandCategoryPojo.setCategory(StringUtil.toLowerCase(brandCategoryPojo.getCategory()));
 	}
 }

@@ -19,6 +19,8 @@ function addBrandCategory(event){
        },	   
 	   success: function(response) {
 	   		getBrandCategoryList();  
+			$("#brandcategory-form input[name=brand]").val("");
+			$("#brandcategory-form input[name=category]").val("");
 	   },
 	   error: handleAjaxError
 	});

@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.employee.model.ProductData;
 import com.increff.employee.model.ProductForm;
+import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.ApiException;
+import com.increff.employee.service.InventoryService;
 import com.increff.employee.service.ProductService;
 
 import io.swagger.annotations.Api;
@@ -24,65 +26,73 @@ import io.swagger.annotations.ApiOperation;
 public class ProductController {
 
 	@Autowired
-	private ProductService service;
+	private ProductService productService;
+	@Autowired
+	private InventoryService inventoryService;
 	
 	@ApiOperation(value = "Adds product")
 	@RequestMapping(path = "/api/product", method = RequestMethod.POST)
 	public void add(@RequestBody ProductForm form) throws ApiException {
-		ProductPojo p = convert(form);
-		service.add(p);
+		ProductPojo productPojo = convert(form);
+		productService.add(productPojo);
+		
+		// Adds inventory
+		InventoryPojo inventoryPojo = new InventoryPojo();
+		inventoryPojo.setQuantity(0);
+		inventoryPojo.setBarcode(form.getBarcode());
+		inventoryService.add(inventoryPojo);
 	}
 	
 	@ApiOperation(value = "Deletes a product")
 	@RequestMapping(path = "/api/product/{id}", method = RequestMethod.DELETE)
 	public void delete(@PathVariable int id) {
-		service.delete(id);
+		productService.delete(id);
 	}
 
 	@ApiOperation(value = "Gets a product by ID")
 	@RequestMapping(path = "/api/product/{id}", method = RequestMethod.GET)
 	public ProductData get(@PathVariable int id) throws ApiException {
-		ProductPojo p = service.get(id);
-		return convert(p);
+		ProductPojo productPojo = productService.get(id);
+		return convert(productPojo);
 	}
 
 	@ApiOperation(value = "Gets list of all products")
 	@RequestMapping(path = "/api/product", method = RequestMethod.GET)
 	public List<ProductData> getAll() throws ApiException {
-		List<ProductPojo> list = service.getAll();
-		List<ProductData> list2 = new ArrayList<ProductData>();
-		for (ProductPojo p : list) {
-			list2.add(convert(p));
+		List<ProductPojo> productPojoList = productService.getAll();
+		List<ProductData> productDataList = new ArrayList<ProductData>();
+		for (ProductPojo productPojo : productPojoList) {
+			productDataList.add(convert(productPojo));
 		}
-		return list2;
+		return productDataList;
 	}
 
 	@ApiOperation(value = "Updates an product")
 	@RequestMapping(path = "/api/product/{id}", method = RequestMethod.PUT)
-	public void update(@PathVariable int id, @RequestBody ProductForm f) throws ApiException {
-		ProductPojo p = convert(f);
-		service.update(id, p);
+	public void update(@PathVariable int id, @RequestBody ProductForm productForm) throws ApiException {
+		ProductPojo productPojo = convert(productForm);
+		productService.update(id, productPojo);
 	}
 	
-	private static ProductData convert(ProductPojo p) {
-		ProductData d = new ProductData();
-		d.setId(p.getId());
-		d.setName(p.getName());
-		d.setBarcode(p.getBarcode());
-		d.setMrp(p.getMrp());
-		d.setBrand(p.getBrand());
-		d.setCategory(p.getCategory());
-		d.setBrandCategory(p.getBrand_category());
-		return d;
+	private static ProductData convert(ProductPojo productPojo) {
+		ProductData productData = new ProductData();
+		productData.setId(productPojo.getId());
+		productData.setName(productPojo.getName());
+		productData.setBarcode(productPojo.getBarcode());
+		productData.setMrp(productPojo.getMrp());
+		productData.setBrand(productPojo.getBrand());
+		productData.setCategory(productPojo.getCategory());
+		productData.setBrandCategory(productPojo.getBrand_category());
+		return productData;
 	}
 
-	private static ProductPojo convert(ProductForm f) {
-		ProductPojo p = new ProductPojo();
-		p.setBarcode(f.getBarcode());
-		p.setMrp(f.getMrp());
-		p.setBrand(f.getBrand());
-		p.setCategory(f.getCategory());
-		p.setName(f.getName());
-		return p;
+	private static ProductPojo convert(ProductForm productForm) {
+		ProductPojo productPojo = new ProductPojo();
+		productPojo.setBarcode(productForm.getBarcode());
+		productPojo.setMrp(productForm.getMrp());
+		productPojo.setBrand(productForm.getBrand());
+		productPojo.setCategory(productForm.getCategory());
+		productPojo.setName(productForm.getName());
+		return productPojo;
 	}
 }

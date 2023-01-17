@@ -19,8 +19,7 @@ public class ProductDao extends AbstractDao{
 	private static String delete_id = "delete from ProductPojo p where id=:id";
 	private static String select_id = "select p from ProductPojo p where id=:id";
 	private static String select_all = "select p from ProductPojo p";
-	private static String select_brandcategory_by_brand_category = "select p from BrandCategoryPojo p where brand=:brand AND category=:category";
-	private static String select_brandcategory_by_id = "select p from BrandCategoryPojo p where id=:id";
+	private static String select_barcode = "select p from ProductPojo p where barcode=:barcode";
 	
 	@PersistenceContext
 	private EntityManager em;
@@ -50,18 +49,10 @@ public class ProductDao extends AbstractDao{
 	public void update(ProductPojo p) {
 	}
 	
-	// get brandcategory by productpojo
-	public BrandCategoryPojo getBrandCategory(ProductPojo p){
-		TypedQuery<BrandCategoryPojo> query = getQuery(select_brandcategory_by_brand_category, BrandCategoryPojo.class);
-		query.setParameter("brand", p.getBrand());
-		query.setParameter("category", p.getCategory());
-		return getSingle(query);
-	}
-	
-	// get brandcategory by id
-	public BrandCategoryPojo getBrandCategoryById(int id) {
-		TypedQuery<BrandCategoryPojo> query = getQuery(select_brandcategory_by_id, BrandCategoryPojo.class);
-		query.setParameter("id", id);
+	// get product by barcode
+	public ProductPojo getProductByBarcode(String barcode) {
+		TypedQuery<ProductPojo> query = getQuery(select_barcode, ProductPojo.class);
+		query.setParameter("barcode", barcode);
 		return getSingle(query);
 	}
 }

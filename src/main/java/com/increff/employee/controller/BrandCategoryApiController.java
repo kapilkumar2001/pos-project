@@ -29,8 +29,8 @@ public class BrandCategoryApiController {
 	@ApiOperation(value = "Adds brand and category")
 	@RequestMapping(path = "/api/brandcategory", method = RequestMethod.POST)
 	public void add(@RequestBody BrandCategoryForm form) throws ApiException {
-		BrandCategoryPojo p = convert(form);
-		service.add(p);
+		BrandCategoryPojo brandCategoryPojo = convert(form);
+		service.add(brandCategoryPojo);
 	}
 	
 	@ApiOperation(value = "Deletes an brand category")
@@ -42,63 +42,63 @@ public class BrandCategoryApiController {
 	@ApiOperation(value = "Gets an brandcategory by ID")
 	@RequestMapping(path = "/api/brandcategory/{id}", method = RequestMethod.GET)
 	public BrandCategoryData get(@PathVariable int id) throws ApiException {
-		BrandCategoryPojo p = service.get(id);
-		return convert(p);
+		BrandCategoryPojo brandCategoryPojo = service.get(id);
+		return convert(brandCategoryPojo);
 	}
 
 	@ApiOperation(value = "Gets list of all brandcategories")
 	@RequestMapping(path = "/api/brandcategory", method = RequestMethod.GET)
 	public List<BrandCategoryData> getAll() {
 		List<BrandCategoryPojo> list = service.getAll();
-		List<BrandCategoryData> list2 = new ArrayList<BrandCategoryData>();
-		for (BrandCategoryPojo p : list) {
-			list2.add(convert(p));
+		List<BrandCategoryData> newList = new ArrayList<BrandCategoryData>();
+		for (BrandCategoryPojo brandCategoryPojo : list) {
+			newList.add(convert(brandCategoryPojo));
 		}
-		return list2;
+		return newList;
 	}
 
 	@ApiOperation(value = "Updates an brandcategory")
 	@RequestMapping(path = "/api/brandcategory/{id}", method = RequestMethod.PUT)
 	public void update(@PathVariable int id, @RequestBody BrandCategoryForm f) throws ApiException {
-		BrandCategoryPojo p = convert(f);
-		service.update(id, p);
+		BrandCategoryPojo brandCategoryPojo = convert(f);
+		service.update(id, brandCategoryPojo);
 	}
 	
 	@ApiOperation(value = "Gets list of all brands")
 	@RequestMapping(path = "/api/brandcategory/get-brands", method = RequestMethod.GET)
 	public List<String> getAllBrands() {
 		List<BrandCategoryPojo> list = service.getAll();
-		List<String> list2 = new ArrayList<String>();
-		for (BrandCategoryPojo p : list) {
-			list2.add(p.getBrand());
+		List<String> newList = new ArrayList<String>();
+		for (BrandCategoryPojo brandCategoryPojo : list) {
+			newList.add(brandCategoryPojo.getBrand());
 		}
-		return list2;
+		return newList;
 	}
 
 	@ApiOperation(value = "Gets list of all categories by brands")
 	@RequestMapping(path = "/api/brandcategory/get-categories/{brand}", method = RequestMethod.GET)
 	public List<String> getCategories(@PathVariable String brand) {
 		List<BrandCategoryPojo> list = service.getCategories(brand);
-		List<String> list2 = new ArrayList<String>();
+		List<String> newList = new ArrayList<String>();
 		for (BrandCategoryPojo p : list) {
-			list2.add(p.getCategory());
+			newList.add(p.getCategory());
 		}
-		return list2;
+		return newList;
 	}
 	
-	private static BrandCategoryData convert(BrandCategoryPojo p) {
-		BrandCategoryData d = new BrandCategoryData();
-		d.setId(p.getId());
-		d.setBrand(p.getBrand());
-		d.setCategory(p.getCategory());
-		return d;
+	private static BrandCategoryData convert(BrandCategoryPojo brandCategoryPojo) {
+		BrandCategoryData brandCategoryData = new BrandCategoryData();
+		brandCategoryData.setId(brandCategoryPojo.getId());
+		brandCategoryData.setBrand(brandCategoryPojo.getBrand());
+		brandCategoryData.setCategory(brandCategoryPojo.getCategory());
+		return brandCategoryData;
 	}
 
-	private static BrandCategoryPojo convert(BrandCategoryForm f) {
-		BrandCategoryPojo p = new BrandCategoryPojo();
-		p.setBrand(f.getBrand());
-		p.setCategory(f.getCategory());
-		return p;
+	private static BrandCategoryPojo convert(BrandCategoryForm brandCategoryForm) {
+		BrandCategoryPojo brandCategoryPojo = new BrandCategoryPojo();
+		brandCategoryPojo.setBrand(brandCategoryForm.getBrand());
+		brandCategoryPojo.setCategory(brandCategoryForm.getCategory());
+		return brandCategoryPojo;
 	}
 	
 }

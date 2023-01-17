@@ -1,30 +1,22 @@
 package com.increff.employee.model;
 
-import javax.persistence.Transient;
-
 public class OrderItemForm {
 
-	private int orderId;
-	private int quantity;
-	private int sellingPrice;
+	private double quantity;
+	private double sellingPrice;
 	private String barcode;
 	
-	public int getOrderId() {
-		return orderId;
-	}
-	public void setOrderId(int orderId) {
-		this.orderId = orderId;
-	}
-	public int getQuantity() {
+	
+	public double getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(int quantity) {
+	public void setQuantity(double quantity) {
 		this.quantity = quantity;
 	}
-	public int getSellingPrice() {
+	public double getSellingPrice() {
 		return sellingPrice;
 	}
-	public void setSellingPrice(int sellingPrice) {
+	public void setSellingPrice(double sellingPrice) {
 		this.sellingPrice = sellingPrice;
 	}
 	public String getBarcode() {

@@ -23,6 +23,14 @@ function addProduct(event) {
 		},
 		success: function (response) {
 			getProductList();
+
+			$("#product-form input[name=name]").val("");
+			$("#product-form input[name=mrp]").val("");
+			$("#product-form input[name=barcode]").val("");
+			// document.getElementById("inputBrand").selectedIndex = -1;
+			// document.getElementById("inputCategory").selectedIndex = -1;
+			// $("#product-form input[name=category]").val("");
+			// $("#product-form input[name=brand]").val("");
 		},
 		error: handleAjaxError
 	});
