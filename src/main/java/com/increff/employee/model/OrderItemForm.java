@@ -5,7 +5,7 @@ public class OrderItemForm {
 	private double quantity;
 	private double sellingPrice;
 	private String barcode;
-	
+	private int orderItemId;
 	
 	public double getQuantity() {
 		return quantity;
@@ -25,5 +25,10 @@ public class OrderItemForm {
 	public void setBarcode(String barcode) {
 		this.barcode = barcode;
 	}
-	
+	public int getOrderItemId() {
+		return orderItemId;
+	}
+	public void setOrderItemId(int orderItemId) {
+		this.orderItemId = orderItemId;
+	}
 }

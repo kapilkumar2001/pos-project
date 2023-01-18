@@ -13,10 +13,12 @@ import com.increff.employee.dao.OrderDao;
 import com.increff.employee.dao.OrderItemDao;
 import com.increff.employee.dao.ProductDao;
 import com.increff.employee.model.OrderData;
+import com.increff.employee.model.OrderItemData;
 import com.increff.employee.model.OrderItemForm;
 import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
+import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.util.StringUtil;
 
 @Service
@@ -93,6 +95,7 @@ public class OrderService {
 		orderItemDao.insert(orderItemPojo);
 	}
 	
+	
 	@Transactional(rollbackOn = ApiException.class) 
 	public OrderPojo getOrder(int id) throws ApiException{
 		OrderPojo orderPojo = getCheck(id);
@@ -101,7 +104,7 @@ public class OrderService {
 	
 	@Transactional(rollbackOn = ApiException.class) 
 	public OrderData getOrderItems(int orderId) throws ApiException{
-		List<OrderItemPojo> orderItemPojo = orderItemDao.select(orderId);
+		List<OrderItemPojo> orderItemPojo = orderItemDao.selectByOrderId(orderId);
 		OrderPojo orderPojo = getOrder(orderId);
 		return convert(orderPojo, orderItemPojo);
 	}
@@ -114,6 +117,101 @@ public class OrderService {
 			newList.add(getOrderItems(p.getId()));
 		}
 		return newList;
+	}
+	
+	@Transactional(rollbackOn  = ApiException.class)
+	public void update(int orderId, List<OrderItemForm> orderFormList) throws ApiException {
+		OrderPojo orderPojo = getCheck(orderId);
+		
+		OrderData orderData = getOrderItems(orderId);
+		List<OrderItemData> existingOrderItemDataList = orderData.getOrders();
+		List<Integer> existingOrderItemIds = new ArrayList<>();
+		for(OrderItemData orderItemData: existingOrderItemDataList) {
+			existingOrderItemIds.add(orderItemData.getOrderItemId());
+		}
+		
+		List<Integer> newOrderItemIds = new ArrayList<>();
+		
+		for(OrderItemForm orderItemForm: orderFormList)
+		{
+			newOrderItemIds.add(orderItemForm.getOrderItemId());
+			
+			if(StringUtil.isEmpty(orderItemForm.getBarcode())) {
+				throw new ApiException("Barcode can not be empty");
+			}
+			if(orderItemForm.getQuantity()<0) {
+				throw new ApiException("Quantity can not be less than 0");
+			}
+			if(orderItemForm.getSellingPrice()<=0) {
+				throw new ApiException("Selling Price can not be less than or equal to 0");
+			}
+			
+			System.out.println("orderitemid: " + orderItemForm.getOrderItemId());
+			
+			if(orderItemForm.getOrderItemId()==0) {
+				
+				System.out.println("orderItemPojo null");
+				
+				OrderItemPojo orderItemPojoIn = new OrderItemPojo();
+				orderItemPojoIn.setBarcode(orderItemForm.getBarcode());
+				orderItemPojoIn.setOrderId(orderPojo.getId());
+				orderItemPojoIn.setQuantity((int) orderItemForm.getQuantity());
+				orderItemPojoIn.setSellingPrice(orderItemForm.getSellingPrice());
+				addOrderItem(orderItemPojoIn);	
+			}
+			else {
+				
+				OrderItemPojo orderItemPojo = orderItemDao.selectByOrderItemId(orderItemForm.getOrderItemId());
+				OrderItemPojo orderItemPojoTemp = orderItemDao.selectByOrderItemId(orderItemForm.getOrderItemId());
+				int prevQuantity =  orderItemPojoTemp.getQuantity();
+				
+				System.out.println("orderItemPojo not null, updating");
+			
+			    orderItemPojo.setBarcode(orderItemForm.getBarcode());
+			    orderItemPojo.setOrderId(orderPojo.getId());
+			    orderItemPojo.setQuantity((int) orderItemForm.getQuantity());
+				orderItemPojo.setSellingPrice(orderItemForm.getSellingPrice());
+			    
+				normalize(orderItemPojo);
+				
+				ProductPojo productPojo = productDao.getProductByBarcode(orderItemPojo.getBarcode());
+				if(StringUtil.isEmpty(String.valueOf(orderItemPojo.getProductId()))) {
+					throw new ApiException("product doesn't exist, barcode:" + orderItemForm.getBarcode());
+				}
+				orderItemPojo.setProductId(productPojo.getId());
+		
+				// reduce quantity from inventory
+				InventoryPojo inventoryPojo = inventoryService.get(orderItemPojo.getBarcode());
+				
+				System.out.println(orderItemPojo.getBarcode() + "  " + inventoryPojo.getQuantity() + "  " + prevQuantity + " " + orderItemPojo.getQuantity());
+				if(orderItemPojo.getQuantity()>(inventoryPojo.getQuantity() + prevQuantity)) {
+					throw new ApiException("not enough quantity available, barcode: " + orderItemPojo.getBarcode());
+				}
+				
+				inventoryService.update(orderItemPojo.getBarcode(),  (inventoryPojo.getQuantity() + prevQuantity) - orderItemPojo.getQuantity());
+				
+				orderItemDao.update(orderItemPojo);
+			}
+		}
+		
+		for(Integer orderItemId: existingOrderItemIds) {
+			System.out.println("existing orderItem, id:" + orderItemId);
+			
+		}
+		
+		for(Integer orderItemId: newOrderItemIds) {
+			System.out.println("new orderItem, id:" + orderItemId);
+			
+		}
+		
+		
+		existingOrderItemIds.removeAll(newOrderItemIds);
+		
+		for(Integer orderItemId: existingOrderItemIds) {
+			System.out.println("deleting orderItem, id:" + orderItemId);
+			orderItemDao.delete(orderItemId);
+		}
+		
 	}
 	
 	@Transactional
@@ -146,19 +244,22 @@ public class OrderService {
 		orderData.setTime(orderPojo.getTime());
 		orderData.setId(orderPojo.getId());
 		
-		List<OrderItemForm> orderItemFormList = new ArrayList<>();
+		List<OrderItemData> orderItemDataList = new ArrayList<>();
 		
 		for(OrderItemPojo orderItemPojo : orderItemPojoList) {
-			OrderItemForm tmp = new OrderItemForm();
-			
-			tmp.setBarcode(productDao.select(orderItemPojo.getProductId()).getBarcode());
+			OrderItemData tmp = new OrderItemData();
+			ProductPojo productPojo = productDao.select(orderItemPojo.getProductId()); 
+			tmp.setBarcode(productPojo.getBarcode());
 			tmp.setQuantity(orderItemPojo.getQuantity());
 			tmp.setSellingPrice(orderItemPojo.getSellingPrice());
-			
-			orderItemFormList.add(tmp);
+			tmp.setId(orderItemPojo.getOrderId());
+			tmp.setProductId(orderItemPojo.getProductId());
+			tmp.setProductName(productPojo.getName());	
+			tmp.setOrderItemId(orderItemPojo.getId());
+			orderItemDataList.add(tmp);
 		}
 		
-		orderData.setOrders(orderItemFormList);
+		orderData.setOrders(orderItemDataList);
 		return orderData;
 	}
 }

@@ -42,4 +42,10 @@ public class OrderApiController {
 		List<OrderData> orders = orderService.getAllOrders();
 		return orders;
 	}
+	
+	@ApiOperation(value = "Updates an order")
+	@RequestMapping(path = "/api/order/{id}", method = RequestMethod.PUT)
+	public void update(@PathVariable int id, @RequestBody List<OrderItemForm> form) throws ApiException {
+		orderService.update(id, form);
+	}
 }

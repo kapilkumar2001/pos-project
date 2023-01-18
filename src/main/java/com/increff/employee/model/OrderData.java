@@ -6,13 +6,13 @@ public class OrderData extends OrderForm{
 
 	private int id;
 	private String time;
-	private List<OrderItemForm> orders;
+	private List<OrderItemData> orders;
 
-	public List<OrderItemForm> getOrders() {
+	public List<OrderItemData> getOrders() {
 		return orders;
 	}
 
-	public void setOrders(List<OrderItemForm> orders) {
+	public void setOrders(List<OrderItemData> orders) {
 		this.orders = orders;
 	}
 

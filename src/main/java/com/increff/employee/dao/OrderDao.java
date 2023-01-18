@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
+import com.increff.employee.pojo.ProductPojo;
 
 @Repository
 public class OrderDao extends AbstractDao{
@@ -34,6 +35,9 @@ public class OrderDao extends AbstractDao{
 	public List<OrderPojo> selectAll(){
 		TypedQuery<OrderPojo> query = getQuery(select_all, OrderPojo.class);
 		return query.getResultList();
+	}
+	
+	public void update(OrderPojo p) {
 	}
 	
 }

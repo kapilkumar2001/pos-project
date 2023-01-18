@@ -4,6 +4,7 @@ public class OrderItemData extends OrderItemForm{
 
 	private int id;
 	private int productId;
+	private String productName;
 	
 	public int getId() {
 		return id;
@@ -17,4 +18,11 @@ public class OrderItemData extends OrderItemForm{
 	public void setProductId(int productId) {
 		this.productId = productId;
 	}
+	public String getProductName() {
+		return productName;
+	}
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+	
 }
