@@ -97,8 +97,8 @@ function displayOrderList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="viewOrder(' + e.id + ')">View</button>'
-		buttonHtml += '<button onclick="editOrder(' + e.id + ')">Edit</button>'
+		var buttonHtml = '<button onclick="editOrder(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'far fa-edit\' style=\'font-size:18px;color:black;\'></i></button>'
+		buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none; margin-left:8px; background-color:transparent\'><i class=\'fa fa-eye\' style=\'font-size:18px;color:black;\'></i></button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.time + '</td>'
@@ -113,7 +113,7 @@ var tmpc =0;
 function displayOrderItemList(){
 	
 	var $tbody = $('#order-item-table').find('tbody');
-	var buttonHtml = '<button onclick="deleteItem(' + tmpc + ')">Delete</button>'
+	var buttonHtml = '<button onclick="deleteItem(' + tmpc + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fas fa-trash\' style=\'font-size:18px;color:black;\'></i></button>'
 	var row = '<tr id="row' + tmpc + '">'
 	+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpc + '" id="barcode' + tmpc + '" placeholder="enter barcode"></div> </td>'
 	+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpc + '" id="quantity' + tmpc + '" placeholder="enter quantity"></div> </td>'
@@ -184,7 +184,7 @@ function editOrderItems(data){
 		var e = data['orders'][i];
 		var orderId = data['id']; 
 		var $tbody = $('#edit-order-item-table').find('tbody');
-		var buttonHtml = '<button onclick="deleteItem(' + tmpe + ')">Delete</button>'
+		var buttonHtml = '<button onclick="deleteItem(' + tmpe + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fas fa-trash\' style=\'font-size:18px;color:black;\'></i></button>'
 		var row = '<tr id="row' + tmpe + '">'
 		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpe + '" id="barcode' + tmpe + '" value="' + e.barcode +  '" ></div> </td>'
 		+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpe + '" id="quantity' + tmpe + '" value="' + e.quantity +  '"></div> </td>'
@@ -259,7 +259,7 @@ function cancelUpdate(){
 function addIteminEditForm(){
 	var $tbody = $('#edit-order-item-table').find('tbody');
 	
-	var buttonHtml = '<button onclick="deleteItem(' + tmpe + ')">Delete</button>'
+	var buttonHtml = '<button onclick="deleteItem(' + tmpe + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fas fa-trash\' style=\'font-size:18px;color:black;\'></i></button>'
 	var row = '<tr id="row' + tmpe + '">'
 	+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpe + '" id="barcode' + tmpe + '" value="" ></div> </td>'
 	+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpe + '" id="quantity' + tmpe + '" value=""></div> </td>'

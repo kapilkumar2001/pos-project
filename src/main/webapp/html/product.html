@@ -10,63 +10,60 @@
 
 <div class="container">
 
-<h3>Products</h3>
+<h4>Products</h4>
 
  <!-- Top row with form-->
  <div class="row">
 	 <div class="col-12">
 			<form class="form-inline" id="product-form">
-			  <div class="form-group">
-			    <label for="inputName" class="col-sm-2 col-form-label">Product Name</label>
-			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="name" id="inputName" placeholder="enter name">
+				
+			  <div class="form-group row col-4">
+			    <label for="inputName" class="col-sm-4 col-form-label" style="justify-content: left;">Product Name</label>
+			    <div class="col-sm-8">
+			      <input type="text" class="form-control form-control-sm" name="name" id="inputName" placeholder="enter name">
 			    </div>
 			  </div>
-			  <div class="form-group">
-			    <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
-			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="barcode" id="inputBarcode" placeholder="enter barcode">
+			  
+			  <div class="form-group row col-4">
+			    <label for="inputBarcode" class="col-sm-4 col-form-label" style="justify-content: left;">Barcode</label>
+			    <div class="col-sm-8">
+			      <input type="text" class="form-control form-control-sm" name="barcode" id="inputBarcode" placeholder="enter barcode">
 			    </div>
 			  </div>
-              <div class="form-group">
-			    <label for="inputMrp" class="col-sm-2 col-form-label">Mrp</label>
-			    <div class="col-sm-10">
-			      <input type="number" class="form-control" name="mrp" id="inputMrp" placeholder="enter mrp">
+			 
+              <div class="form-group row col-4">
+			    <label for="inputMrp" class="col-sm-4 col-form-label" style="justify-content: left;">Mrp</label>
+			    <div class="col-sm-8">
+			      <input type="number" class="form-control form-control-sm" name="mrp" id="inputMrp" placeholder="enter mrp">
 			    </div>
-			  </div>
-			  <div class="form-group">
-				<label for="inputBrand" class="col-sm-2 col-form-label">Select Brand</label>
-				<div class="col-sm-10" id="brands-dropdown">
-					<select class="form-control" name="brand" id="inputBrand">
-						<!-- <option value="volvo">Volvo</option>
-						<option value="saab">Saab</option>
-						<option value="opel">Opel</option>
-						<option value="audi">Audi</option> -->
+			  </div> 
+
+			  <div class="form-group row col-4">
+				<label for="inputBrand" class="col-sm-4 col-form-label" style="justify-content: left;">Brand</label>
+				<div class="col-sm-8" id="brands-dropdown">
+					<select class="form-control form-control-sm" name="brand" id="inputBrand">
 					  </select> 
 				</div> 
 			  </div>
-			  <div class="form-group">
-				<label for="inputCategory" class="col-sm-2 col-form-label">Select Category</label>
-				<div class="col-sm-10">
-					<select class="form-control" name="category" id="inputCategory">
+			
+			  <div class="form-group row col-4">
+				<label for="inputCategory" class="col-sm-4 col-form-label" style="justify-content: left;">Category</label>
+				<div class="col-sm-8">
+					<select class="form-control form-control-sm" name="category" id="inputCategory">
 						<option value='' disabled selected style='display: none'>Select Brand First</option>
-						<!-- <option value="saab">Saab</option>
-						<option value="opel">Opel</option>
-						<option value="audi">Audi</option> -->
 					  </select> 
 				</div> 
 			  </div>
-			  <!-- <div class="form-group">
-			    <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
-			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="category" id="inputCategory" placeholder="enter category">
-			    </div>
-			  </div> -->
-			  <button type="button" class="btn btn-primary" id="add-product">Add</button>
-			  &nbsp;
-			  <button type="button" class="btn btn-primary" id="refresh-data">Refresh</button>
-			  &nbsp;
-			  <button type="button" class="btn btn-primary" id="upload-data">Upload</button>
+			  
+			  <div class="form-group row col-4" style="justify-content: center;">
+				<button type="button" class="btn btn-primary btn-sm" id="add-product"><i class='fa fa-plus' style='font-size:16px;color:white; padding-right: 4px;'></i>Add</button>
+				&nbsp; &nbsp;
+				<button type="button" class="btn btn-primary btn-sm" id="refresh-data"><i class='fas fa-sync-alt' style='font-size:16px;color:white;padding-right: 4px;'></i>Refresh</button>
+				&nbsp; &nbsp;
+				<button type="button" class="btn btn-primary btn-sm" id="upload-data"><i class='fa fa-upload' style='font-size:16px;color:white;padding-right: 4px;'></i>Upload</button>
+			  </div>
+			
+			  
 			</form>
 	 </div>	
 </div> 
@@ -119,35 +116,35 @@
         </button>
       </div>
       <div class="modal-body">
-			<form class="form-inline" id="product-edit-form">
-			  <div class="form-group">
-			    <label for="inputName" class="col-sm-2 col-form-label">Product Name</label>
+			<form id="product-edit-form">
+			  <div class="form-group row">
+			    <label for="inputName" class="col-sm-2 col-form-label">Name</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="name" placeholder="enter product name">
+			      <input type="text" class="form-control form-control-sm" name="name" placeholder="enter product name">
 			    </div>
 			  </div>
-			  <div class="form-group">
+			  <div class="form-group row">
 			    <label for="inputMrp" class="col-sm-2 col-form-label">Mrp</label>
 			    <div class="col-sm-10">
-			      <input type="number" class="form-control" name="mrp" placeholder="enter mrp">
+			      <input type="number" class="form-control form-control-sm" name="mrp" placeholder="enter mrp">
 			    </div>
 			  </div>
-			  <div class="form-group">
+			  <div class="form-group row">
 			    <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="barcode" placeholder="enter barcode">
+			      <input type="text" class="form-control form-control-sm" name="barcode" placeholder="enter barcode">
 			    </div>
 			   </div>
-				<div class="form-group">
+				<div class="form-group row">
 					<label for="editinputBrand" class="col-sm-2 col-form-label">Brand</label>
 					<div class="col-sm-10">
-					  <input type="text" class="form-control" name="brand" placeholder="enter brand">
+					  <input type="text" class="form-control form-control-sm" name="brand" placeholder="enter brand">
 					</div>
 				  </div>
-				  <div class="form-group">
+				  <div class="form-group row">
 					<label for="editinputCategory" class="col-sm-2 col-form-label">Category</label>
 					<div class="col-sm-10">
-					  <input type="text" class="form-control" name="category" placeholder="enter category">
+					  <input type="text" class="form-control form-control-sm" name="category" placeholder="enter category">
 					</div>
 				  </div>
 			    
@@ -155,8 +152,8 @@
 			</form>        
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="update-product">Update</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class='fa fa-close' style='font-size:16px;color:white; padding-right: 4px;'></i>Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm" id="update-product"><i class='fa fa-check' style='font-size:16px;color:white; padding-right: 4px;'></i>Update</button>
       </div>
     </div>
   </div>
@@ -188,9 +185,9 @@
       </div>
       
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="process-data">Upload</button>
-        <button type="button" class="btn btn-warning" id="download-errors">Download Errors</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class='fa fa-close' style='font-size:16px;color:white; padding-right: 4px;'></i>Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm" id="process-data"><i class='fa fa-upload' style='font-size:16px;color:white;padding-right: 4px;'></i>Upload</button>
+        <button type="button" class="btn btn-warning btn-sm" id="download-errors"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>
       </div>
     </div>
   </div>

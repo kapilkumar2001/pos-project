@@ -180,8 +180,8 @@ function displayProductList(data) {
 	$tbody.empty();
 	for (var i in data) {
 		var e = data[i];
-		var buttonHtml = '<button onclick="deleteProduct(' + e.id + ')">delete</button>'
-		buttonHtml += ' <button onclick="displayEditProduct(' + e.id + ')">edit</button>'
+		var buttonHtml = '<button onclick="displayEditProduct(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'far fa-edit\' style=\'font-size:18px;color:black;\'></i></button>'
+		buttonHtml += '<button onclick="deleteProduct(' + e.id + ')" style=\'border: none; margin-left:8px; background-color:transparent\'><i class=\'fas fa-trash\' style=\'font-size:18px;color:black;\'></i></button>'
 		var row = '<tr>'
 			+ '<td>' + e.id + '</td>'
 			+ '<td>' + e.name + '</td>'
@@ -198,7 +198,7 @@ function displayProductList(data) {
 function displayBrandList(data) {
 	var $select = $('#inputBrand');
 	$select.empty();
-	var row = "<option value='' disabled selected style='display: none'>Please Choose</option>";
+	var row = "<option value='' disabled selected style='display: none'>Please Choose Brand</option>";
 	$select.append(row);
 	for (var i in data) {
 		var e = data[i];

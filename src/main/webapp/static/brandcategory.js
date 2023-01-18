@@ -142,8 +142,8 @@ function displayBrandCategoryList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="deleteBrandCategory(' + e.id + ')">delete</button>'
-		buttonHtml += ' <button onclick="displayEditBrandCategory(' + e.id + ')">edit</button>'
+		var buttonHtml = '<button onclick="displayEditBrandCategory(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'far fa-edit\' style=\'font-size:18px;color:black;\'></i></button>'
+		buttonHtml += '<button onclick="deleteBrandCategory(' + e.id + ')" style=\'border: none; margin-left:8px; background-color:transparent\'><i class=\'fas fa-trash\' style=\'font-size:18px;color:black;\'></i></button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.brand + '</td>'
