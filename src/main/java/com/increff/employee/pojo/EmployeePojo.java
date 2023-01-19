@@ -7,7 +7,6 @@ import javax.persistence.Id;
 
 @Entity
 public class EmployeePojo {
-
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;

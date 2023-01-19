@@ -5,7 +5,10 @@ public class OrderItemData extends OrderItemForm{
 	private int id;
 	private int productId;
 	private String productName;
-	
+	private double amount;
+
+
+
 	public int getId() {
 		return id;
 	}
@@ -23,6 +26,13 @@ public class OrderItemData extends OrderItemForm{
 	}
 	public void setProductName(String productName) {
 		this.productName = productName;
+	}
+	public double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(double amount) {
+		this.amount = amount;
 	}
 	
 }

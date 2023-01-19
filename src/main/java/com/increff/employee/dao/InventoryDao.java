@@ -4,17 +4,10 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
-
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
-
-import com.increff.employee.controller.OrderApiController;
-import com.increff.employee.pojo.BrandCategoryPojo;
 import com.increff.employee.pojo.InventoryPojo;
-import com.increff.employee.pojo.ProductPojo;
 
 
 
