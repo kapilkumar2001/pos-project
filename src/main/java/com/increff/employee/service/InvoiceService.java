@@ -30,9 +30,18 @@ public class InvoiceService {
     public void generateInvoice(int orderId) throws ApiException {
 
         OrderPojo orderPojo = orderDao.select(orderId);
+
         if(orderPojo == null) {
             throw new ApiException("order with this id doesn't exist, orderId: " + orderId);
         }
+
+        if(orderPojo.getStatus()=="invoiced"){
+            return;
+        }
+
+        // update order status to from created to invoiced
+        orderPojo.setStatus("invoiced");
+        orderDao.update(orderPojo);
 
         List<OrderItemPojo> orderItemPojoList = orderItemDao.selectByOrderId(orderId);
 
