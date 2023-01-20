@@ -299,6 +299,7 @@ function addIteminEditForm(){
 function getInvoice(id){
 	var url = getInvoiceUrl() + '/' + id;
 	window.open(url, '_blank');
+	getOrderList();
 }
 
 function generateInvoice(id){
@@ -327,6 +328,7 @@ function init(){
 	$('#update-order').click(updateOrder);
 	$('#cancel-update').click(cancelUpdate);
 	$('#edit-add-item').click(addIteminEditForm);
+	$('#refresh-data').click(getOrderList);
 }
 
 $(document).ready(init);

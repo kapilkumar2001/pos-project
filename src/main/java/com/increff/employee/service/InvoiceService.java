@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +54,7 @@ public class InvoiceService {
         orderFopObject.setOrderId(orderPojo.getId());
         orderFopObject.setTime(orderPojo.getTime());
 
+        DecimalFormat dec = new DecimalFormat("#.##");
         double totalAmount = 0;
         List<OrderItemData> orderItemDataList = new ArrayList<>();
         for(OrderItemPojo orderItemPojo : orderItemPojoList) {
@@ -60,18 +62,18 @@ public class InvoiceService {
             ProductPojo productPojo = productDao.select(orderItemPojo.getProductId());
             orderItemData.setBarcode(productPojo.getBarcode());
             orderItemData.setQuantity(orderItemPojo.getQuantity());
-            orderItemData.setSellingPrice(orderItemPojo.getSellingPrice());
+            orderItemData.setSellingPrice(Double.valueOf(dec.format(orderItemPojo.getSellingPrice())));
             orderItemData.setId(orderItemPojo.getOrderId());
             orderItemData.setProductId(orderItemPojo.getProductId());
             orderItemData.setProductName(productPojo.getName());
             orderItemData.setOrderItemId(orderItemPojo.getId());
             double amount = orderItemPojo.getQuantity()*orderItemPojo.getSellingPrice();
-            orderItemData.setAmount(amount);
+            orderItemData.setAmount(Double.valueOf(dec.format(amount)));
             totalAmount += amount;
             orderItemDataList.add(orderItemData);
         }
         orderFopObject.setOrders(orderItemDataList);
-        orderFopObject.setTotalAmount(totalAmount);
+        orderFopObject.setTotalAmount(Double.valueOf(dec.format(totalAmount)));
 
 
         PDFHandler handler = new PDFHandler();
