@@ -14,6 +14,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,4 +86,37 @@ public class InvoiceService {
         }
 
     }
+
+
+    public byte[] readFully(InputStream stream) throws IOException
+    {
+        byte[] buffer = new byte[8192];
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        int bytesRead;
+        while ((bytesRead = stream.read(buffer)) != -1)
+        {
+            baos.write(buffer, 0, bytesRead);
+        }
+        return baos.toByteArray();
+    }
+
+    public byte[] loadFile(String sourcePath) throws IOException
+    {
+        InputStream inputStream = null;
+        try 
+        {
+            inputStream = new FileInputStream(new File(sourcePath));
+            return readFully(inputStream);
+        } 
+        finally
+        {
+            if (inputStream != null)
+            {
+                inputStream.close();
+            }
+        }
+    }
+
+
 }

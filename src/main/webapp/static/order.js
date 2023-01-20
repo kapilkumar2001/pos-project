@@ -2,6 +2,10 @@ function getOrderUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/order";
 }
+function getInvoiceUrl(){
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/invoice";
+}
 
 //BUTTON ACTIONS
 
@@ -101,15 +105,15 @@ function displayOrderList(data){
 
 		if(e.status=='invoiced'){
 			console.log(e.status + " not edit " + e.id);
-            buttonHtml += '<button onclick="" style=\'border: none;margin-right:8px; background-color:transparent\' disabled><i class=\'far fa-edit\' style=\'font-size:18px;color:gray;\'></i></button>'
-			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none; margin-left:8px; background-color:transparent\'><i class=\'fa fa-eye\' style=\'font-size:18px;color:black;\'></i></button>'
-			buttonHtml += '<button onclick="showInvoice(' + e.id + ')" style=\'border: none; margin-left:8px; background-color:transparent\'><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
+            buttonHtml += '<button onclick="" style=\'border: none;margin-right:16px; background-color:transparent\' disabled><i class=\'far fa-edit\' style=\'font-size:18px;color:gray;\'></i></button>'
+			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none; background-color:transparent\'><i class=\'fa fa-eye\' style=\'font-size:18px;color:black;\'></i></button>'
+			buttonHtml += '<button onclick="getInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\'><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
 		}
 		else{
 			console.log(e.status + " edit " + e.id);
-            buttonHtml += '<button onclick="editOrder(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'far fa-edit\' style=\'font-size:18px;color:black;\'></i></button>'
-			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none; margin-left:8px; background-color:transparent\'><i class=\'fa fa-eye\' style=\'font-size:18px;color:black;\'></i></button>'
-			buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:8px; background-color:transparent\'><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
+            buttonHtml += '<button onclick="editOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\'><i class=\'far fa-edit\' style=\'font-size:18px;color:black;\'></i></button>'
+			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none; background-color:transparent\'><i class=\'fa fa-eye\' style=\'font-size:18px;color:black;\'></i></button>'
+			buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\'><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
 		}
 		
 		var row = '<tr>'
@@ -285,6 +289,32 @@ function addIteminEditForm(){
 	$tbody.prepend(row);
 	tmpe=tmpe+1;
 	
+}
+
+
+
+
+// Invoice functions
+
+function getInvoice(id){
+	var url = getInvoiceUrl() + '/' + id;
+	window.open(url, '_blank');
+}
+
+function generateInvoice(id){
+	var url = getInvoiceUrl() + '/' + id;
+	$.ajax({
+	   url: url,
+	   type: 'POST',
+	   headers: {
+       	'Content-Type': 'application/json'
+       },	   
+	   success: function(response) {
+	   		getInvoice(id);  
+	   },
+	   error: handleAjaxError
+	});
+	return false;
 }
 
 
