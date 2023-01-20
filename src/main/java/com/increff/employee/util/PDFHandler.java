@@ -32,7 +32,7 @@ public class PDFHandler {
 
     public String createPDFFile(int orderId, ByteArrayOutputStream xmlSource, String templateFilePath) throws IOException {
 
-        File file = new File("src/main/resources/com/increff/employee/invoices/invoice-" + orderId + ".pdf");
+        File file = new File("src/main/webapp/static/invoices/invoice-" + orderId + ".pdf");
         file.createNewFile();
 
         URL url = new File(templateFilePath + PRESCRIPTION_URL).toURI().toURL();

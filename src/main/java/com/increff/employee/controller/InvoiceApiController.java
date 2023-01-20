@@ -34,7 +34,7 @@ public class InvoiceApiController {
     @RequestMapping(path="api/invoice/{id}", method=RequestMethod.GET)
     public ResponseEntity<byte[]> getInvoice(@PathVariable int id) throws IOException  {
 
-        String sourcePath = "src/main/resources/com/increff/employee/invoices/invoice-" + id + ".pdf";
+        String sourcePath = "src/main/webapp/static/invoices/invoice-" + id + ".pdf";
         byte[] contents = invoiceService.loadFile(sourcePath);
 
         HttpHeaders headers = new HttpHeaders();
