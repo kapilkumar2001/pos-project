@@ -225,6 +225,7 @@ public class OrderService {
 	
 	protected static void normalize(OrderPojo orderPojo) {
 		orderPojo.setTime(StringUtil.toLowerCase(getTimestamp()));
+		orderPojo.setStatus("created");
 	}
 	
 	protected static void normalize(OrderItemPojo orderItemPojo) {
@@ -243,6 +244,7 @@ public class OrderService {
 		OrderData orderData = new OrderData();
 		orderData.setTime(orderPojo.getTime());
 		orderData.setId(orderPojo.getId());
+		orderData.setStatus(orderPojo.getStatus());
 		
 		List<OrderItemData> orderItemDataList = new ArrayList<>();
 		
