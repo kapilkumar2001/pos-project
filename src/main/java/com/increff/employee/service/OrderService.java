@@ -86,11 +86,11 @@ public class OrderService {
 		}
 		
 		// reduce quantity in inventory
-		InventoryPojo inventoryPojo = inventoryService.get(orderItemPojo.getBarcode());
+		InventoryPojo inventoryPojo = inventoryService.get(orderItemPojo.getProductId(), orderItemPojo.getBarcode());
 		if(orderItemPojo.getQuantity()>inventoryPojo.getQuantity()) {
 			throw new ApiException("not enough quantity available, barcode: " + orderItemPojo.getBarcode());
 		}
-		inventoryService.update(orderItemPojo.getBarcode(),  inventoryPojo.getQuantity() - orderItemPojo.getQuantity());
+		inventoryService.update(orderItemPojo.getProductId(), orderItemPojo.getBarcode(),  inventoryPojo.getQuantity() - orderItemPojo.getQuantity());
 		
 		orderItemDao.insert(orderItemPojo);
 	}
@@ -181,14 +181,14 @@ public class OrderService {
 				orderItemPojo.setProductId(productPojo.getId());
 		
 				// reduce quantity from inventory
-				InventoryPojo inventoryPojo = inventoryService.get(orderItemPojo.getBarcode());
+				InventoryPojo inventoryPojo = inventoryService.get(orderItemPojo.getProductId(), orderItemPojo.getBarcode());
 				
 				System.out.println(orderItemPojo.getBarcode() + "  " + inventoryPojo.getQuantity() + "  " + prevQuantity + " " + orderItemPojo.getQuantity());
 				if(orderItemPojo.getQuantity()>(inventoryPojo.getQuantity() + prevQuantity)) {
 					throw new ApiException("not enough quantity available, barcode: " + orderItemPojo.getBarcode());
 				}
 				
-				inventoryService.update(orderItemPojo.getBarcode(),  (inventoryPojo.getQuantity() + prevQuantity) - orderItemPojo.getQuantity());
+				inventoryService.update(orderItemPojo.getProductId(), orderItemPojo.getBarcode(),  (inventoryPojo.getQuantity() + prevQuantity) - orderItemPojo.getQuantity());
 				
 				orderItemDao.update(orderItemPojo);
 			}

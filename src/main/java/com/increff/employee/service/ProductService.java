@@ -6,9 +6,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.increff.employee.dao.BrandCategoryDao;
 import com.increff.employee.dao.ProductDao;
-import com.increff.employee.pojo.BrandCategoryPojo;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.util.StringUtil;
 
@@ -17,8 +15,6 @@ public class ProductService{
 
 	@Autowired
 	private ProductDao productDao;
-	@Autowired
-	private BrandCategoryDao brandCategoryDao;
 	
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(ProductPojo productPojo) throws ApiException {
@@ -38,17 +34,15 @@ public class ProductService{
 		else if(StringUtil.isEmpty(String.valueOf(productPojo.getCategory()))) {
 			throw new ApiException("category cannot be empty");
 		}
+		if(productPojo.getBrand_category()==0) {
+			throw new ApiException("brand & category combination doesn't exist");
+		}
 		
 		ProductPojo tmpPojo = productDao.getProductByBarcode(productPojo.getBarcode());
 		if(tmpPojo!=null) {
 			throw new ApiException("Product with this barcode already exist, barcode: "+ productPojo.getBarcode());
 		}
-		
-		int id = brandCategoryDao.getBrandCategory(productPojo.getBrand(), productPojo.getCategory()).getId();
-		if(id==0) {
-			throw new ApiException("brand & category doesn't exist");
-		}
-		productPojo.setBrand_category(id);
+
 		productDao.insert(productPojo);
 	}
 	
@@ -60,20 +54,12 @@ public class ProductService{
 	@Transactional(rollbackOn = ApiException.class)
 	public ProductPojo get(int id) throws ApiException {
 		ProductPojo p = getCheck(id);
-		BrandCategoryPojo b = brandCategoryDao.select(p.getBrand_category());
-		p.setBrand(b.getBrand());
-		p.setCategory(b.getCategory());
 		return p;
 	}
 
 	@Transactional(rollbackOn = ApiException.class)
 	public List<ProductPojo> getAll() throws ApiException{
 		List<ProductPojo> products = productDao.selectAll();
-	    for(ProductPojo p: products)  {
-	    	BrandCategoryPojo b = brandCategoryDao.select(p.getBrand_category());
-			p.setBrand(b.getBrand());
-			p.setCategory(b.getCategory());
-		}
 		return products;	
 	}
 	
@@ -95,22 +81,20 @@ public class ProductService{
 		else if(StringUtil.isEmpty(String.valueOf(productPojo.getCategory()))) {
 			throw new ApiException("category cannot be empty");
 		}
+		if(productPojo.getBrand_category()==0) {
+			throw new ApiException("brand & category combination doesn't exist");
+		}
 		
 		ProductPojo tmpPojo = productDao.getProductByBarcode(productPojo.getBarcode());
 		if(tmpPojo!=null && tmpPojo.getId()!=id) {
 			throw new ApiException("Product with this barcode already exist, barcode: "+ productPojo.getBarcode());
 		}
-		
-		int brandCategoryId = brandCategoryDao.getBrandCategory(productPojo.getBrand(), productPojo.getCategory()).getId();
-		if(brandCategoryId==0) {
-			throw new ApiException("brand & category combination doesn't exist");
-		}
-		
+
 		ProductPojo newPojo = getCheck(id);
 		newPojo.setBarcode(productPojo.getBarcode());
 		newPojo.setBrand(productPojo.getBrand());
 		newPojo.setCategory(productPojo.getCategory());
-		newPojo.setBrand_category(brandCategoryId);
+		newPojo.setBrand_category(productPojo.getBrand_category());
 		newPojo.setMrp(productPojo.getMrp());
 		newPojo.setName(productPojo.getName());
 		productDao.update(newPojo);
@@ -123,6 +107,15 @@ public class ProductService{
 			throw new ApiException("ID does not exit, id: " + id);
 		}
 		return p;
+	}
+
+	@Transactional
+	public ProductPojo getProductByBarcode(String barcode) throws ApiException{
+		ProductPojo productPojo = productDao.getProductByBarcode(barcode);
+		if(productPojo==null) {
+			throw new ApiException("product with this barcode doesn't exist, barcode: "+ barcode);
+		}
+		return productPojo;
 	}
 	
 	protected static void normalize(ProductPojo p) {

@@ -15,7 +15,7 @@ import com.increff.employee.util.StringUtil;
 public class BrandCategoryService{
 
 	@Autowired
-	BrandCategoryDao brandCategoryDao;
+	private BrandCategoryDao brandCategoryDao;
 	
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(BrandCategoryPojo brandCategoryPojo) throws ApiException {
@@ -81,6 +81,11 @@ public class BrandCategoryService{
 			throw new ApiException("ID does not exit, id: " + id);
 		}
 		return brandCategoryPojo;
+	}
+
+	@Transactional
+	public BrandCategoryPojo getBrandCategory(String brand, String category){
+		return brandCategoryDao.getBrandCategory(brand, category);
 	}
 	
 	protected static void normalize(BrandCategoryPojo brandCategoryPojo) {

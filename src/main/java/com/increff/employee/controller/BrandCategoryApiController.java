@@ -1,6 +1,5 @@
 package com.increff.employee.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.increff.employee.dto.BrandCategoryDto;
@@ -13,9 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.employee.model.BrandCategoryData;
 import com.increff.employee.model.BrandCategoryForm;
-import com.increff.employee.pojo.BrandCategoryPojo;
 import com.increff.employee.service.ApiException;
-import com.increff.employee.service.BrandCategoryService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,7 +21,7 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 public class BrandCategoryApiController {
 	@Autowired
-	BrandCategoryDto brandCategoryDto;
+	private BrandCategoryDto brandCategoryDto;
 	
 	@ApiOperation(value = "Adds brand and category")
 	@RequestMapping(path = "/api/brandcategory", method = RequestMethod.POST)

@@ -1,6 +1,5 @@
 package com.increff.employee.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.employee.model.ProductData;
 import com.increff.employee.model.ProductForm;
-import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.ApiException;
 import com.increff.employee.dto.ProductDto;
 
