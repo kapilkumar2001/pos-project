@@ -28,7 +28,7 @@ public class BrandCategoryService{
 		}
 		BrandCategoryPojo p = brandCategoryDao.getBrandCategory(brandCategoryPojo.getBrand(), brandCategoryPojo.getCategory());
 		if(p!=null) {
-			throw new ApiException("Brand and Category already exists");
+			throw new ApiException("This brand-category combination already exists");
 		}
 		brandCategoryDao.insert(brandCategoryPojo);
 	}
