@@ -59,7 +59,7 @@ public class SalesReportService {
                 List<OrderPojo> orderPojoList = orderDao.selectByTime(startDateTime, endDateTime);
 
                 for(OrderPojo orderPojo: orderPojoList){
-                    System.out.println(orderPojo.getTime());
+                  
 
                     List<OrderItemPojo> orderItemPojoList = orderItemDao.selectByOrderId(orderPojo.getId());
 
@@ -114,7 +114,7 @@ public class SalesReportService {
                 List<OrderPojo> orderPojoList = orderDao.selectByTime(startDateTime, endDateTime);
 
                 for(OrderPojo orderPojo: orderPojoList){
-                    System.out.println(orderPojo.getTime());
+                   
 
                     List<OrderItemPojo> orderItemPojoList = orderItemDao.selectByOrderId(orderPojo.getId());
 

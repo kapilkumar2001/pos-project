@@ -84,7 +84,6 @@ public class InvoiceService {
         PDFHandler handler = new PDFHandler();
         String templateFilePath ="src/main/resources/com/increff/employee/";
 
-        System.out.println("generating pdf for order id:" + orderId);
         try {
             ByteArrayOutputStream streamSource = handler.getXMLSource(orderFopObject);
             handler.createPDFFile(orderId,streamSource,templateFilePath);
