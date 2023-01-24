@@ -17,7 +17,7 @@ public class SalesReportApiController {
     private SalesReportService salesReportService;
 
     @ApiOperation(value = "Gets salesreport data")
-    @RequestMapping(path = "/api/sales-report/", method = RequestMethod.GET)
+    @RequestMapping(path = "/api/sales-report/{startDate}/{endDate}/{brand}/{category}", method = RequestMethod.GET)
     public List<SalesReportData> get(
         @RequestParam(value="startdate", defaultValue = "2023-01-24") String startDate,
         @RequestParam(value="enddate", defaultValue = "2023-01-26") String endDate,
