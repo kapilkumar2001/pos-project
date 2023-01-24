@@ -11,8 +11,9 @@ function getSalesReport() {
     var endDate = $("#sales-report-form input[name=endDate]").val();
 
 
-	var url = getSalesReportUrl() + "/" + startDate + "/" + endDate + "/" + brand + "/" + category;
-    console.log(url);
+	var url = getSalesReportUrl() + '/?startdate=' + startDate + '&enddate=' + endDate + '&brand=' + brand + '&category=' + category;
+
+    console.log("url = " + url);
 	$.ajax({
 		url: url,
 		type: 'GET',

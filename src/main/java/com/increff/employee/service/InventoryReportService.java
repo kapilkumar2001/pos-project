@@ -31,8 +31,7 @@ public class InventoryReportService {
         List<BrandCategoryPojo> brandCategoryPojoList = brandCategoryDao.selectAll();
 
         for(BrandCategoryPojo brandCategoryPojo: brandCategoryPojoList){
-            // System.out.println("brandcategorypojo:  " + brandCategoryPojo.getId() + " " + brandCategoryPojo.getBrand() + " " + brandCategoryPojo.getCategory());
-
+            
             InventoryReportData inventoryReportData = new InventoryReportData();
             inventoryReportData.setBrand(brandCategoryPojo.getBrand());
             inventoryReportData.setCategory(brandCategoryPojo.getCategory());
