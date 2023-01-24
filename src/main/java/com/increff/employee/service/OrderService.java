@@ -1,6 +1,7 @@
 package com.increff.employee.service;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +39,7 @@ public class OrderService {
 	public void createOrder(List<OrderItemForm> form) throws ApiException{
 		OrderPojo orderPojo = new OrderPojo();
 		normalize(orderPojo);
-		if(StringUtil.isEmpty(orderPojo.getTime())) {
-			throw new ApiException("Something wrong! Please try again!");
-		}
+		
 		orderDao.insert(orderPojo);
 		
 		for(OrderItemForm orderItemForm: form)
@@ -224,7 +223,7 @@ public class OrderService {
 	}
 	
 	protected static void normalize(OrderPojo orderPojo) {
-		orderPojo.setTime(StringUtil.toLowerCase(getTimestamp()));
+		orderPojo.setTime(LocalDateTime.now());
 		orderPojo.setStatus("created");
 	}
 	
@@ -232,17 +231,21 @@ public class OrderService {
 		orderItemPojo.setBarcode(StringUtil.toLowerCase(orderItemPojo.getBarcode()));
 	}
 	
-	public static String getTimestamp() {
-		String ts = Instant.now().toString();
-		ts=ts.replace('T', ' ');
-		ts=ts.replace('Z',' ');
-		ts = ts.substring(0, 16);
-		return ts;
-	}
+	// public static String getTimestamp() {
+	// 	String ts = Instant.now().toString();
+	// 	ts=ts.replace('T', ' ');
+	// 	ts=ts.replace('Z',' ');
+	// 	ts = ts.substring(0, 16);
+	// 	return ts;
+	// }
 	
 	public OrderData convert(OrderPojo orderPojo, List<OrderItemPojo> orderItemPojoList) {
 		OrderData orderData = new OrderData();
-		orderData.setTime(orderPojo.getTime());
+
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");  
+        String dateTime = orderPojo.getTime().format(format);
+        orderData.setTime(dateTime);
+
 		orderData.setId(orderPojo.getId());
 		orderData.setStatus(orderPojo.getStatus());
 		
