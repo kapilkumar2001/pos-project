@@ -41,19 +41,12 @@ public class InventoryReportService {
 
             int quantity=0;
             List<ProductPojo> productPojoList = productDao.getAllProductByBrandsCategoryId(brandCategoryId);
-            if(productPojoList.size()!=0)
-            // System.out.println("size - >  " +  productPojoList.get(0).getBarcode());
-            
-            
-            for(ProductPojo productPojo: productPojoList){
-                // System.out.print("productpojo:  ");
-                // System.out.print("productpojo:  " + productPojo.getId() + " " + productPojo.getBrand_category());
+
+            for(ProductPojo productPojo: productPojoList) {
                 int productId = productPojo.getId();
                 InventoryPojo inventoryPojo = inventoryDao.select(productId);
                 quantity = quantity + inventoryPojo.getQuantity();
-                System.out.println(" " +quantity);
             }
-            // System.out.println("productpojo end ");
 
             inventoryReportData.setQuantity(quantity);
 
