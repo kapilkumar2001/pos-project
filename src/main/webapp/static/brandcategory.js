@@ -57,6 +57,7 @@ function updateBrandCategory(event){
 
 function getBrandCategoryList(){
 	var url = getBrandCategoryUrl();
+	console.log(url);
 	$.ajax({
 	   url: url,
 	   type: 'GET',

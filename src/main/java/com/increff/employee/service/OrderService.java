@@ -145,11 +145,11 @@ public class OrderService {
 				throw new ApiException("Selling Price can not be less than or equal to 0");
 			}
 			
-			System.out.println("orderitemid: " + orderItemForm.getOrderItemId());
+		
 			
 			if(orderItemForm.getOrderItemId()==0) {
 				
-				System.out.println("orderItemPojo null");
+				
 				
 				OrderItemPojo orderItemPojoIn = new OrderItemPojo();
 				orderItemPojoIn.setBarcode(orderItemForm.getBarcode());
@@ -164,7 +164,7 @@ public class OrderService {
 				OrderItemPojo orderItemPojoTemp = orderItemDao.selectByOrderItemId(orderItemForm.getOrderItemId());
 				int prevQuantity =  orderItemPojoTemp.getQuantity();
 				
-				System.out.println("orderItemPojo not null, updating");
+			
 			
 			    orderItemPojo.setBarcode(orderItemForm.getBarcode());
 			    orderItemPojo.setOrderId(orderPojo.getId());
@@ -182,7 +182,7 @@ public class OrderService {
 				// reduce quantity from inventory
 				InventoryPojo inventoryPojo = inventoryService.get(orderItemPojo.getBarcode());
 				
-				System.out.println(orderItemPojo.getBarcode() + "  " + inventoryPojo.getQuantity() + "  " + prevQuantity + " " + orderItemPojo.getQuantity());
+				
 				if(orderItemPojo.getQuantity()>(inventoryPojo.getQuantity() + prevQuantity)) {
 					throw new ApiException("not enough quantity available, barcode: " + orderItemPojo.getBarcode());
 				}
@@ -193,21 +193,9 @@ public class OrderService {
 			}
 		}
 		
-		for(Integer orderItemId: existingOrderItemIds) {
-			System.out.println("existing orderItem, id:" + orderItemId);
-			
-		}
-		
-		for(Integer orderItemId: newOrderItemIds) {
-			System.out.println("new orderItem, id:" + orderItemId);
-			
-		}
-		
-		
 		existingOrderItemIds.removeAll(newOrderItemIds);
 		
 		for(Integer orderItemId: existingOrderItemIds) {
-			System.out.println("deleting orderItem, id:" + orderItemId);
 			orderItemDao.delete(orderItemId);
 		}
 		
