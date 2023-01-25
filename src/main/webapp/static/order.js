@@ -40,9 +40,8 @@ function createOrder(){
 
 
 function updateOrder(id){
-	$('#edit-order-modal').modal('toggle');
-	//Get the ID
 
+	//Get the ID
 	var id = $('#edit-order-list-form input[name=orderId]').val();	
 
 	console.log(id);
