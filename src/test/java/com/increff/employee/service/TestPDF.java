@@ -42,7 +42,6 @@ public class TestPDF {
         PDFHandler handler = new PDFHandler();
         String templateFilePath ="src/main/resources/com/increff/employee/";
 
-        System.out.println("generating pdf for order id:0");
         try {
             ByteArrayOutputStream streamSource = handler.getXMLSource(orderFopObject);
             handler.createPDFFile(0,streamSource,templateFilePath);

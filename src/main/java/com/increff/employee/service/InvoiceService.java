@@ -19,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +53,11 @@ public class InvoiceService {
 
         OrderFopObject orderFopObject = new OrderFopObject();
         orderFopObject.setOrderId(orderPojo.getId());
-        orderFopObject.setTime(orderPojo.getTime());
+        
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");  
+        String dateTime = orderPojo.getTime().format(format);
+        orderFopObject.setTime(dateTime);
+       
 
         DecimalFormat dec = new DecimalFormat("#.##");
         double totalAmount = 0;
@@ -79,7 +84,6 @@ public class InvoiceService {
         PDFHandler handler = new PDFHandler();
         String templateFilePath ="src/main/resources/com/increff/employee/";
 
-        System.out.println("generating pdf for order id:" + orderId);
         try {
             ByteArrayOutputStream streamSource = handler.getXMLSource(orderFopObject);
             handler.createPDFFile(orderId,streamSource,templateFilePath);

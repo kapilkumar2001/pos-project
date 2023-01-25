@@ -41,4 +41,19 @@ public class AppUiController extends AbstractUiController {
 	public ModelAndView order() {
 		return mav("order.html");
 	}
+
+	@RequestMapping(value = "/ui/inventory-report")
+	public ModelAndView inventoryReport() {
+		return mav("inventory_report.html");
+	}
+
+	@RequestMapping(value = "/ui/brand-report")
+	public ModelAndView brandReport() {
+		return mav("brand_report.html");
+	}
+
+	@RequestMapping(value = "/ui/sales-report")
+	public ModelAndView salesReport() {
+		return mav("sales_report.html");
+	}
 }
