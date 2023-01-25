@@ -34,6 +34,7 @@ public class ProductDto {
 
         // Adds inventory
         InventoryPojo inventoryPojo = new InventoryPojo();
+        inventoryPojo.setId(productPojo.getId());
         inventoryPojo.setQuantity(0);
         inventoryPojo.setBarcode(form.getBarcode());
         inventoryService.add(inventoryPojo);
