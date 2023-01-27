@@ -52,6 +52,11 @@ public class BrandCategoryService{
 	public List<BrandCategoryPojo> getCategories(String brand) {
 		return brandCategoryDao.selectCategories(brand);
 	}
+
+	@Transactional
+	public List<BrandCategoryPojo> getBrands(String category) {
+		return brandCategoryDao.selectBrands(category);
+	}
 	
 	@Transactional(rollbackOn  = ApiException.class)
 	public void update(int id, BrandCategoryPojo brandCategoryPojo) throws ApiException {

@@ -37,6 +37,11 @@ public class OrderService {
 		List<OrderPojo> orders = orderDao.selectAll();
 		return orders;
 	}
+
+    @Transactional
+	public List<OrderPojo> getOrderByTime(LocalDateTime startTime, LocalDateTime endTime){
+		return orderDao.selectByTime(startTime, endTime);
+	}
 	
 	@Transactional
 	public void update(OrderPojo orderPojo) throws ApiException{

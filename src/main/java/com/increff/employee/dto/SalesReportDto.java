@@ -1,32 +1,36 @@
-package com.increff.employee.service;
-
-import com.increff.employee.dao.*;
-import com.increff.employee.model.SalesReportData;
-import com.increff.employee.pojo.BrandCategoryPojo;
-import com.increff.employee.pojo.OrderItemPojo;
-import com.increff.employee.pojo.OrderPojo;
-import com.increff.employee.pojo.ProductPojo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+package com.increff.employee.dto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class SalesReportService {
+import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.increff.employee.model.SalesReportData;
+import com.increff.employee.pojo.BrandCategoryPojo;
+import com.increff.employee.pojo.OrderItemPojo;
+import com.increff.employee.pojo.OrderPojo;
+import com.increff.employee.pojo.ProductPojo;
+import com.increff.employee.service.ApiException;
+import com.increff.employee.service.BrandCategoryService;
+import com.increff.employee.service.OrderItemService;
+import com.increff.employee.service.OrderService;
+import com.increff.employee.service.ProductService;
+
+@Component
+public class SalesReportDto {
     @Autowired
-    private BrandCategoryDao brandCategoryDao;
+    private BrandCategoryService brandCategoryService;
     @Autowired
-    private ProductDao productDao;
+    private ProductService productService;
     @Autowired
-    private OrderItemDao orderItemDao;
+    private OrderItemService orderItemService;
     @Autowired
-    private OrderDao orderDao;
+    private OrderService orderService;
 
     @Transactional
     public List<SalesReportData> get(String startDate, String endDate, String brand, String category) throws ApiException{
@@ -34,7 +38,7 @@ public class SalesReportService {
         List<BrandCategoryPojo> brandCategoryPojoList = new ArrayList<>();
 
         if((!brand.equals("")) && (!category.equals(""))){
-            BrandCategoryPojo brandCategoryPojo = brandCategoryDao.getBrandCategory(brand, category);
+            BrandCategoryPojo brandCategoryPojo = brandCategoryService.getBrandCategory(brand, category);
             if(brandCategoryPojo==null){
                 throw  new ApiException("Brand-Category Combination doesn't exist");
             }
@@ -45,7 +49,7 @@ public class SalesReportService {
             int brandCategoryId = brandCategoryPojo.getId();
             int quantity=0;
             double revenue = 0;
-            List<ProductPojo> productPojoList = productDao.getAllProductByBrandsCategoryId(brandCategoryId);
+            List<ProductPojo> productPojoList = productService.getProductsByBrandCategoryId(brandCategoryId);
 
             for(ProductPojo productPojo: productPojoList){
                 int productId = productPojo.getId();
@@ -56,12 +60,12 @@ public class SalesReportService {
                 LocalDateTime startDateTime = LocalDateTime.parse(tmpStartDate, formatter);
                 LocalDateTime endDateTime = LocalDateTime.parse(tmpEndDate, formatter);
                
-                List<OrderPojo> orderPojoList = orderDao.selectByTime(startDateTime, endDateTime);
+                List<OrderPojo> orderPojoList = orderService.getOrderByTime(startDateTime, endDateTime);
 
                 for(OrderPojo orderPojo: orderPojoList){
                   
 
-                    List<OrderItemPojo> orderItemPojoList = orderItemDao.selectByOrderId(orderPojo.getId());
+                    List<OrderItemPojo> orderItemPojoList = orderItemService.getOrderItemsbyOrderId(orderPojo.getId());
 
                     for(OrderItemPojo orderItemPojo: orderItemPojoList){
                         if(orderItemPojo.getProductId()==productId){
@@ -80,15 +84,15 @@ public class SalesReportService {
         }
 
         else if(!brand.equals("")){
-            brandCategoryPojoList = brandCategoryDao.selectCategories(brand);
+            brandCategoryPojoList = brandCategoryService.getCategories(brand);
         }
 
         else if(!category.equals("")) {
-            brandCategoryPojoList = brandCategoryDao.selectBrands(category);
+            brandCategoryPojoList = brandCategoryService.getBrands(category);
         }
 
         else{
-            brandCategoryPojoList = brandCategoryDao.selectAll();
+            brandCategoryPojoList = brandCategoryService.getAll();
         }
 
         for(BrandCategoryPojo brandCategoryPojo: brandCategoryPojoList){
@@ -100,7 +104,7 @@ public class SalesReportService {
             int brandCategoryId = brandCategoryPojo.getId();
             int quantity=0;
             double revenue = 0;
-            List<ProductPojo> productPojoList = productDao.getAllProductByBrandsCategoryId(brandCategoryId);
+            List<ProductPojo> productPojoList = productService.getProductsByBrandCategoryId(brandCategoryId);
 
             for(ProductPojo productPojo: productPojoList){
                 int productId = productPojo.getId();
@@ -111,12 +115,10 @@ public class SalesReportService {
                 LocalDateTime startDateTime = LocalDateTime.parse(tmpStartDate, formatter);
                 LocalDateTime endDateTime = LocalDateTime.parse(tmpEndDate, formatter);
                
-                List<OrderPojo> orderPojoList = orderDao.selectByTime(startDateTime, endDateTime);
+                List<OrderPojo> orderPojoList = orderService.getOrderByTime(startDateTime, endDateTime);
 
                 for(OrderPojo orderPojo: orderPojoList){
-                   
-
-                    List<OrderItemPojo> orderItemPojoList = orderItemDao.selectByOrderId(orderPojo.getId());
+                    List<OrderItemPojo> orderItemPojoList = orderItemService.getOrderItemsbyOrderId(orderPojo.getId());
 
                     for(OrderItemPojo orderItemPojo: orderItemPojoList){
                         if(orderItemPojo.getProductId()==productId){
