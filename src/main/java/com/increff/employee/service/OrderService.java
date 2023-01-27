@@ -37,9 +37,16 @@ public class OrderService {
 		List<OrderPojo> orders = orderDao.selectAll();
 		return orders;
 	}
-		
+	
+	@Transactional
+	public void update(OrderPojo orderPojo) throws ApiException{
+		orderDao.update(orderPojo);
+	}
+
 	protected static void normalize(OrderPojo orderPojo) {
 		orderPojo.setTime(LocalDateTime.now());
 		orderPojo.setStatus("created");
 	}
+
+	
 }

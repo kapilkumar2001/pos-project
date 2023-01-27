@@ -1,7 +1,7 @@
 package com.increff.employee.controller;
 
+import com.increff.employee.dto.InvoiceDto;
 import com.increff.employee.service.ApiException;
-import com.increff.employee.service.InvoiceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -22,12 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class InvoiceApiController {
 
     @Autowired
-    private InvoiceService invoiceService;
+    private InvoiceDto invoiceDto;
 
     @ApiOperation(value="generates invoice")
     @RequestMapping(path="api/invoice/{id}", method= RequestMethod.POST)
     public void generateInvoice(@PathVariable int id) throws ApiException {
-        invoiceService.generateInvoice(id);
+        invoiceDto.generateInvoice(id);
     }
 
     @ApiOperation(value="gets invoice")
@@ -35,7 +35,7 @@ public class InvoiceApiController {
     public ResponseEntity<byte[]> getInvoice(@PathVariable int id) throws IOException  {
 
         String sourcePath = "src/main/invoices/invoice-" + id + ".pdf";
-        byte[] contents = invoiceService.loadFile(sourcePath);
+        byte[] contents = invoiceDto.loadFile(sourcePath);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
