@@ -118,6 +118,11 @@ public class ProductService{
 		return productPojo;
 	}
 	
+    @Transactional
+	public List<ProductPojo> getProductsByBrandCategoryId(int brandCategoryId) throws ApiException{
+        return productDao.getAllProductByBrandsCategoryId(brandCategoryId);
+	}
+
 	protected static void normalize(ProductPojo p) {
 		p.setBarcode(StringUtil.toLowerCase(p.getBarcode()));
 		p.setName(StringUtil.toLowerCase(p.getName()));

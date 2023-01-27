@@ -1,8 +1,8 @@
 package com.increff.employee.controller;
 
+import com.increff.employee.dto.InventoryReportDto;
 import com.increff.employee.model.InventoryReportData;
 import com.increff.employee.service.ApiException;
-import com.increff.employee.service.InventoryReportService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +17,12 @@ import java.util.List;
 public class InventoryReportApiController {
 
     @Autowired
-    private InventoryReportService inventoryReportService;
+    private InventoryReportDto inventoryReportDto;
 
     @ApiOperation(value = "Gets inventory report")
     @RequestMapping(path = "/api/inventory-report/", method = RequestMethod.GET)
     public List<InventoryReportData> get() throws ApiException {
-        return inventoryReportService.get();
+        return inventoryReportDto.get();
     }
 
 }
