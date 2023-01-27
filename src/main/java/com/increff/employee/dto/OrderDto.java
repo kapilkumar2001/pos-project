@@ -18,15 +18,19 @@ import com.increff.employee.pojo.OrderPojo;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.ApiException;
 import com.increff.employee.service.InventoryService;
+import com.increff.employee.service.OrderItemService;
 import com.increff.employee.service.OrderService;
 import com.increff.employee.service.ProductService;
 import com.increff.employee.util.StringUtil;
+
 
 @Component
 public class OrderDto {
 
     @Autowired
     private OrderService orderService; 
+	@Autowired
+	private OrderItemService orderItemService;
     @Autowired
 	private ProductService productService;
     @Autowired
@@ -70,7 +74,8 @@ public class OrderDto {
             orderItemPojoList.add(orderItemPojo);
         }
 
-        orderService.createOrder(orderPojo, orderItemPojoList);
+        orderService.createOrder(orderPojo);
+		orderItemService.addItemstoOrder(orderPojo.getId(), orderItemPojoList);
     }
 
     public OrderPojo getOrder(int id) throws ApiException{
@@ -79,7 +84,7 @@ public class OrderDto {
 	}
 
     public OrderData getOrderItems(int orderId) throws ApiException{
-		List<OrderItemPojo> orderItemPojo = orderService.getOrderItems(orderId);
+		List<OrderItemPojo> orderItemPojo = orderItemService.getOrderItemsbyOrderId(orderId);
 		OrderPojo orderPojo = getOrder(orderId);
 		return convert(orderPojo, orderItemPojo);
 	}
@@ -98,7 +103,7 @@ public class OrderDto {
     
         List <OrderItemPojo> orderItemPojoList = new ArrayList<>();
 
-		List<OrderItemPojo> existingOrderItemPojoList = orderService.getOrderItems(orderId);
+		List<OrderItemPojo> existingOrderItemPojoList = orderItemService.getOrderItemsbyOrderId(orderId);
 		List<Integer> existingOrderItemIds = new ArrayList<>();
 		for(OrderItemPojo orderItemPojo: existingOrderItemPojoList) {
 			existingOrderItemIds.add(orderItemPojo.getId());
@@ -134,7 +139,7 @@ public class OrderDto {
 
             // reduce quantity in inventory
             if(orderItemForm.getOrderItemId()!=0){
-				OrderItemPojo orderItemPojoTemp = orderService.getOrderItembyItemId(orderItemForm.getOrderItemId());
+				OrderItemPojo orderItemPojoTemp = orderItemService.getOrderItembyItemId(orderItemForm.getOrderItemId());
 			    int prevQuantity =  orderItemPojoTemp.getQuantity();
 
                 InventoryPojo inventoryPojo = inventoryService.get(orderItemPojo.getProductId(), orderItemPojo.getBarcode());
@@ -158,14 +163,14 @@ public class OrderDto {
 		existingOrderItemIds.removeAll(newOrderItemIds);
 
 		for(Integer orderItemId: existingOrderItemIds) {
-			OrderItemPojo orderItemPojo = orderService.getOrderItembyItemId(orderItemId);
+			OrderItemPojo orderItemPojo = orderItemService.getOrderItembyItemId(orderItemId);
 			String barcode = productService.get(orderItemPojo.getProductId()).getBarcode();
 			InventoryPojo inventoryPojo = inventoryService.get(orderItemPojo.getProductId(), barcode);
 			inventoryService.update(orderItemPojo.getProductId(), barcode,  inventoryPojo.getQuantity() + orderItemPojo.getQuantity());
 		}	
 
 		List<Integer> orderItemIdstoRemove = existingOrderItemIds;
-        orderService.update(orderId, orderItemPojoList, orderItemIdstoRemove);
+        orderItemService.update(orderId, orderItemPojoList, orderItemIdstoRemove);
     }
 
 
