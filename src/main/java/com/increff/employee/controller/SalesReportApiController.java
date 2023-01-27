@@ -1,8 +1,8 @@
 package com.increff.employee.controller;
 
+import com.increff.employee.dto.SalesReportDto;
 import com.increff.employee.model.SalesReportData;
 import com.increff.employee.service.ApiException;
-import com.increff.employee.service.SalesReportService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 public class SalesReportApiController {
     @Autowired
-    private SalesReportService salesReportService;
+    private SalesReportDto salesReportDto;
 
     @ApiOperation(value = "Gets salesreport data")
     @RequestMapping(path = "/api/sales-report/", method = RequestMethod.GET)
@@ -24,7 +24,7 @@ public class SalesReportApiController {
         @RequestParam(value="brand", required = false, defaultValue = "") String brand,
         @RequestParam(value="category", required = false, defaultValue = "") String category)
         throws ApiException {
-            return salesReportService.get(startDate, endDate, brand, category);
+            return salesReportDto.get(startDate, endDate, brand, category);
     }
 
 }

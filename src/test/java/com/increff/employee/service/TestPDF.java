@@ -14,7 +14,7 @@ public class TestPDF {
     public static void main(String args[]){
         OrderFopObject orderFopObject = new OrderFopObject();
         
-        orderFopObject.setOrderId(1);
+        orderFopObject.setOrderId(0);
         orderFopObject.setTime("2023-01-17 06:03");
         
         DecimalFormat dec = new DecimalFormat("#.##");
@@ -26,7 +26,7 @@ public class TestPDF {
             orderItemData.setQuantity((2+i));
             double mrp = ((2.1723)*(i+1)) + i;
             orderItemData.setSellingPrice(mrp);
-            orderItemData.setId(1);
+            orderItemData.setId(0);
             orderItemData.setProductId((i+1)*5);
             orderItemData.setProductName("GoodDay Biscuit " + (i+1)*(5));
             orderItemData.setOrderItemId(i+1);
@@ -42,10 +42,9 @@ public class TestPDF {
         PDFHandler handler = new PDFHandler();
         String templateFilePath ="src/main/resources/com/increff/employee/";
 
-      
         try {
             ByteArrayOutputStream streamSource = handler.getXMLSource(orderFopObject);
-            handler.createPDFFile(1,streamSource,templateFilePath);
+            handler.createPDFFile(0,streamSource,templateFilePath);
         } catch (Exception e) {
             e.printStackTrace();
         }

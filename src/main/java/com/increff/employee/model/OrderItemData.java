@@ -7,8 +7,6 @@ public class OrderItemData extends OrderItemForm{
 	private String productName;
 	private double amount;
 
-
-
 	public int getId() {
 		return id;
 	}

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.increff.employee.dao.InventoryDao;
-import com.increff.employee.dao.ProductDao;
 import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.util.StringUtil;
 
@@ -17,10 +16,7 @@ public class InventoryService {
 
 	@Autowired
 	InventoryDao inventoryDao;
-	@Autowired
-	ProductDao productDao;
-	
-	
+
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(InventoryPojo inventoryPojo) throws ApiException {
 		normalize(inventoryPojo.getBarcode());
@@ -30,59 +26,47 @@ public class InventoryService {
 		else if(StringUtil.isEmpty(inventoryPojo.getBarcode())) {
 			throw new ApiException("barcode cannot be empty");
 		}
-		if(productDao.getProductByBarcode(inventoryPojo.getBarcode())==null) {
-			throw new ApiException("product with this barcode doesn't exist, barcode: "+ inventoryPojo.getBarcode());
-		}
-		int id = productDao.getProductByBarcode(inventoryPojo.getBarcode()).getId();
-		inventoryPojo.setId(id);
-		InventoryPojo existingInventoryPojo = inventoryDao.select(id);
+
+		InventoryPojo existingInventoryPojo = inventoryDao.select(inventoryPojo.getId());
 		if(existingInventoryPojo==null)
 		{
 		   inventoryDao.insert(inventoryPojo);
 		}
 		else
 		{
-			update(inventoryPojo.getBarcode(), existingInventoryPojo.getQuantity()+inventoryPojo.getQuantity());
+			update(existingInventoryPojo.getId(), inventoryPojo.getBarcode(), existingInventoryPojo.getQuantity()+inventoryPojo.getQuantity());
 		}
 	}
 	
 	@Transactional(rollbackOn = ApiException.class)
-	public InventoryPojo get(String barcode) throws ApiException {
-		InventoryPojo inventoryPojo =  getCheck(barcode);
+	public InventoryPojo get(int id, String barcode) throws ApiException {
+		InventoryPojo inventoryPojo =  getCheck(id, barcode);
 		inventoryPojo.setBarcode(barcode);
 		return inventoryPojo;
 	}
 
 	@Transactional
 	public List<InventoryPojo> getAll() {
-		List<InventoryPojo> inventories =  inventoryDao.selectAll();
-		for(InventoryPojo p: inventories) {
-			p.setBarcode(productDao.select(p.getId()).getBarcode());
-		}
-		return inventories;
+		return inventoryDao.selectAll();
 	}
 	
 	@Transactional(rollbackOn  = ApiException.class)
-	public void update(String barcode, int quantity) throws ApiException {
+	public void update(int id, String barcode, int quantity) throws ApiException {
 		if(quantity<0) {
 			throw new ApiException("quantity cannot be less than 0");
 		}
 		else if(StringUtil.isEmpty(barcode)) {
 			throw new ApiException("barcode cannot be empty");
 		}
-		if(productDao.getProductByBarcode(barcode)==null) {
-			throw new ApiException("product with this barcode doesn't exist, barcode: "+ barcode);
-		}
-		
-		InventoryPojo newInventoryPojo = getCheck(barcode);
+
+		InventoryPojo newInventoryPojo = getCheck(id ,barcode);
 		newInventoryPojo.setBarcode(barcode);
 		newInventoryPojo.setQuantity(quantity);
 	    inventoryDao.update(newInventoryPojo);
 	}
 	
 	@Transactional
-	public InventoryPojo getCheck(String barcode) throws ApiException {
-		int id = productDao.getProductByBarcode(barcode).getId();
+	public InventoryPojo getCheck(int id, String barcode) throws ApiException {
 		InventoryPojo inventoryPojo = inventoryDao.select(id);
 		if (inventoryPojo == null) {
 			throw new ApiException("barcode does not exit, barcode: " + barcode);

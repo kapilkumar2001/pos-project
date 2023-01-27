@@ -15,7 +15,7 @@ import com.increff.employee.util.StringUtil;
 public class BrandCategoryService{
 
 	@Autowired
-	BrandCategoryDao brandCategoryDao;
+	private BrandCategoryDao brandCategoryDao;
 	
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(BrandCategoryPojo brandCategoryPojo) throws ApiException {
@@ -28,7 +28,7 @@ public class BrandCategoryService{
 		}
 		BrandCategoryPojo p = brandCategoryDao.getBrandCategory(brandCategoryPojo.getBrand(), brandCategoryPojo.getCategory());
 		if(p!=null) {
-			throw new ApiException("Brand and Category already exists");
+			throw new ApiException("This brand-category combination already exists");
 		}
 		brandCategoryDao.insert(brandCategoryPojo);
 	}
@@ -51,6 +51,11 @@ public class BrandCategoryService{
 	@Transactional
 	public List<BrandCategoryPojo> getCategories(String brand) {
 		return brandCategoryDao.selectCategories(brand);
+	}
+
+	@Transactional
+	public List<BrandCategoryPojo> getBrands(String category) {
+		return brandCategoryDao.selectBrands(category);
 	}
 	
 	@Transactional(rollbackOn  = ApiException.class)
@@ -81,6 +86,11 @@ public class BrandCategoryService{
 			throw new ApiException("ID does not exit, id: " + id);
 		}
 		return brandCategoryPojo;
+	}
+
+	@Transactional
+	public BrandCategoryPojo getBrandCategory(String brand, String category){
+		return brandCategoryDao.getBrandCategory(brand, category);
 	}
 	
 	protected static void normalize(BrandCategoryPojo brandCategoryPojo) {
