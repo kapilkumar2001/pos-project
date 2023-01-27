@@ -202,7 +202,7 @@ function editOrderItems(data){
 		var $tbody = $('#edit-order-item-table').find('tbody');
 		var buttonHtml = '<button onclick="deleteItem(' + tmpe + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fas fa-trash\' style=\'font-size:18px;color:black;\'></i></button>'
 		var row = '<tr id="row' + tmpe + '">'
-		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpe + '" id="barcode' + tmpe + '" value="' + e.barcode +  '" ></div> </td>'
+		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpe + '" id="barcode' + tmpe + '" value="' + e.barcode +  '" readonly="true"></div> </td>'
 		+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpe + '" id="quantity' + tmpe + '" value="' + e.quantity +  '"></div> </td>'
 		+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpe + '" id="sellingPrice' + tmpe + '" value="' + e.sellingPrice +  '"></div> </td>'
 		+ '<td>' + buttonHtml + '</td>'

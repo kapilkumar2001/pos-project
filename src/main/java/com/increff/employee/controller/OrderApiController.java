@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.increff.employee.dto.OrderDto;
 import com.increff.employee.model.OrderData;
 import com.increff.employee.model.OrderItemForm;
 import com.increff.employee.service.ApiException;
-import com.increff.employee.service.OrderService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,30 +22,30 @@ import io.swagger.annotations.ApiOperation;
 public class OrderApiController {
 
 	@Autowired
-	private OrderService orderService;
+	private OrderDto orderDto;
 	
 	@ApiOperation(value="creates an order")
 	@RequestMapping(path="api/order", method=RequestMethod.POST)
 	public void createOrder(@RequestBody List<OrderItemForm> form) throws ApiException{
-		orderService.createOrder(form);
+		orderDto.createOrder(form);
 	}
 	
 	@ApiOperation(value="gets an order")
 	@RequestMapping(path="api/order/{id}", method=RequestMethod.GET)
 	public OrderData getOrder(@PathVariable int id) throws ApiException{
-		return orderService.getOrderItems(id);
+		return orderDto.getOrderItems(id);
 	}
 	
 	@ApiOperation(value="get a list of all orders")
 	@RequestMapping(path="api/order", method=RequestMethod.GET)
 	public List<OrderData> getAllOrders() throws ApiException{
-		List<OrderData> orders = orderService.getAllOrders();
+		List<OrderData> orders = orderDto.getAllOrders();
 		return orders;
 	}
 	
 	@ApiOperation(value = "Updates an order")
 	@RequestMapping(path = "/api/order/{id}", method = RequestMethod.PUT)
 	public void update(@PathVariable int id, @RequestBody List<OrderItemForm> form) throws ApiException {
-		orderService.update(id, form);
+		orderDto.update(id, form);
 	}
 }

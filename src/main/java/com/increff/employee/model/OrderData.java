@@ -7,6 +7,7 @@ public class OrderData extends OrderForm{
 	private int id;
 	private String time;
 	private String status;
+	private List<OrderItemData> orders;
 
 	public String getStatus() {
 		return status;
@@ -15,7 +16,6 @@ public class OrderData extends OrderForm{
 		this.status = status;
 	}
 
-	private List<OrderItemData> orders;
 
 	public List<OrderItemData> getOrders() {
 		return orders;
