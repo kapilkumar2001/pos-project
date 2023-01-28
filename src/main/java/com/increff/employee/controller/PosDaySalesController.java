@@ -22,7 +22,7 @@ public class PosDaySalesController {
     private PosDaySalesDto posDaySalesDto;
     
     @ApiOperation(value = "Gets list of every day sales")
-	@RequestMapping(path = "/api/pos-day-sale", method = RequestMethod.GET)
+	@RequestMapping(path = "/api/posdaysales-report", method = RequestMethod.GET)
 	public List<PosDaySalesData> getAll() throws ApiException {
 		return posDaySalesDto.getAllDaySale();
 	}
