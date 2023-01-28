@@ -45,11 +45,13 @@ public class OrderService {
 	
 	@Transactional
 	public void update(OrderPojo orderPojo) throws ApiException{
+		orderPojo.setUpdatedAt(LocalDateTime.now());
 		orderDao.update(orderPojo);
 	}
 
 	protected static void normalize(OrderPojo orderPojo) {
-		orderPojo.setTime(LocalDateTime.now());
+		orderPojo.setCreatedAt(LocalDateTime.now());
+		orderPojo.setUpdatedAt(LocalDateTime.now());
 		orderPojo.setStatus("created");
 	}
 
