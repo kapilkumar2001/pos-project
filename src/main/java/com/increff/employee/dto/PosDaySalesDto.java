@@ -3,6 +3,7 @@ package com.increff.employee.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.increff.employee.model.PosDaySalesData;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
 import com.increff.employee.pojo.PosDaySalesPojo;
@@ -73,5 +75,24 @@ public class PosDaySalesDto {
         System.out.println(invoicedOrdersCount + " " + invoicedItemsCount + " " + totalRevenue);
         
         posDaySalesService.create(posDaySalesPojo);
+    }
+
+    @Transactional
+    public List<PosDaySalesData> getAllDaySale(){
+        List<PosDaySalesData> posDaySalesDataList = new ArrayList<>();
+
+        List<PosDaySalesPojo> posDaySalesPojoList = posDaySalesService.getAll();
+
+        for(PosDaySalesPojo posDaySalesPojo: posDaySalesPojoList){
+            PosDaySalesData posDaySalesData = new PosDaySalesData();
+
+            posDaySalesData.setDate(posDaySalesPojo.getDate());
+            posDaySalesData.setInvoicedItemsCount(posDaySalesPojo.getInvoicedItemsCount());
+            posDaySalesData.setInvoicedOrdersCount(posDaySalesPojo.getInvoicedOrdersCount());
+            posDaySalesData.setTotalRevenue(posDaySalesPojo.getTotalRevenue());
+
+            posDaySalesDataList.add(posDaySalesData);
+        }    
+        return posDaySalesDataList;
     }
 }

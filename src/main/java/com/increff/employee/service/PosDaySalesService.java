@@ -1,5 +1,7 @@
 package com.increff.employee.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,4 +23,9 @@ public class PosDaySalesService {
         posDaySalesDao.insert(posDaySalesPojo);
     }
 
+    @Transactional
+    public List<PosDaySalesPojo> getAll(){
+        return posDaySalesDao.selectAll();
+    }
+    
 }
