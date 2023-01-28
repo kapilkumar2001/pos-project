@@ -1,6 +1,6 @@
 package com.increff.employee.pojo;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,15 +9,15 @@ import javax.persistence.Id;
 public class PosDaySalesPojo {
     
     @Id
-    private LocalDateTime date;
+    private LocalDate date;
     private int invoiced_orders_count;
     private int invoiced_items_count;
     private int total_revenue;
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
     public int getInvoicedOrdersCount() {

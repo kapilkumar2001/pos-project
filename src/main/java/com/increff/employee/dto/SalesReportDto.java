@@ -110,7 +110,6 @@ public class SalesReportDto {
 
             for(ProductPojo productPojo: productPojoList){
                 int productId = productPojo.getId();
-                System.out.println("startDate: " + startDate);
                 String tmpStartDate = startDate + "00:00:00";
                 String tmpEndDate = endDate + "23:59:59";
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-ddHH:mm:ss");
@@ -118,12 +117,7 @@ public class SalesReportDto {
                 LocalDateTime startDateTime = LocalDateTime.parse(tmpStartDate, formatter);
                 LocalDateTime endDateTime = LocalDateTime.parse(tmpEndDate, formatter);
                 
-
-                System.out.println("startDateTime & endDateTime: " + startDateTime + " & " + endDateTime);
-               
                 List<OrderPojo> orderPojoList = orderService.getOrderByTime(startDateTime, endDateTime);
-
-                System.out.println("away hehe");
 
                 for(OrderPojo orderPojo: orderPojoList){
                     List<OrderItemPojo> orderItemPojoList = orderItemService.getOrderItemsbyOrderId(orderPojo.getId());

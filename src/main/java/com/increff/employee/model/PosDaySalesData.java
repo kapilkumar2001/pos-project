@@ -1,18 +1,18 @@
 package com.increff.employee.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class PosDaySalesData {
     
-    private LocalDateTime date;
+    private LocalDate date;
     private int invoicedOrdersCount;
     private int invoicedItemsCount;
     private int totalRevenue;
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
     public int getInvoicedOrdersCount() {
