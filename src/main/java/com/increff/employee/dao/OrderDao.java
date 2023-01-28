@@ -18,7 +18,6 @@ public class OrderDao extends AbstractDao{
 	private static String select_all = "select p from OrderPojo p";
 	private static String select_time = "select p from OrderPojo p where time>=:startTime and time<=:endTime";
 	
-	
 	@PersistenceContext
 	private EntityManager em;
 	

@@ -52,13 +52,6 @@
       <li class="nav-item">
         <a class="nav-link" th:href="@{/ui/home}">Home</a>
       </li>
-      <!-- <li class="nav-item">
-        <a class="nav-link" th:href="@{/ui/employee}">Employees</a>
-      </li> -->
-      <!--
-      <li class="nav-item">
-        <a class="nav-link" th:href="@{/ui/admin}">Admin</a>
-      </li> -->
       <li class="nav-item">
         <a class="nav-link" th:href="@{/ui/brandcategory}">Brands</a>
       </li>
@@ -71,14 +64,15 @@
       <li class="nav-item">
         <a class="nav-link" th:href="@{/ui/order}">Order</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" th:href="@{/ui/inventory-report}">Inventory Report</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" th:href="@{/ui/brand-report}">Brand Report</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" th:href="@{/ui/sales-report}">Sales Report</a>
+      <li class="nav-item dropdown" onmouseover="showDropdown()" onmouseout="hideDropdown()">
+        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Reports
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="navbarDropdownMenu">
+          <a class="dropdown-item" th:href="@{/ui/brand-report}">Brands Report</a>
+          <a class="dropdown-item" th:href="@{/ui/inventory-report}">Inventory Report</a>
+          <a class="dropdown-item" th:href="@{/ui/sales-report}">Sales Report</a>
+        </div>
       </li>
     </ul>
     
@@ -90,9 +84,7 @@
 	    <li class="nav-item">
 	    	<a class="btn btn-primary" th:href="@{/session/logout}">Logout</a>
 	    </li>
-    </ul>
-    
-        
+    </ul>   
   </div>
 </nav>
 
@@ -103,7 +95,23 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<script th:src="@{/static/app.js}"/></script>
 	<script th:src="@{/static/papaparse.min.js}"/></script>
+  <script>
+    function showDropdown() {
+      document.getElementById("navbarDropdownMenu").style.display = "block";
+    }
+    
+    function hideDropdown() {
+      document.getElementById("navbarDropdownMenu").style.display = "none";
+    }
+  </script>
 	
 </footer>
 
 
+
+
+  
+  
+  
+  
+  
