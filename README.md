@@ -1,1 +1,1 @@
-# employee-spring
+# PoS App
