@@ -56,4 +56,9 @@ public class AppUiController extends AbstractUiController {
 	public ModelAndView salesReport() {
 		return mav("sales_report.html");
 	}
+
+	@RequestMapping(value = "/ui/posdaysales-report")
+	public ModelAndView posDaySalesReport() {
+		return mav("posdaysales_report.html");
+	}
 }
