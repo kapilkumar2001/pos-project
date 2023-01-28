@@ -49,11 +49,13 @@ public class InventoryDto {
         inventoryService.update(productPojo.getId(), barcode, inventoryForm.getQuantity());
     }
 
-    private InventoryData convert(InventoryPojo p) {
+    private InventoryData convert(InventoryPojo p) throws ApiException{
         InventoryData d = new InventoryData();
         d.setQuantity(p.getQuantity());
         d.setBarcode(p.getBarcode());
         d.setId(p.getId());
+        ProductPojo productPojo =  productService.get(p.getId());
+        d.setProductName(productPojo.getName());
         return d;
     }
 
