@@ -13,18 +13,30 @@ public class OrderPojo {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	private LocalDateTime time;
+	private LocalDateTime created_at;
+	private LocalDateTime updated_at;
 	private String status;
 	
 	public int getId() {
 		return id;
 	}
-	public LocalDateTime getTime() {
-		return time;
+	
+	public LocalDateTime getCreatedAt() {
+		return created_at;
 	}
-	public void setTime(LocalDateTime time) {
-		this.time = time;
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.created_at = createdAt;
 	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updated_at;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updated_at = updatedAt;
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
