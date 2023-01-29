@@ -6,90 +6,96 @@
 
 <body>
 
-<nav th:replace="snippets.html :: name_app_navbar"></nav>
+    <nav th:replace="snippets.html :: name_app_navbar"></nav>
 
-<div class="container">
+    <div class="container">
 
-<h3>Sales Report</h3>
+        <h3>Sales Report</h3>
 
-<!-- Blank Row -->
-<div class="row">
-    &nbsp;
-</div>
-
-
-<!-- Filters -->
-
-<div class="row">
-    <div class="col-12 d-flex justify-content-between">
-      <form class="form-inline" id="sales-report-form">
-        <div class="form-group mr-3">
-          <label for="inputStartDate" class="col-form-label">Start Date</label>
-          <input type="date" class="form-control form-control-sm ml-2" name="startDate" id="inputStartDate">
+        <!-- Blank Row -->
+        <div class="row">
+            &nbsp;
         </div>
-  
-        <div class="form-group mr-3">
-          <label for="inputEndDate" class="col-form-label">End Date</label>
-          <input type="date" class="form-control form-control-sm ml-2" name="endDate" id="inputEndDate">
+
+
+        <!-- Filters -->
+
+        <div class="row">
+            <div class="col-12 d-flex justify-content-between">
+                <form class="form-inline" id="sales-report-form">
+                    <div class="form-group mr-3">
+                        <label for="inputStartDate" class="col-form-label">Start Date</label>
+                        <input type="date" class="form-control form-control-sm ml-2" name="startDate"
+                            id="inputStartDate">
+                    </div>
+
+                    <div class="form-group mr-3">
+                        <label for="inputEndDate" class="col-form-label">End Date</label>
+                        <input type="date" class="form-control form-control-sm ml-2" name="endDate" id="inputEndDate">
+                    </div>
+
+                    <div class="form-group mr-3">
+                        <label for="inputBrand" class="col-form-label">Brand</label>
+                        <select class="form-control form-control-sm ml-2" name="brand" id="inputBrand">
+                        </select>
+                    </div>
+
+                    <div class="form-group mr-3">
+                        <label for="inputCategory" class="col-form-label">Category</label>
+                        <select class="form-control form-control-sm ml-2" name="category" id="inputCategory">
+                            <option value='' selected>All</option>
+                        </select>
+                    </div>
+
+                    <button type="button" class="btn btn-primary btn-sm" id="apply-filter">
+                        <i class='fa fa-filter' style='font-size:16px;color:white;padding-right: 4px;'></i>
+                        Apply
+                    </button>
+                </form>
+            </div>
         </div>
-  
-        <div class="form-group mr-3">
-          <label for="inputBrand" class="col-form-label">Brand</label>
-          <select class="form-control form-control-sm ml-2" name="brand" id="inputBrand">
-          </select> 
+
+
+
+        <!-- Blank Row -->
+        <div class="row">
+            &nbsp;
         </div>
-  
-        <div class="form-group mr-3">
-          <label for="inputCategory" class="col-form-label">Category</label>
-          <select class="form-control form-control-sm ml-2" name="category" id="inputCategory">
-            <option value='' selected>All</option>
-          </select> 
+
+        <div class="row">
+
+            <!-- Table -->
+            <div class="col-12">
+                <div class="card shadow-4-strong rounded-5 overflow-hidden">
+                    <div class="card-body">
+                        <table class="table table-striped" id="sales-report-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">S.No.</th>
+                                    <th scope="col">Brand</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Revenue</th>
+                                    <!-- <th scope="col">Quantity</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-  
-        <button type="button" class="btn btn-primary btn-sm" id="apply-filter">
-          <i class='fa fa-filter' style='font-size:16px;color:white;padding-right: 4px;'></i>
-          Apply
-        </button>
-      </form>
-    </div>	
-</div>
 
 
+    </div>
 
-<!-- Blank Row -->
-<div class="row">
-    &nbsp;
-</div>
+    <footer th:replace="snippets.html :: name_footer"></footer>
 
-<div class="row">
+    <script th:src="@{/static/sales_report.js}" />
+    </script>
 
- <!-- Table -->
- <div class="col-12">
-    <table class="table table-striped" id="sales-report-table">
-      <thead>
-        <tr>
-          <th scope="col">S.No.</th>
-          <th scope="col">Brand</th>
-          <th scope="col">Category</th>
-          <th scope="col">Quantity</th>
-          <th scope="col">Revenue</th>
-          <!-- <th scope="col">Quantity</th> -->
-        </tr>
-      </thead>
-      <tbody>
-       
-      </tbody>
-    </table>
-</div>
-</div>
-
-
-</div> 
-
-<footer th:replace="snippets.html :: name_footer"></footer>
-
-<script th:src="@{/static/sales_report.js}"/></script>
-
-</body> 
+</body>
 
 </html>

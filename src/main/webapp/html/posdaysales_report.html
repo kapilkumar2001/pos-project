@@ -6,44 +6,49 @@
 
 <body>
 
-<nav th:replace="snippets.html :: name_app_navbar"></nav>
+  <nav th:replace="snippets.html :: name_app_navbar"></nav>
 
-<div class="container">
+  <div class="container">
 
-<h3>Pos Day Sale Report</h3>
-
-
-<!-- Blank Row -->
-<div class="row">
-    &nbsp;
-</div>
-<div class="row">
-
- <!-- Table -->
- <div class="col-12">
-    <table class="table table-striped" id="posdaysales-report-table">
-      <thead>
-        <tr>
-          <th scope="col">Date</th>
-          <th scope="col">Total Invoiced Orders</th>
-          <th scope="col">Total Invoiced Items</th>
-          <th scope="col">Total Revenue</th>
-        </tr>
-      </thead>
-      <tbody>
-       
-      </tbody>
-    </table>
-</div>
-</div>
+    <h3>Pos Day Sale Report</h3>
 
 
-</div> 
+    <!-- Blank Row -->
+    <div class="row">
+      &nbsp;
+    </div>
+    <div class="row">
 
-<footer th:replace="snippets.html :: name_footer"></footer>
+      <!-- Table -->
+      <div class="col-12">
+        <div class="card shadow-4-strong rounded-5 overflow-hidden">
+          <div class="card-body">
+            <table class="table table-striped" id="posdaysales-report-table">
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Total Invoiced Orders</th>
+                  <th scope="col">Total Invoiced Items</th>
+                  <th scope="col">Total Revenue</th>
+                </tr>
+              </thead>
+              <tbody>
 
-<script th:src="@{/static/posdaysales_report.js}"/></script>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
 
-</body> 
+
+  </div>
+
+  <footer th:replace="snippets.html :: name_footer"></footer>
+
+  <script th:src="@{/static/posdaysales_report.js}" />
+  </script>
+
+</body>
 
 </html>

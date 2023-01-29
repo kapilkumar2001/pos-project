@@ -1,16 +1,16 @@
-function getOrderUrl(){
+function getOrderUrl() {
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/order";
 }
-function getInvoiceUrl(){
+function getInvoiceUrl() {
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/invoice";
 }
 
 //BUTTON ACTIONS
 
-function createOrder(){
-	
+function createOrder() {
+
 	var $form = $("#order-list-form");
 	var json = convertToArrayOfObjectToCreate($form);
 
@@ -18,19 +18,19 @@ function createOrder(){
 	var url = getOrderUrl();
 
 	$.ajax({
-	   url: url,
-	   type: 'POST',
-	   data: json,
-	   headers: {
-       	'Content-Type': 'application/json'
-       },	   
-	   success: function(response) {
-	   		getOrderList();  
+		url: url,
+		type: 'POST',
+		data: json,
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		success: function (response) {
+			getOrderList();
 			var $tbody = $('#order-item-table').find('tbody');
 			$tbody.empty();
 			$('#create-order-modal').modal('hide');
-	   },
-	   error: handleAjaxError
+		},
+		error: handleAjaxError
 	});
 
 
@@ -39,10 +39,10 @@ function createOrder(){
 
 
 
-function updateOrder(id){
+function updateOrder(id) {
 
 	//Get the ID
-	var id = $('#edit-order-list-form input[name=orderId]').val();	
+	var id = $('#edit-order-list-form input[name=orderId]').val();
 
 	console.log(id);
 	var url = getOrderUrl() + "/" + id;
@@ -51,54 +51,54 @@ function updateOrder(id){
 	var json = convertToArrayOfObjectToUpdate($form);
 
 	$.ajax({
-	   url: url,
-	   type: 'PUT',
-	   data: json,
-	   headers: {
-       	'Content-Type': 'application/json'
-       },	   
-	   success: function(response) {
-	   		getOrderList(); 
+		url: url,
+		type: 'PUT',
+		data: json,
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		success: function (response) {
+			getOrderList();
 			var $tbody = $('#edit-order-item-table').find('tbody');
 			$tbody.empty();
 			$('#edit-order-modal').modal('hide');
-	   },
-	   error: handleAjaxError
+		},
+		error: handleAjaxError
 	});
 	return false;
 }
 
-function getOrderList(){
+function getOrderList() {
 	var url = getOrderUrl();
 	$.ajax({
-	   url: url,
-	   type: 'GET',
-	   success: function(data) {
-	   		displayOrderList(data);  
-	   },
-	   error: handleAjaxError
+		url: url,
+		type: 'GET',
+		success: function (data) {
+			displayOrderList(data);
+		},
+		error: handleAjaxError
 	});
 }
 
-function getOrderItems(id){
-	var url = getOrderUrl()+ '/' + id;
+function getOrderItems(id) {
+	var url = getOrderUrl() + '/' + id;
 	$.ajax({
-	   url: url,
-	   type: 'GET',
-	   success: function(data) {
-	   		viewOrderItems(data);  
-	   },
-	   error: handleAjaxError
+		url: url,
+		type: 'GET',
+		success: function (data) {
+			viewOrderItems(data);
+		},
+		error: handleAjaxError
 	});
 }
 
 
 
 // display orders list
-function displayOrderList(data){
+function displayOrderList(data) {
 	var $tbody = $('#order-table').find('tbody');
 	$tbody.empty();
-	for(var i in data){
+	for (var i in data) {
 		var e = data[i];
 		var buttonHtml = '';
 
@@ -110,47 +110,47 @@ function displayOrderList(data){
 		var updatedAt = new Intl.DateTimeFormat('en-US', options).format(date);
 
 
-		if(e.status=='invoiced'){
+		if (e.status == 'invoiced') {
 			console.log(e.status + " not edit " + e.id);
-            buttonHtml += '<button onclick="" style=\'border: none;margin-right:16px; background-color:transparent\' disabled><i class=\'far fa-edit\' style=\'font-size:18px;color:gray;\'></i></button>'
-			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none; background-color:transparent\'><i class=\'fa fa-eye\' style=\'font-size:18px;color:black;\'></i></button>'
+			buttonHtml += '<button onclick="" style=\'border: none;margin-right:16px; background-color:transparent\' disabled><i class=\'far fa-edit\' style=\'font-size:18px;color:gray;\'></i></button>'
+			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none; background-color:transparent\'><i class=\'fa fa-eye\' style=\'font-size:18px;color:green;\'></i></button>'
 			buttonHtml += '<button onclick="getInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\'><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
 		}
-		else{
+		else {
 			console.log(e.status + " edit " + e.id);
-            buttonHtml += '<button onclick="editOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\'><i class=\'far fa-edit\' style=\'font-size:18px;color:black;\'></i></button>'
-			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none; background-color:transparent\'><i class=\'fa fa-eye\' style=\'font-size:18px;color:black;\'></i></button>'
+			buttonHtml += '<button onclick="editOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\'><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
+			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none; background-color:transparent\'><i class=\'fa fa-eye\' style=\'font-size:18px;color:green;\'></i></button>'
 			buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\'><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
 		}
-		
+
 		var row = '<tr>'
-		+ '<td>' + e.id + '</td>'
-		+ '<td>' + createdAt + '</td>'
-		+ '<td>' + updatedAt + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
-		+ '</tr>';
-        $tbody.append(row);
+			+ '<td>' + e.id + '</td>'
+			+ '<td>' + createdAt + '</td>'
+			+ '<td>' + updatedAt + '</td>'
+			+ '<td>' + buttonHtml + '</td>'
+			+ '</tr>';
+		$tbody.append(row);
 	}
 }
 
 // add items to the order list
-var tmpc =0;
-function displayOrderItemList(){
-	
+var tmpc = 0;
+function displayOrderItemList() {
+
 	var $tbody = $('#order-item-table').find('tbody');
-	var buttonHtml = '<button onclick="deleteItem(' + tmpc + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fas fa-trash\' style=\'font-size:18px;color:black;\'></i></button>'
+	var buttonHtml = '<button onclick="deleteItem(' + tmpc + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
 	var row = '<tr id="row' + tmpc + '">'
-	+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpc + '" id="barcode' + tmpc + '" placeholder="enter barcode"></div> </td>'
-	+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpc + '" id="quantity' + tmpc + '" placeholder="enter quantity"></div> </td>'
-	+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpc + '" id="sellingPrice' + tmpc + '" placeholder="enter price"></div> </td>'
-	+ '<td>' + buttonHtml + '</td>'
-	+ '</tr>';
+		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpc + '" id="barcode' + tmpc + '" placeholder="enter barcode"></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpc + '" id="quantity' + tmpc + '" placeholder="enter quantity"></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpc + '" id="sellingPrice' + tmpc + '" placeholder="enter price"></div> </td>'
+		+ '<td>' + buttonHtml + '</td>'
+		+ '</tr>';
 	$tbody.prepend(row);
-	tmpc=tmpc+1;
+	tmpc = tmpc + 1;
 }
 
-function deleteItem(tmp){
-	rowtmp = "row"+tmp;
+function deleteItem(tmp) {
+	rowtmp = "row" + tmp;
 	document.getElementById(`${rowtmp}`).remove();
 	return false;
 }
@@ -160,23 +160,23 @@ function deleteItem(tmp){
 
 
 // view order 
-function viewOrder(id){
+function viewOrder(id) {
 	$('#view-order-modal').modal('toggle');
 	getOrderItems(id);
 }
 
-function viewOrderItems(data){
+function viewOrderItems(data) {
 	var $tbody = $('#view-order-table').find('tbody');
 	$tbody.empty();
-	for(var i in data['orders']){
+	for (var i in data['orders']) {
 		var e = data['orders'][i];
 		var row = '<tr>'
-		+ '<td>' + e.barcode + '</td>'
-		+ '<td>' + e.productName + '</td>'
-		+ '<td>' + e.quantity + '</td>'
-		+ '<td>' + e.sellingPrice + '</td>'
-		+ '</tr>';
-        $tbody.append(row);
+			+ '<td>' + e.barcode + '</td>'
+			+ '<td>' + e.productName + '</td>'
+			+ '<td>' + e.quantity + '</td>'
+			+ '<td>' + e.sellingPrice + '</td>'
+			+ '</tr>';
+		$tbody.append(row);
 	}
 }
 
@@ -184,119 +184,119 @@ function viewOrderItems(data){
 
 var orderId;
 
-function editOrder(id){
+function editOrder(id) {
 	$('#edit-order-modal').modal('toggle');
 
-	var url = getOrderUrl()+ '/' + id;
-	
+	var url = getOrderUrl() + '/' + id;
+
 	$.ajax({
-	   url: url,
-	   type: 'GET',
-	   success: function(data) {
-		    orderId = data['id'];
-	   		editOrderItems(data);  
-	   },
-	   error: handleAjaxError
+		url: url,
+		type: 'GET',
+		success: function (data) {
+			orderId = data['id'];
+			editOrderItems(data);
+		},
+		error: handleAjaxError
 	});
 }
 
 var tmpe = 0;
-function editOrderItems(data){
+function editOrderItems(data) {
 	var $tbody = $('#edit-order-item-table').find('tbody');
 	$tbody.empty();
 
-	for(var i in data['orders']){
+	for (var i in data['orders']) {
 		var e = data['orders'][i];
-		var orderId = data['id']; 
+		var orderId = data['id'];
 		var $tbody = $('#edit-order-item-table').find('tbody');
-		var buttonHtml = '<button onclick="deleteItem(' + tmpe + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fas fa-trash\' style=\'font-size:18px;color:black;\'></i></button>'
+		var buttonHtml = '<button onclick="deleteItem(' + tmpe + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
 		var row = '<tr id="row' + tmpe + '">'
-		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpe + '" id="barcode' + tmpe + '" value="' + e.barcode +  '" readonly="true"></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpe + '" id="quantity' + tmpe + '" value="' + e.quantity +  '"></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpe + '" id="sellingPrice' + tmpe + '" value="' + e.sellingPrice +  '"></div> </td>'
-		+ '<td>' + buttonHtml + '</td>'
-		+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderItemId' + tmpe + '" id="orderItemId' + tmpe + '" value="' + e.orderItemId + '"></input>'
-		+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderId" id="orderId" value="' + orderId + '"></input>'
-		+ '</tr>';
-		
+			+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpe + '" id="barcode' + tmpe + '" value="' + e.barcode + '" readonly="true"></div> </td>'
+			+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpe + '" id="quantity' + tmpe + '" value="' + e.quantity + '"></div> </td>'
+			+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpe + '" id="sellingPrice' + tmpe + '" value="' + e.sellingPrice + '"></div> </td>'
+			+ '<td>' + buttonHtml + '</td>'
+			+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderItemId' + tmpe + '" id="orderItemId' + tmpe + '" value="' + e.orderItemId + '"></input>'
+			+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderId" id="orderId" value="' + orderId + '"></input>'
+			+ '</tr>';
+
 		$tbody.append(row);
-		tmpe=tmpe+1;
+		tmpe = tmpe + 1;
 	}
 
 }
 
-function openCreateOrderModel(){
+function openCreateOrderModel() {
 	$('#create-order-modal').modal('toggle');
 }
 
-function addItemInList(){
+function addItemInList() {
 	displayOrderItemList();
 }
 
 
-function convertToArrayOfObjectToCreate(data){
+function convertToArrayOfObjectToCreate(data) {
 	var serialized = data.serializeArray();
 	let arr = []
-	for(let i=0;i<serialized.length;i+=3){
-			let obj = {};
-			console.log(serialized[i].value);
-			console.log(serialized[i+1].value);
-			console.log(serialized[i+2].value);
-			obj['barcode'] = serialized[i].value;
-			obj['quantity'] = serialized[i+1].value;
-			obj['sellingPrice'] = serialized[i+2].value;
-			arr.push(obj);
+	for (let i = 0; i < serialized.length; i += 3) {
+		let obj = {};
+		console.log(serialized[i].value);
+		console.log(serialized[i + 1].value);
+		console.log(serialized[i + 2].value);
+		obj['barcode'] = serialized[i].value;
+		obj['quantity'] = serialized[i + 1].value;
+		obj['sellingPrice'] = serialized[i + 2].value;
+		arr.push(obj);
 	}
 	return JSON.stringify(arr);
 }
 
 
-function convertToArrayOfObjectToUpdate(data){
+function convertToArrayOfObjectToUpdate(data) {
 	var serialized = data.serializeArray();
 	let arr = []
-	for(let i=0;i<serialized.length;i+=5){
-			let obj = {};
-			console.log(serialized[i].value);
-			console.log(serialized[i+1].value);
-			console.log(serialized[i+2].value);
-			console.log(serialized[i+3].value);
-			obj['barcode'] = serialized[i].value;
-			obj['quantity'] = serialized[i+1].value;
-			obj['sellingPrice'] = serialized[i+2].value;
-			obj['orderItemId'] = serialized[i+3].value;
-			arr.push(obj);
+	for (let i = 0; i < serialized.length; i += 5) {
+		let obj = {};
+		console.log(serialized[i].value);
+		console.log(serialized[i + 1].value);
+		console.log(serialized[i + 2].value);
+		console.log(serialized[i + 3].value);
+		obj['barcode'] = serialized[i].value;
+		obj['quantity'] = serialized[i + 1].value;
+		obj['sellingPrice'] = serialized[i + 2].value;
+		obj['orderItemId'] = serialized[i + 3].value;
+		arr.push(obj);
 	}
 	return JSON.stringify(arr);
 }
 
-function cancelOrder(){
+function cancelOrder() {
 	var $tbody = $('#order-item-table').find('tbody');
-	$tbody.empty();	
+	$tbody.empty();
 	$('#create-order-modal').modal('hide');
 }
 
-function cancelUpdate(){
+function cancelUpdate() {
 	var $tbody = $('#edit-order-item-table').find('tbody');
 	$tbody.empty();
 	$('#edit-order-modal').modal('hide');
 }
 
-function addIteminEditForm(){
+function addIteminEditForm() {
 	var $tbody = $('#edit-order-item-table').find('tbody');
-	
-	var buttonHtml = '<button onclick="deleteItem(' + tmpe + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fas fa-trash\' style=\'font-size:18px;color:black;\'></i></button>'
+
+	var buttonHtml = '<button onclick="deleteItem(' + tmpe + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
 	var row = '<tr id="row' + tmpe + '">'
-	+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpe + '" id="barcode' + tmpe + '" value="" ></div> </td>'
-	+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpe + '" id="quantity' + tmpe + '" value=""></div> </td>'
-	+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpe + '" id="sellingPrice' + tmpe + '" value=""></div> </td>'
-	+ '<td>' + buttonHtml + '</td>'
-	+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderItemId' + tmpe + '" id="orderItemId' + tmpe + '" value="0"></input>'
-	+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderId" id="orderId" value="' + orderId + '"></input>'
-	+ '</tr>';
-	
+		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpe + '" id="barcode' + tmpe + '" value="" ></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpe + '" id="quantity' + tmpe + '" value=""></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpe + '" id="sellingPrice' + tmpe + '" value=""></div> </td>'
+		+ '<td>' + buttonHtml + '</td>'
+		+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderItemId' + tmpe + '" id="orderItemId' + tmpe + '" value="0"></input>'
+		+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderId" id="orderId" value="' + orderId + '"></input>'
+		+ '</tr>';
+
 	$tbody.prepend(row);
-	tmpe=tmpe+1;
-	
+	tmpe = tmpe + 1;
+
 }
 
 
@@ -304,33 +304,33 @@ function addIteminEditForm(){
 
 // Invoice functions
 
-function getInvoice(id){
+function getInvoice(id) {
 	var url = getInvoiceUrl() + '/' + id;
 	window.open(url, '_blank');
 	getOrderList();
 }
 
-function generateInvoice(id){
+function generateInvoice(id) {
 	var url = getInvoiceUrl() + '/' + id;
 	$.ajax({
-	   url: url,
-	   type: 'POST',
-	   headers: {
-       	'Content-Type': 'application/json'
-       },	   
-	   success: function(response) {
-	   		getInvoice(id);  
-	   },
-	   error: handleAjaxError
+		url: url,
+		type: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		success: function (response) {
+			getInvoice(id);
+		},
+		error: handleAjaxError
 	});
 	return false;
 }
 
 
 //INITIALIZATION CODE
-function init(){
+function init() {
 	$('#create-order-button').click(openCreateOrderModel);
-    $('#add-item').click(addItemInList);
+	$('#add-item').click(addItemInList);
 	$('#create-order').click(createOrder);
 	$('#cancel-order').click(cancelOrder);
 	$('#update-order').click(updateOrder);
