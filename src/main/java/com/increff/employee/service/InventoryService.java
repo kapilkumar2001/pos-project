@@ -50,7 +50,7 @@ public class InventoryService {
 		return inventoryDao.selectAll();
 	}
 
-	@Transactional(rollbackOn  = ApiException.class)
+	@Transactional
 	public void updateInventoryWhileCreatingOrder(int id, String barcode, int quantity) throws ApiException{
 		if(quantity<0) {
 			throw new ApiException("not enough quantity available, barcode: " + barcode);
