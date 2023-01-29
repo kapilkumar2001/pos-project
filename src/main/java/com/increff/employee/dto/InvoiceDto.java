@@ -40,11 +40,7 @@ public class InvoiceDto {
     public void generateInvoice(int orderId) throws ApiException {
         OrderPojo orderPojo =  orderService.getOrder(orderId);
         
-        if(orderPojo == null) {
-            throw new ApiException("order with this id doesn't exist, orderId: " + orderId);
-        }
-
-        if(orderPojo.getStatus()=="invoiced"){
+        if(orderPojo.getStatus().equals("invoiced")){
             return;
         }
 

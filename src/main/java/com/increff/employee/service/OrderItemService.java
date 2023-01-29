@@ -21,6 +21,15 @@ public class OrderItemService {
 	public void addItemstoOrder(int orderId, List<OrderItemPojo> orderItemPojoList) throws ApiException{
         for(OrderItemPojo orderItemPojo: orderItemPojoList)
 		{
+			if(StringUtil.isEmpty(orderItemPojo.getBarcode())) {
+				throw new ApiException("Barcode can not be empty");
+			}
+			if(orderItemPojo.getQuantity()<0) {
+				throw new ApiException("Quantity can not be less than 0");
+			}
+			if(orderItemPojo.getSellingPrice()<=0) {
+				throw new ApiException("Selling Price can not be less than or equal to 0");
+			}
 			orderItemPojo.setOrderId(orderId);
 			addOrderItem(orderItemPojo);
 		}
@@ -50,6 +59,18 @@ public class OrderItemService {
 
 		for(OrderItemPojo orderItemPojo: orderItemPojoList)
 		{
+
+			if(StringUtil.isEmpty(orderItemPojo.getBarcode())) {
+				throw new ApiException("Barcode can not be empty");
+			}
+			if(orderItemPojo.getQuantity()<0) {
+				throw new ApiException("Quantity can not be less than 0");
+			}
+			if(orderItemPojo.getSellingPrice()<=0) {
+				throw new ApiException("Selling Price can not be less than or equal to 0");
+			}
+
+
 			if(orderItemPojo.getId()==0) {
 				OrderItemPojo orderItemPojoIn = new OrderItemPojo();
 				

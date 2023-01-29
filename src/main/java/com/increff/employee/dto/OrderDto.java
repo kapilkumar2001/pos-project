@@ -21,7 +21,6 @@ import com.increff.employee.service.InventoryService;
 import com.increff.employee.service.OrderItemService;
 import com.increff.employee.service.OrderService;
 import com.increff.employee.service.ProductService;
-import com.increff.employee.util.StringUtil;
 
 
 @Component
@@ -44,16 +43,6 @@ public class OrderDto {
         
         for(OrderItemForm orderItemForm: form)
 		{
-			if(StringUtil.isEmpty(orderItemForm.getBarcode())) {
-				throw new ApiException("Barcode can not be empty");
-			}
-			if(orderItemForm.getQuantity()<0) {
-				throw new ApiException("Quantity can not be less than 0");
-			}
-			if(orderItemForm.getSellingPrice()<=0) {
-				throw new ApiException("Selling Price can not be less than or equal to 0");
-			}
-
 			OrderItemPojo orderItemPojo = new OrderItemPojo();
 			orderItemPojo.setBarcode(orderItemForm.getBarcode());
 			orderItemPojo.setOrderId(orderPojo.getId());
@@ -66,10 +55,7 @@ public class OrderDto {
 				
             // reduce quantity in inventory
             InventoryPojo inventoryPojo = inventoryService.get(orderItemPojo.getProductId(), orderItemPojo.getBarcode());
-            if(orderItemPojo.getQuantity()>inventoryPojo.getQuantity()) {
-                throw new ApiException("not enough quantity available, barcode: " + orderItemPojo.getBarcode());
-            }
-            inventoryService.update(orderItemPojo.getProductId(), orderItemPojo.getBarcode(),  inventoryPojo.getQuantity() - orderItemPojo.getQuantity());
+            inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(), inventoryPojo.getQuantity() - orderItemPojo.getQuantity());
 
             orderItemPojoList.add(orderItemPojo);
         }
@@ -117,16 +103,6 @@ public class OrderDto {
         for(OrderItemForm orderItemForm: orderItemFormList)
 		{
 			newOrderItemIds.add(orderItemForm.getOrderItemId());
-
-            if(StringUtil.isEmpty(orderItemForm.getBarcode())) {
-				throw new ApiException("Barcode can not be empty");
-			}
-			if(orderItemForm.getQuantity()<0) {
-				throw new ApiException("Quantity can not be less than 0");
-			}
-			if(orderItemForm.getSellingPrice()<=0) {
-				throw new ApiException("Selling Price can not be less than or equal to 0");
-			}
         	
             OrderItemPojo orderItemPojo = new OrderItemPojo();
             orderItemPojo.setBarcode(orderItemForm.getBarcode());
@@ -146,17 +122,11 @@ public class OrderDto {
 			    int prevQuantity =  orderItemPojoTemp.getQuantity();
 
                 InventoryPojo inventoryPojo = inventoryService.get(orderItemPojo.getProductId(), orderItemPojo.getBarcode());
-				if(orderItemPojo.getQuantity()>(inventoryPojo.getQuantity() + prevQuantity)) {
-					throw new ApiException("not enough quantity available, barcode: " + orderItemPojo.getBarcode());
-				}
-				inventoryService.update(orderItemPojo.getProductId(), orderItemPojo.getBarcode(),  (inventoryPojo.getQuantity() + prevQuantity) - orderItemPojo.getQuantity());
+				inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(),  (inventoryPojo.getQuantity() + prevQuantity) - orderItemPojo.getQuantity());
             }
             else{ 
                 InventoryPojo inventoryPojo = inventoryService.get(orderItemPojo.getProductId(), orderItemPojo.getBarcode());
-                if(orderItemPojo.getQuantity()>inventoryPojo.getQuantity()) {
-                    throw new ApiException("not enough quantity available, barcode: " + orderItemPojo.getBarcode());
-                }
-                inventoryService.update(orderItemPojo.getProductId(), orderItemPojo.getBarcode(),  inventoryPojo.getQuantity() - orderItemPojo.getQuantity());
+                inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(),  inventoryPojo.getQuantity() - orderItemPojo.getQuantity());
             }
             
             orderItemPojoList.add(orderItemPojo);
@@ -169,7 +139,7 @@ public class OrderDto {
 			OrderItemPojo orderItemPojo = orderItemService.getOrderItembyItemId(orderItemId);
 			String barcode = productService.get(orderItemPojo.getProductId()).getBarcode();
 			InventoryPojo inventoryPojo = inventoryService.get(orderItemPojo.getProductId(), barcode);
-			inventoryService.update(orderItemPojo.getProductId(), barcode,  inventoryPojo.getQuantity() + orderItemPojo.getQuantity());
+			inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), barcode,  inventoryPojo.getQuantity() + orderItemPojo.getQuantity());
 		}	
 
 		List<Integer> orderItemIdstoRemove = existingOrderItemIds;

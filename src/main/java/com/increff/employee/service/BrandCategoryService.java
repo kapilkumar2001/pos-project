@@ -89,8 +89,12 @@ public class BrandCategoryService{
 	}
 
 	@Transactional
-	public BrandCategoryPojo getBrandCategory(String brand, String category){
-		return brandCategoryDao.getBrandCategory(brand, category);
+	public BrandCategoryPojo getBrandCategory(String brand, String category) throws ApiException{
+		BrandCategoryPojo brandCategoryPojo =  brandCategoryDao.getBrandCategory(brand, category);
+		if(brandCategoryPojo==null){
+			throw  new ApiException("Brand-Category Combination doesn't exist");
+		}
+		return brandCategoryPojo;
 	}
 	
 	protected static void normalize(BrandCategoryPojo brandCategoryPojo) {
