@@ -39,9 +39,7 @@ public class SalesReportDto {
 
         if((!brand.equals("")) && (!category.equals(""))){
             BrandCategoryPojo brandCategoryPojo = brandCategoryService.getBrandCategory(brand, category);
-            if(brandCategoryPojo==null){
-                throw  new ApiException("Brand-Category Combination doesn't exist");
-            }
+            
             SalesReportData salesReportData = new SalesReportData();
             salesReportData.setBrand(brandCategoryPojo.getBrand());
             salesReportData.setCategory(brandCategoryPojo.getCategory());

@@ -86,7 +86,7 @@ public class ProductDto {
         return productData;
     }
 
-    private ProductPojo convert(ProductForm productForm) {
+    private ProductPojo convert(ProductForm productForm) throws ApiException {
         ProductPojo productPojo = new ProductPojo();
         productPojo.setBarcode(productForm.getBarcode());
         productPojo.setMrp(productForm.getMrp());
