@@ -53,6 +53,15 @@ public class BrandCategoryDto {
         return brandsList;
     }
 
+    public List<String> getAllCategories(){
+        List<BrandCategoryPojo> brandCategoryPojoList = brandCategoryService.getAll();
+        List<String> categoryList = new ArrayList<String>();
+        for (BrandCategoryPojo brandCategoryPojo : brandCategoryPojoList) {
+            categoryList.add(brandCategoryPojo.getCategory());
+        }
+        return categoryList;
+    }
+
     public List<String> getCategories(String brand){
         List<BrandCategoryPojo> brandCategoryPojoList = brandCategoryService.getCategories(brand);
         List<String> categoriesList = new ArrayList<String>();
