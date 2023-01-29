@@ -201,6 +201,7 @@ function displayBrandList(data) {
 	$select.empty();
 	var row = "<option value='' disabled selected style='display: none'>Please Choose Brand</option>";
 	$select.append(row);
+	data = Array.from(new Set(data));
 	for (var i in data) {
 		var e = data[i];
 		row = "<option value='" +e+ "'>" + e + "</option>";

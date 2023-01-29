@@ -86,6 +86,9 @@ public class OrderDto {
 
     @Transactional
     public void update(int orderId, List<OrderItemForm> orderItemFormList) throws ApiException{
+
+		OrderPojo orderPojo = orderService.getOrder(orderId);
+		orderService.update(orderPojo);
     
         List <OrderItemPojo> orderItemPojoList = new ArrayList<>();
 
@@ -148,8 +151,10 @@ public class OrderDto {
 		OrderData orderData = new OrderData();
 
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");  
-        String dateTime = orderPojo.getTime().format(format);
-        orderData.setTime(dateTime);
+        String dateTime = orderPojo.getCreatedAt().format(format);
+        orderData.setCreatedAt(dateTime);
+		dateTime = orderPojo.getUpdatedAt().format(format);
+		orderData.setUpdatedAt(dateTime);
 
 		orderData.setId(orderPojo.getId());
 		orderData.setStatus(orderPojo.getStatus());

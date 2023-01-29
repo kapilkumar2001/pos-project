@@ -102,6 +102,14 @@ function displayOrderList(data){
 		var e = data[i];
 		var buttonHtml = '';
 
+		var date = new Date((e.createdAt).replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
+		var options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true };
+		var createdAt = new Intl.DateTimeFormat('en-US', options).format(date);
+
+		date = new Date((e.updatedAt).replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
+		var updatedAt = new Intl.DateTimeFormat('en-US', options).format(date);
+
+
 		if(e.status=='invoiced'){
 			console.log(e.status + " not edit " + e.id);
             buttonHtml += '<button onclick="" style=\'border: none;margin-right:16px; background-color:transparent\' disabled><i class=\'far fa-edit\' style=\'font-size:18px;color:gray;\'></i></button>'
@@ -117,7 +125,8 @@ function displayOrderList(data){
 		
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
-		+ '<td>' + e.time + '</td>'
+		+ '<td>' + createdAt + '</td>'
+		+ '<td>' + updatedAt + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);

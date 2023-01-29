@@ -22,7 +22,7 @@ public class InvoiceService {
         orderFopObject.setOrderId(orderPojo.getId());
         
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");  
-        String dateTime = orderPojo.getTime().format(format);
+        String dateTime = orderPojo.getUpdatedAt().format(format);
         orderFopObject.setTime(dateTime);
        
         DecimalFormat dec = new DecimalFormat("#.##");

@@ -1,0 +1,49 @@
+<!doctype html>
+
+<html lang="en">
+
+<head th:replace="snippets.html :: name_head"></head>
+
+<body>
+
+<nav th:replace="snippets.html :: name_app_navbar"></nav>
+
+<div class="container">
+
+<h3>Pos Day Sale Report</h3>
+
+
+<!-- Blank Row -->
+<div class="row">
+    &nbsp;
+</div>
+<div class="row">
+
+ <!-- Table -->
+ <div class="col-12">
+    <table class="table table-striped" id="posdaysales-report-table">
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Total Invoiced Orders</th>
+          <th scope="col">Total Invoiced Items</th>
+          <th scope="col">Total Revenue</th>
+        </tr>
+      </thead>
+      <tbody>
+       
+      </tbody>
+    </table>
+</div>
+</div>
+
+
+</div> 
+
+<footer th:replace="snippets.html :: name_footer"></footer>
+
+<script th:src="@{/static/posdaysales_report.js}"/></script>
+
+</body> 
+
+</html>
