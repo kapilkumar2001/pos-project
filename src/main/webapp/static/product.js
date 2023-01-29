@@ -14,6 +14,8 @@ function addProduct(event) {
 	var json = toJson($form);
 	var url = getProductUrl();
 
+	console.log(json);
+
 	$.ajax({
 		url: url,
 		type: 'POST',
@@ -27,10 +29,12 @@ function addProduct(event) {
 			$("#product-form input[name=name]").val("");
 			$("#product-form input[name=mrp]").val("");
 			$("#product-form input[name=barcode]").val("");
-			// document.getElementById("inputBrand").selectedIndex = -1;
-			// document.getElementById("inputCategory").selectedIndex = -1;
-			// $("#product-form input[name=category]").val("");
-			// $("#product-form input[name=brand]").val("");
+			document.getElementById("inputBrand").selectedIndex = -1;
+			document.getElementById("inputBrand").innerHTML = "<option value='' disabled selected style='display: none'>Please Choose Brand</option>";
+			document.getElementById("inputCategory").selectedIndex = -1;
+			document.getElementById("inputCategory").innerHTML = "<option value='' disabled selected style='display: none'>Select Brand First</option>";
+			$('#add-product-modal').modal('hide');
+
 		},
 		error: handleAjaxError
 	});
@@ -39,7 +43,6 @@ function addProduct(event) {
 }
 
 function updateProduct(event) {
-	// $('#edit-product-modal').modal('toggle');
 	//Get the ID
 	var id = $("#product-edit-form input[name=id]").val();
 	var url = getProductUrl() + "/" + id;
@@ -182,7 +185,7 @@ function displayProductList(data) {
 	for (var i in data) {
 		var e = data[i];
 		var buttonHtml = '<button onclick="displayEditProduct(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'far fa-edit\' style=\'font-size:18px;color:black;\'></i></button>'
-		buttonHtml += '<button onclick="deleteProduct(' + e.id + ')" style=\'border: none; margin-left:8px; background-color:transparent\'><i class=\'fas fa-trash\' style=\'font-size:18px;color:black;\'></i></button>'
+		// buttonHtml += '<button onclick="deleteProduct(' + e.id + ')" style=\'border: none; margin-left:8px; background-color:transparent\'><i class=\'fas fa-trash\' style=\'font-size:18px;color:black;\'></i></button>'
 		var row = '<tr>'
 			+ '<td>' + e.id + '</td>'
 			+ '<td>' + e.name + '</td>'
@@ -273,8 +276,13 @@ function displayProduct(data) {
 	$('#edit-product-modal').modal('toggle');
 }
 
+function OpenAddProductModal(){
+    $('#add-product-modal').modal('toggle');
+}
+
 //INITIALIZATION CODE
 function init() {
+	$('#add-product-button').click(OpenAddProductModal);
 	$('#add-product').click(addProduct);
 	$('#update-product').click(updateProduct);
 	$('#refresh-data').click(getProductList);
