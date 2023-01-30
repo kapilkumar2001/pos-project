@@ -3,12 +3,16 @@ package com.increff.employee.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.increff.employee.model.UserData;
 import com.increff.employee.model.UserForm;
@@ -21,26 +25,33 @@ import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
-public class AdminApiController {
+public class SignupApiController {
 
 	@Autowired
 	private UserService service;
 
+	@Value("${signup.email}")
+	private String email;
+
+
+	// signup 
 	@ApiOperation(value = "Adds a user")
-	@RequestMapping(path = "/api/admin/user", method = RequestMethod.POST)
-	public void addUser(@RequestBody UserForm form) throws ApiException {
+	@RequestMapping(path = "/session/signup", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	public ModelAndView addUser(HttpServletRequest req, UserForm form) throws ApiException {
 		UserPojo p = convert(form);
 		service.add(p);
+		
+		return new ModelAndView("redirect:/site/login");
 	}
 
 	@ApiOperation(value = "Deletes a user")
-	@RequestMapping(path = "/api/admin/user/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(path = "/session/signup/{id}", method = RequestMethod.DELETE)
 	public void deleteUser(@PathVariable int id) {
 		service.delete(id);
 	}
 
 	@ApiOperation(value = "Gets list of all users")
-	@RequestMapping(path = "/api/admin/user", method = RequestMethod.GET)
+	@RequestMapping(path = "/session/signup", method = RequestMethod.GET)
 	public List<UserData> getAllUser() {
 		List<UserPojo> list = service.getAll();
 		List<UserData> list2 = new ArrayList<UserData>();
@@ -58,10 +69,15 @@ public class AdminApiController {
 		return d;
 	}
 
-	private static UserPojo convert(UserForm f) {
+	private UserPojo convert(UserForm f) {
 		UserPojo p = new UserPojo();
 		p.setEmail(f.getEmail());
-		p.setRole(f.getRole());
+		if(f.getEmail().equals(email)){
+			p.setRole("supervisor");	
+		}
+		else{
+			p.setRole("operator");
+		}
 		p.setPassword(f.getPassword());
 		return p;
 	}

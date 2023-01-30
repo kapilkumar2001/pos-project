@@ -128,10 +128,14 @@ function downloadErrors() {
 function displayInventoryList(data) {
 	var $tbody = $('#inventory-table').find('tbody');
 	$tbody.empty();
+	var role = $('.user-role').find('span').text();
 	for (var i in data) {
 		var e = data[i];
-		var buttonHtml = '<button onclick="displayEditInventory(\'' + e.barcode + '\')\" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
-		console.log(buttonHtml);
+		var buttonHtml = '';
+		if(role=="supervisor"){
+		    buttonHtml += '<button onclick="displayEditInventory(\'' + e.barcode + '\')\" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
+		}
+		
 		var row = '<tr>'
 			+ '<td>' + e.id + '</td>'
 			+ '<td>' + e.barcode + '</td>'

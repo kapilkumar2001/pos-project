@@ -98,6 +98,8 @@ function getOrderItems(id) {
 function displayOrderList(data) {
 	var $tbody = $('#order-table').find('tbody');
 	$tbody.empty();
+
+	var role = $('.user-role').find('span').text();
 	for (var i in data) {
 		var e = data[i];
 		var buttonHtml = '';
@@ -109,18 +111,26 @@ function displayOrderList(data) {
 		date = new Date((e.updatedAt).replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
 		var updatedAt = new Intl.DateTimeFormat('en-US', options).format(date);
 
-
 		if (e.status == 'invoiced') {
-			console.log(e.status + " not edit " + e.id);
 			buttonHtml += '<button onclick="" style=\'border: none;margin-right:16px; background-color:transparent\' disabled><i class=\'far fa-edit\' style=\'font-size:18px;color:gray;\'></i></button>'
 			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none; background-color:transparent\'><i class=\'fa fa-eye\' style=\'font-size:18px;color:green;\'></i></button>'
 			buttonHtml += '<button onclick="getInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\'><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
 		}
 		else {
-			console.log(e.status + " edit " + e.id);
-			buttonHtml += '<button onclick="editOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\'><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
+			var buttonHtml = '';
+			if (role == "supervisor") {
+				buttonHtml += '<button onclick="editOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\'><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
+			}
+			else {
+				buttonHtml += '<button onclick="" style=\'border: none;margin-right:16px; background-color:transparent\' disabled><i class=\'far fa-edit\' style=\'font-size:18px;color:gray;\'></i></button>'
+			}
 			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none; background-color:transparent\'><i class=\'fa fa-eye\' style=\'font-size:18px;color:green;\'></i></button>'
-			buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\'><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
+			if (role == "supervisor") {
+				buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\'><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
+			}
+			else {
+				buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' disabled><i class=\'fa fa-download\' style=\'font-size:18px;color:gray;\'></i></button>'
+			}
 		}
 
 		var row = '<tr>'
