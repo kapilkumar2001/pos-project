@@ -112,24 +112,24 @@ function displayOrderList(data) {
 		var updatedAt = new Intl.DateTimeFormat('en-US', options).format(date);
 
 		if (e.status == 'invoiced') {
-			buttonHtml += '<button onclick="" style=\'border: none;margin-right:16px; background-color:transparent\' disabled><i class=\'far fa-edit\' style=\'font-size:18px;color:gray;\'></i></button>'
-			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none; background-color:transparent\'><i class=\'fa fa-eye\' style=\'font-size:18px;color:green;\'></i></button>'
-			buttonHtml += '<button onclick="getInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\'><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
+			buttonHtml += '<button onclick="" style=\'border: none;margin-right:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Order is already invoiced, can\'t edit" disabled><i class=\'far fa-edit\' style=\'font-size:18px;color:gray;\'></i></button>'
+			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="View Order"><i class=\'fa fa-eye\' style=\'font-size:18px;color:green;\'></i></button>'
+			buttonHtml += '<button onclick="getInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Download Invoice"><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
 		}
 		else {
 			var buttonHtml = '';
 			if (role == "supervisor") {
-				buttonHtml += '<button onclick="editOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\'><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
+				buttonHtml += '<button onclick="editOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
 			}
 			else {
-				buttonHtml += '<button onclick="" style=\'border: none;margin-right:16px; background-color:transparent\' disabled><i class=\'far fa-edit\' style=\'font-size:18px;color:gray;\'></i></button>'
+				buttonHtml += '<button onclick="" style=\'border: none;margin-right:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="You don\'t have permission to edit order" disabled><i class=\'far fa-edit\' style=\'font-size:18px;color:gray;\'></i></button>'
 			}
-			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none; background-color:transparent\'><i class=\'fa fa-eye\' style=\'font-size:18px;color:green;\'></i></button>'
+			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="View Order"><i class=\'fa fa-eye\' style=\'font-size:18px;color:green;\'></i></button>'
 			if (role == "supervisor") {
-				buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\'><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
+				buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Generate Invoice"><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
 			}
 			else {
-				buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' disabled><i class=\'fa fa-download\' style=\'font-size:18px;color:gray;\'></i></button>'
+				buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Invoice not generated yet" disabled><i class=\'fa fa-download\' style=\'font-size:18px;color:gray;\'></i></button>'
 			}
 		}
 
