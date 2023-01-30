@@ -16,6 +16,7 @@
 
 		<div class="row">
 			&nbsp;
+			&nbsp;
             <h4 class="alignleft">Brands</h4>
 			<th:block th:switch="${info.getRole()}">
 				<div th:case="supervisor" style="margin-left: auto;margin-right: 0;">
@@ -23,21 +24,17 @@
 						<div class="col-12">
 							<button type="button" class="btn btn-primary btn-sm" id="add-brandcategory-button"
 								style="padding: 4px">
-								<i class='fa fa-plus'
-									style='font-size:16px;color:white; padding-right: 4px;'></i>Add</button>
-							&nbsp;
-							<button type="button" class="btn btn-primary btn-sm" id="refresh-data"><i
-									class='fas fa-sync-alt'
-									style='font-size:16px;color:white;padding-right: 4px;'></i>Refresh</button>
-							&nbsp;
-							<button type="button" class="btn btn-primary btn-sm" id="upload-data"><i class='fa fa-upload'
-									style='font-size:16px;color:white;padding-right: 4px;'></i>Upload</button>
-							<!-- <input type="hidden" value="${info.getRole()}" id="user-role"></input> -->
+								<i class='fa fa-plus align-middle'
+									style='font-size:16px;color:white; padding-right: 4px;'></i><span class="align-middle">Add Brand</span></button>
+							&nbsp;&nbsp;
+							<button type="button" class="btn btn-primary btn-sm" id="upload-data"><i class='fa fa-upload align-middle'
+									style='font-size:16px;color:white;padding-right: 4px;'></i><span class="align-middle">Upload Brands</span></button>
 						</div>
 					</div>
 				</div>
 				<div th:case="operator"></div>
 			</th:block>
+			&nbsp;
 			&nbsp;
 		</div>
 
@@ -55,7 +52,7 @@
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title">Add BrandCategory</h5>
+						<h5 class="modal-title">Add Brand Category</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -79,19 +76,14 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary btn-sm" id="add-brandcategory"><i
-								class='fa fa-check'
-								style='font-size:16px;color:white; padding-right: 4px;'></i>Add</button>
+						<button type="button" class="btn btn-primary btn-sm" id="add-brandcategory">Add</button>
 					</div>
 				</div>
 			</div>
 		</div>
 
 
-		<!-- Blank Row -->
-		<div class="row">
-			&nbsp;
-		</div>
+		
 		<div class="row">
 
 			<!-- Table -->
@@ -106,7 +98,7 @@
 									<th scope="col">Category</th>
 									<th:block th:switch="${info.getRole()}">
 										<div th:case="supervisor">
-											<th scope="col">Actions</th>
+											<th scope="col">Action</th>
 										</div>
 									</th:block>
 								</tr>
@@ -120,12 +112,17 @@
 		</div>
 
 
+		<div class="row">
+			&nbsp;
+		</div>
+
+
 		<!-- BrandCategory Edit Modal -->
 		<div class="modal" tabindex="-1" role="dialog" id="edit-brandcategory-modal">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title">Edit BrandCategory</h5>
+						<h5 class="modal-title">Edit Brand Category</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -151,9 +148,7 @@
 					</div>
 					<div class="modal-footer">
 						<!-- <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class='fa fa-close' style='font-size:16px;color:white; padding-right: 4px;'></i>Cancel</button> -->
-						<button type="button" class="btn btn-primary btn-sm" id="update-brandcategory"><i
-								class='fa fa-check'
-								style='font-size:16px;color:white; padding-right: 4px;'></i>Update</button>
+						<button type="button" class="btn btn-primary btn-sm" id="update-brandcategory">Update</button>
 					</div>
 				</div>
 			</div>
@@ -199,7 +194,7 @@
 			</div>
 		</div>
 
-	</div> <!-- Container end-->
+	</div> 
 
 	<footer th:replace="snippets.html :: name_footer"></footer>
 
