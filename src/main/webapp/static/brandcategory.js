@@ -151,7 +151,6 @@ function displayBrandCategoryList(data){
 			buttonHtml += '<button onclick="displayEditBrandCategory(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
 		} 
 		var row = '<tr>'
-		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.brand + '</td>'
 		+ '<td>'  + e.category + '</td>'
 		+ '<td>' + buttonHtml + '</td>'

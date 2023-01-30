@@ -47,13 +47,13 @@
             <table class="table table-striped" id="inventory-table">
               <thead>
                 <tr>
-                  <th scope="col">ID</th>
+                 
                   <th scope="col">Barcode</th>
                   <th scope="col">Product Name</th>
                   <th scope="col">Quantity</th>
                   <th:block th:switch="${info.getRole()}">
                     <div th:case="supervisor">
-                      <th scope="col">Actions</th>
+                      <th scope="col">Action</th>
                     </div>
                   </th:block>
                 </tr>
@@ -82,7 +82,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <form id="inventory-edit-form">
+            <form class="form-inline" id="inventory-edit-form">
               <div class="form-group">
                 <label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label>
                 <div class="col-sm-10">
@@ -93,10 +93,7 @@
             </form>
           </div>
           <div class="modal-footer">
-            <!-- <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class='fa fa-close'
-                style='font-size:16px;color:white; padding-right: 4px;'></i>Cancel</button> -->
-            <button type="button" class="btn btn-primary btn-sm" id="update-inventory"><i class='fa fa-check'
-                style='font-size:16px;color:white; padding-right: 4px;'></i>Update</button>
+            <button type="button" class="btn btn-primary btn-sm" id="update-inventory">Update</button>
           </div>
         </div>
       </div>

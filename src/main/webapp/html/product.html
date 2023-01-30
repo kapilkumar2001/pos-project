@@ -18,19 +18,22 @@
 		<div class="row">
 			&nbsp;
 			&nbsp;
-            <h4 class="leftAlign">Products</h4>
+			<h4 class="leftAlign">Products</h4>
 
 			<th:block th:switch="${info.getRole()}">
 				<div th:case="supervisor" style="margin-left: auto;margin-right: 0;">
-					<div class="row" >
+					<div class="row">
 						<div class="col-12">
 							<button type="button" class="btn btn-primary btn-sm" id="add-product-button"><i
 									class='fa fa-plus align-middle'
-									style='font-size:16px;color:white; padding-right: 4px;'></i><span class="align-middle">Add Product</span></button>
+									style='font-size:16px;color:white; padding-right: 4px;'></i><span
+									class="align-middle">Add Product</span></button>
 							&nbsp; &nbsp;
-							<button type="button" class="btn btn-primary btn-sm" id="upload-data"><i class='fa fa-upload align-middle'
-									style='font-size:16px;color:white;padding-right: 4px;'></i><span class="align-middle">Upload Products</span></button>
-							
+							<button type="button" class="btn btn-primary btn-sm" id="upload-data"><i
+									class='fa fa-upload align-middle'
+									style='font-size:16px;color:white;padding-right: 4px;'></i><span
+									class="align-middle">Upload Products</span></button>
+
 						</div>
 					</div>
 				</div>
@@ -46,7 +49,7 @@
 		<div class="row">
 			&nbsp;
 		</div>
-		
+
 
 
 		<!-- Add Product Modal -->
@@ -62,6 +65,31 @@
 					<div class="modal-body">
 						<form id="product-form">
 							<div class="form-group row">
+								<label for="inputBrand" class="col-sm-2 col-form-label"
+									style="justify-content: left;">Brand</label>
+								<div class="col-sm-10" id="brands-dropdown">
+									<select class="form-control form-control-sm" name="brand" id="inputBrand">
+									</select>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="inputCategory" class="col-sm-2 col-form-label"
+									style="justify-content: left;">Category</label>
+								<div class="col-sm-10">
+									<select class="form-control form-control-sm" name="category" id="inputCategory">
+										<option value='' disabled selected style='display: none'>Select Brand First
+										</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control form-control-sm" name="barcode"
+										placeholder="enter barcode">
+								</div>
+							</div>
+							<div class="form-group row">
 								<label for="inputName" class="col-sm-2 col-form-label">Name</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control form-control-sm" name="name"
@@ -75,31 +103,6 @@
 										placeholder="enter mrp">
 								</div>
 							</div>
-							<div class="form-group row">
-								<label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control form-control-sm" name="barcode"
-										placeholder="enter barcode">
-								</div>
-							</div>
-							<div class="form-group row">
-								<label for="inputBrand" class="col-sm-4 col-form-label"
-									style="justify-content: left;">Brand</label>
-								<div class="col-sm-8" id="brands-dropdown">
-									<select class="form-control form-control-sm" name="brand" id="inputBrand">
-									</select>
-								</div>
-							</div>
-							<div class="form-group row">
-								<label for="inputCategory" class="col-sm-4 col-form-label"
-									style="justify-content: left;">Category</label>
-								<div class="col-sm-8">
-									<select class="form-control form-control-sm" name="category" id="inputCategory">
-										<option value='' disabled selected style='display: none'>Select Brand First
-										</option>
-									</select>
-								</div>
-							</div>
 						</form>
 					</div>
 					<div class="modal-footer">
@@ -111,11 +114,8 @@
 		</div>
 
 
-		
+
 		<div class="row">
-
-
-			<!-- Table -->
 			<div class="col-12">
 
 				<div class="card shadow-4-strong rounded-5 overflow-hidden">
@@ -124,15 +124,14 @@
 						<table class="table table-striped" id="product-table">
 							<thead>
 								<tr>
-									<th scope="col">ID</th>
-									<th scope="col">Product Name</th>
 									<th scope="col">Barcode</th>
+									<th scope="col">Product Name</th>
+									<th scope="col">MRP</th>
 									<th scope="col">Brand</th>
 									<th scope="col">Category</th>
-									<th scope="col">MRP</th>
 									<th:block th:switch="${info.getRole()}">
 										<div th:case="supervisor">
-											<th scope="col">Actions</th>
+											<th scope="col">Action</th>
 										</div>
 									</th:block>
 								</tr>
@@ -182,21 +181,21 @@
 								<label for="editInputBarcode" class="col-sm-2 col-form-label">Barcode</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control form-control-sm" name="barcode"
-										placeholder="Enter Barcode"  readonly="true">
+										placeholder="Enter Barcode" readonly="true">
 								</div>
 							</div>
 							<div class="form-group row">
 								<label for="editInputBrand" class="col-sm-2 col-form-label">Brand</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control form-control-sm" name="brand"
-										placeholder="Enter Brand"  readonly="true">
+										placeholder="Enter Brand" readonly="true">
 								</div>
 							</div>
 							<div class="form-group row">
 								<label for="editInputCategory" class="col-sm-2 col-form-label">Category</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control form-control-sm" name="category"
-										placeholder="Enter Category"  readonly="true">
+										placeholder="Enter Category" readonly="true">
 								</div>
 							</div>
 
