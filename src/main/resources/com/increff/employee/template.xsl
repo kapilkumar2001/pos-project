@@ -69,7 +69,7 @@
                                         </fo:table-cell>
                                         <fo:table-cell text-align="right" border="solid 0.3mm black">
                                             <fo:block font-weight="bold">
-                                               Mrp
+                                               MRP
                                             </fo:block>
                                         </fo:table-cell>
                                         <fo:table-cell text-align="right" border="solid 0.3mm black">
