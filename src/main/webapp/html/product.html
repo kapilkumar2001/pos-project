@@ -13,20 +13,29 @@
 		<h4>Products</h4>
 
 		<!-- Top row -->
-		<div class="row">
-			<div class="col-12">
+		<th:block th:switch="${info.getRole()}">
+			<div th:case="supervisor">
+				<div class="row">
+					<div class="col-12">
 
-				<button type="button" class="btn btn-primary btn-sm" id="add-product-button"><i class='fa fa-plus'
-						style='font-size:16px;color:white; padding-right: 4px;'></i>Add</button>
-				&nbsp; &nbsp;
-				<button type="button" class="btn btn-primary btn-sm" id="refresh-data"><i class='fas fa-sync-alt'
-						style='font-size:16px;color:white;padding-right: 4px;'></i>Refresh</button>
-				&nbsp; &nbsp;
-				<button type="button" class="btn btn-primary btn-sm" id="upload-data"><i class='fa fa-upload'
-						style='font-size:16px;color:white;padding-right: 4px;'></i>Upload</button>
+						<button type="button" class="btn btn-primary btn-sm" id="add-product-button"><i
+								class='fa fa-plus'
+								style='font-size:16px;color:white; padding-right: 4px;'></i>Add</button>
+						&nbsp; &nbsp;
+						<button type="button" class="btn btn-primary btn-sm" id="refresh-data"><i
+								class='fas fa-sync-alt'
+								style='font-size:16px;color:white;padding-right: 4px;'></i>Refresh</button>
+						&nbsp; &nbsp;
+						<button type="button" class="btn btn-primary btn-sm" id="upload-data"><i class='fa fa-upload'
+								style='font-size:16px;color:white;padding-right: 4px;'></i>Upload</button>
+						
+					</div>
+				</div>
+			</div>
+			<div th:case="operator">
 
 			</div>
-		</div>
+		</th:block>
 
 
 		<!-- Add Product Modal -->
@@ -113,18 +122,15 @@
 									<th scope="col">Brand</th>
 									<th scope="col">Category</th>
 									<th scope="col">Mrp</th>
-									<th scope="col">Actions</th>
+									<th:block th:switch="${info.getRole()}">
+										<div th:case="supervisor">
+											<th scope="col">Actions</th>
+										</div>
+									</th:block>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
-									<th scope="col">1</th>
-									<th scope="col">Amul Milk 250ml</th>
-									<th scope="col">abcdswa</th>
-									<th scope="col">Amul</th>
-									<th scope="col">Milk</th>
-									<th scope="col">15</th>
-									<th scope="col">Edit | Delete</th>
 								</tr>
 							</tbody>
 						</table>
@@ -239,8 +245,9 @@
 
 	<footer th:replace="snippets.html :: name_footer"></footer>
 
-	<script th:src="@{/static/product.js}" />
+	<script th:src="@{/static/product.js}">
 	</script>
+	<div hidden class="user-role"><span th:text="${info.getRole()}"></span></div>
 
 </body>
 

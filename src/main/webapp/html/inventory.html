@@ -13,17 +13,22 @@
     <h3>Inventory</h3>
 
     <!-- Top row with form-->
-    <div class="row">
-      <div class="col-12">
-        <form class="form-inline" id="inventory-form">
-          <button type="button" class="btn btn-primary btn-sm" id="refresh-data"><i class='fas fa-sync-alt'
-              style='font-size:16px;color:white;padding-right: 4px;'></i>Refresh</button>
-          &nbsp;
-          <button type="button" class="btn btn-primary btn-sm" id="upload-data"><i class='fa fa-upload'
-              style='font-size:16px;color:white;padding-right: 4px;'></i>Upload</button>
-        </form>
+    <th:block th:switch="${info.getRole()}">
+      <div th:case="supervisor">
+        <div class="row">
+          <div class="col-12">
+            <form class="form-inline" id="inventory-form">
+              <button type="button" class="btn btn-primary btn-sm" id="refresh-data"><i class='fas fa-sync-alt'
+                  style='font-size:16px;color:white;padding-right: 4px;'></i>Refresh</button>
+              &nbsp;
+              <button type="button" class="btn btn-primary btn-sm" id="upload-data"><i class='fa fa-upload'
+                  style='font-size:16px;color:white;padding-right: 4px;'></i>Upload</button>
+                
+            </form>
+          </div>
+        </div>
       </div>
-    </div>
+    </th:block>
 
     <!-- Blank Row -->
     <div class="row">
@@ -42,7 +47,11 @@
                   <th scope="col">Barcode</th>
                   <th scope="col">Product Name</th>
                   <th scope="col">Quantity</th>
-                  <th scope="col">Actions</th>
+                  <th:block th:switch="${info.getRole()}">
+                    <div th:case="supervisor">
+                      <th scope="col">Actions</th>
+                    </div>
+                  </th:block>
                 </tr>
               </thead>
               <tbody>
@@ -126,8 +135,9 @@
 
   <footer th:replace="snippets.html :: name_footer"></footer>
 
-  <script th:src="@{/static/inventory.js}" />
+  <script th:src="@{/static/inventory.js}" >
   </script>
+  <div hidden class="user-role"><span th:text="${info.getRole()}"></span></div>
 
 </body>
 
