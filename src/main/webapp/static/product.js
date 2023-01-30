@@ -2,7 +2,7 @@ function getProductUrl() {
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/product";
 }
-function getBrandCategoryUrl(){
+function getBrandCategoryUrl() {
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/brandcategory";
 }
@@ -95,7 +95,7 @@ function deleteProduct(id) {
 }
 
 function getBrandsList() {
-	var url = getBrandCategoryUrl()+ "/get-brands";
+	var url = getBrandCategoryUrl() + "/get-brands";
 	$.ajax({
 		url: url,
 		type: 'GET',
@@ -109,7 +109,7 @@ function getBrandsList() {
 function getCategoriesList() {
 	var curSelectedBrand = $('#inputBrand').val();
 	console.log("->", curSelectedBrand);
-	var url = getBrandCategoryUrl()+ "/get-categories/" + curSelectedBrand;
+	var url = getBrandCategoryUrl() + "/get-categories/" + curSelectedBrand;
 	$.ajax({
 		url: url,
 		type: 'GET',
@@ -187,17 +187,15 @@ function displayProductList(data) {
 		var e = data[i];
 		var buttonHtml = '';
 		console.log("role: " + role);
-		if(role=="supervisor"){
+		if (role == "supervisor") {
 			buttonHtml += '<button onclick="displayEditProduct(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
-			// buttonHtml += '<button onclick="deleteProduct(' + e.id + ')" style=\'border: none; margin-left:8px; background-color:transparent\'><i class=\'fas fa-trash\' style=\'font-size:18px;color:black;\'></i></button>'
 		}
 		var row = '<tr>'
-			+ '<td>' + e.id + '</td>'
-			+ '<td>' + e.name + '</td>'
 			+ '<td>' + e.barcode + '</td>'
+			+ '<td>' + e.name + '</td>'
+			+ '<td>' + e.mrp + '</td>'
 			+ '<td>' + e.brand + '</td>'
 			+ '<td>' + e.category + '</td>'
-			+ '<td>' + e.mrp + '</td>'
 			+ '<td>' + buttonHtml + '</td>'
 			+ '</tr>';
 		$tbody.append(row);
@@ -212,7 +210,7 @@ function displayBrandList(data) {
 	data = Array.from(new Set(data));
 	for (var i in data) {
 		var e = data[i];
-		row = "<option value='" +e+ "'>" + e + "</option>";
+		row = "<option value='" + e + "'>" + e + "</option>";
 		$select.append(row);
 	}
 }
@@ -224,7 +222,7 @@ function displayCategoryList(data) {
 	$select1.append(row);
 	for (var i in data) {
 		var e = data[i];
-		var row = "<option value='" +e+ "'>" + e + "</option>";
+		var row = "<option value='" + e + "'>" + e + "</option>";
 		$select1.append(row);
 	}
 }
@@ -281,8 +279,8 @@ function displayProduct(data) {
 	$('#edit-product-modal').modal('toggle');
 }
 
-function OpenAddProductModal(){
-    $('#add-product-modal').modal('toggle');
+function OpenAddProductModal() {
+	$('#add-product-modal').modal('toggle');
 }
 
 //INITIALIZATION CODE

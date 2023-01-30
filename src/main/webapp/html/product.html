@@ -10,32 +10,46 @@
 
 	<div class="container">
 
-		<h4>Products</h4>
 
-		<!-- Top row -->
-		<th:block th:switch="${info.getRole()}">
-			<div th:case="supervisor">
-				<div class="row">
-					<div class="col-12">
+		<div class="row">
+			&nbsp;
+		</div>
 
-						<button type="button" class="btn btn-primary btn-sm" id="add-product-button"><i
-								class='fa fa-plus'
-								style='font-size:16px;color:white; padding-right: 4px;'></i>Add</button>
-						&nbsp; &nbsp;
-						<button type="button" class="btn btn-primary btn-sm" id="refresh-data"><i
-								class='fas fa-sync-alt'
-								style='font-size:16px;color:white;padding-right: 4px;'></i>Refresh</button>
-						&nbsp; &nbsp;
-						<button type="button" class="btn btn-primary btn-sm" id="upload-data"><i class='fa fa-upload'
-								style='font-size:16px;color:white;padding-right: 4px;'></i>Upload</button>
-						
+		<div class="row">
+			&nbsp;
+			&nbsp;
+			<h4 class="leftAlign">Products</h4>
+
+			<th:block th:switch="${info.getRole()}">
+				<div th:case="supervisor" style="margin-left: auto;margin-right: 0;">
+					<div class="row">
+						<div class="col-12">
+							<button type="button" class="btn btn-primary btn-sm" id="add-product-button"><i
+									class='fa fa-plus align-middle'
+									style='font-size:16px;color:white; padding-right: 4px;'></i><span
+									class="align-middle">Add Product</span></button>
+							&nbsp; &nbsp;
+							<button type="button" class="btn btn-primary btn-sm" id="upload-data"><i
+									class='fa fa-upload align-middle'
+									style='font-size:16px;color:white;padding-right: 4px;'></i><span
+									class="align-middle">Upload Products</span></button>
+
+						</div>
 					</div>
 				</div>
-			</div>
-			<div th:case="operator">
+				<div th:case="operator">
 
-			</div>
-		</th:block>
+				</div>
+			</th:block>
+			&nbsp;
+			&nbsp;
+		</div>
+
+
+		<div class="row">
+			&nbsp;
+		</div>
+
 
 
 		<!-- Add Product Modal -->
@@ -51,17 +65,21 @@
 					<div class="modal-body">
 						<form id="product-form">
 							<div class="form-group row">
-								<label for="inputName" class="col-sm-2 col-form-label">Name</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control form-control-sm" name="name"
-										placeholder="enter product name">
+								<label for="inputBrand" class="col-sm-2 col-form-label"
+									style="justify-content: left;">Brand</label>
+								<div class="col-sm-10" id="brands-dropdown">
+									<select class="form-control form-control-sm" name="brand" id="inputBrand">
+									</select>
 								</div>
 							</div>
 							<div class="form-group row">
-								<label for="inputMrp" class="col-sm-2 col-form-label">Mrp</label>
+								<label for="inputCategory" class="col-sm-2 col-form-label"
+									style="justify-content: left;">Category</label>
 								<div class="col-sm-10">
-									<input type="number" class="form-control form-control-sm" name="mrp"
-										placeholder="enter mrp">
+									<select class="form-control form-control-sm" name="category" id="inputCategory">
+										<option value='' disabled selected style='display: none'>Select Brand First
+										</option>
+									</select>
 								</div>
 							</div>
 							<div class="form-group row">
@@ -72,21 +90,17 @@
 								</div>
 							</div>
 							<div class="form-group row">
-								<label for="inputBrand" class="col-sm-4 col-form-label"
-									style="justify-content: left;">Brand</label>
-								<div class="col-sm-8" id="brands-dropdown">
-									<select class="form-control form-control-sm" name="brand" id="inputBrand">
-									</select>
+								<label for="inputName" class="col-sm-2 col-form-label">Name</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control form-control-sm" name="name"
+										placeholder="enter product name">
 								</div>
 							</div>
 							<div class="form-group row">
-								<label for="inputCategory" class="col-sm-4 col-form-label"
-									style="justify-content: left;">Category</label>
-								<div class="col-sm-8">
-									<select class="form-control form-control-sm" name="category" id="inputCategory">
-										<option value='' disabled selected style='display: none'>Select Brand First
-										</option>
-									</select>
+								<label for="inputMrp" class="col-sm-2 col-form-label">MRP</label>
+								<div class="col-sm-10">
+									<input type="number" class="form-control form-control-sm" name="mrp"
+										placeholder="enter mrp">
 								</div>
 							</div>
 						</form>
@@ -100,14 +114,8 @@
 		</div>
 
 
-		<!-- Blank Row -->
-		<div class="row">
-			&nbsp;
-		</div>
-		<div class="row">
 
-
-			<!-- Table -->
+		<div class="row">
 			<div class="col-12">
 
 				<div class="card shadow-4-strong rounded-5 overflow-hidden">
@@ -116,15 +124,14 @@
 						<table class="table table-striped" id="product-table">
 							<thead>
 								<tr>
-									<th scope="col">ID</th>
-									<th scope="col">Product Name</th>
 									<th scope="col">Barcode</th>
+									<th scope="col">Product Name</th>
+									<th scope="col">MRP</th>
 									<th scope="col">Brand</th>
 									<th scope="col">Category</th>
-									<th scope="col">Mrp</th>
 									<th:block th:switch="${info.getRole()}">
 										<div th:case="supervisor">
-											<th scope="col">Actions</th>
+											<th scope="col">Action</th>
 										</div>
 									</th:block>
 								</tr>
@@ -137,6 +144,10 @@
 					</div>
 				</div>
 			</div>
+		</div>
+
+		<div class="row">
+			&nbsp;
 		</div>
 
 
@@ -156,35 +167,35 @@
 								<label for="editInputName" class="col-sm-2 col-form-label">Name</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control form-control-sm" name="name"
-										placeholder="enter product name">
+										placeholder="Enter Product Name">
 								</div>
 							</div>
 							<div class="form-group row">
-								<label for="editInputMrp" class="col-sm-2 col-form-label">Mrp</label>
+								<label for="editInputMrp" class="col-sm-2 col-form-label">MRP</label>
 								<div class="col-sm-10">
 									<input type="number" class="form-control form-control-sm" name="mrp"
-										placeholder="enter mrp">
+										placeholder="Enter MRP">
 								</div>
 							</div>
 							<div class="form-group row">
 								<label for="editInputBarcode" class="col-sm-2 col-form-label">Barcode</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control form-control-sm" name="barcode"
-										placeholder="enter barcode">
+										placeholder="Enter Barcode" readonly="true">
 								</div>
 							</div>
 							<div class="form-group row">
 								<label for="editInputBrand" class="col-sm-2 col-form-label">Brand</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control form-control-sm" name="brand"
-										placeholder="enter brand">
+										placeholder="Enter Brand" readonly="true">
 								</div>
 							</div>
 							<div class="form-group row">
 								<label for="editInputCategory" class="col-sm-2 col-form-label">Category</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control form-control-sm" name="category"
-										placeholder="enter category">
+										placeholder="Enter Category" readonly="true">
 								</div>
 							</div>
 
@@ -192,11 +203,7 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<!-- <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i
-								class='fa fa-close'
-								style='font-size:16px;color:white; padding-right: 4px;'></i>Cancel</button> -->
-						<button type="button" class="btn btn-primary btn-sm" id="update-product"><i class='fa fa-check'
-								style='font-size:16px;color:white; padding-right: 4px;'></i>Update</button>
+						<button type="button" class="btn btn-primary btn-sm" id="update-product">Update</button>
 					</div>
 				</div>
 			</div>
