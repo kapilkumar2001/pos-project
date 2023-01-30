@@ -69,4 +69,11 @@ public class BrandCategoryApiController {
 		return categoriesList;
 	}
 
+	@ApiOperation(value = "Gets list of all categories")
+	@RequestMapping(path = "/api/brandcategory/get-categories", method = RequestMethod.GET)
+	public List<String> getAllCategories() {
+		List<String> categoriesList = brandCategoryDto.getAllCategories();
+		return categoriesList;
+	}
+
 }

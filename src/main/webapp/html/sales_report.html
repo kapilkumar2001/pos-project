@@ -6,93 +6,96 @@
 
 <body>
 
-<nav th:replace="snippets.html :: name_app_navbar"></nav>
+    <nav th:replace="snippets.html :: name_app_navbar"></nav>
 
-<div class="container">
+    <div class="container">
 
-<h3>Sales Report</h3>
+        <h3>Sales Report</h3>
 
-<!-- Blank Row -->
-<div class="row">
-    &nbsp;
-</div>
+        <!-- Blank Row -->
+        <div class="row">
+            &nbsp;
+        </div>
 
 
-<!-- Filters -->
-<div class="row">
-    <div class="col-12">
-            <form class="form-inline" id="sales-report-form">
+        <!-- Filters -->
 
-                <div class="form-group col-sm-4">
-                    <label for="inputStartDate" class="col-sm-2 col-form-label">Start Date</label>
-                    <div class="col-sm-10">
-                        <input type="date" class="form-control form-control-sm" name="startDate" id="inputStartDate">
+        <div class="row">
+            <div class="col-12 d-flex justify-content-between">
+                <form class="form-inline" id="sales-report-form">
+                    <div class="form-group mr-3">
+                        <label for="inputStartDate" class="col-form-label">Start Date</label>
+                        <input type="date" class="form-control form-control-sm ml-2" name="startDate"
+                            id="inputStartDate">
+                    </div>
+
+                    <div class="form-group mr-3">
+                        <label for="inputEndDate" class="col-form-label">End Date</label>
+                        <input type="date" class="form-control form-control-sm ml-2" name="endDate" id="inputEndDate">
+                    </div>
+
+                    <div class="form-group mr-3">
+                        <label for="inputBrand" class="col-form-label">Brand</label>
+                        <select class="form-control form-control-sm ml-2" name="brand" id="inputBrand">
+                        </select>
+                    </div>
+
+                    <div class="form-group mr-3">
+                        <label for="inputCategory" class="col-form-label">Category</label>
+                        <select class="form-control form-control-sm ml-2" name="category" id="inputCategory">
+                            <option value='' selected>All</option>
+                        </select>
+                    </div>
+
+                    <button type="button" class="btn btn-primary btn-sm" id="apply-filter">
+                        <i class='fa fa-filter' style='font-size:16px;color:white;padding-right: 4px;'></i>
+                        Apply
+                    </button>
+                </form>
+            </div>
+        </div>
+
+
+
+        <!-- Blank Row -->
+        <div class="row">
+            &nbsp;
+        </div>
+
+        <div class="row">
+
+            <!-- Table -->
+            <div class="col-12">
+                <div class="card shadow-4-strong rounded-5 overflow-hidden">
+                    <div class="card-body">
+                        <table class="table table-striped" id="sales-report-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">S.No.</th>
+                                    <th scope="col">Brand</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Revenue</th>
+                                    <!-- <th scope="col">Quantity</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-
-                <div class="form-group col-sm-4">
-                    <label for="inputEndDate" class="col-sm-2 col-form-label">End Date</label>
-                    <div class="col-sm-10">
-                        <input type="date" class="form-control form-control-sm" name="endDate" id="inputEndDate">
-                    </div>
-                </div>
-                          
-                <div class="form-group col-sm-4">
-                    <label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control form-control-sm" name="brand" id="inputBrand" placeholder="enter brand">
-                    </div>
-                </div>
-                            
-                <div class="form-group col-sm-4">
-                    <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control form-control-sm" name="category" id="inputCategory" placeholder="enter category">
-                    </div>
-                </div>
-                &nbsp;
-                
-                <button type="button" class="btn btn-primary btn-sm" id="apply-filter"><i class='fa fa-filter' style='font-size:16px;color:white;padding-right: 4px;'></i>Apply</button>
-                
-            </form>
-    </div>	
-</div> 
+            </div>
+        </div>
 
 
-<!-- Blank Row -->
-<div class="row">
-    &nbsp;
-</div>
+    </div>
 
-<div class="row">
+    <footer th:replace="snippets.html :: name_footer"></footer>
 
- <!-- Table -->
- <div class="col-12">
-    <table class="table table-striped" id="sales-report-table">
-      <thead>
-        <tr>
-          <th scope="col">S.No.</th>
-          <th scope="col">Brand</th>
-          <th scope="col">Category</th>
-          <th scope="col">Quantity</th>
-          <th scope="col">Revenue</th>
-          <!-- <th scope="col">Quantity</th> -->
-        </tr>
-      </thead>
-      <tbody>
-       
-      </tbody>
-    </table>
-</div>
-</div>
+    <script th:src="@{/static/sales_report.js}" />
+    </script>
 
-
-</div> 
-
-<footer th:replace="snippets.html :: name_footer"></footer>
-
-<script th:src="@{/static/sales_report.js}"/></script>
-
-</body> 
+</body>
 
 </html>

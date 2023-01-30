@@ -21,6 +21,7 @@ function addBrandCategory(event){
 	   		getBrandCategoryList();  
 			$("#brandcategory-form input[name=brand]").val("");
 			$("#brandcategory-form input[name=category]").val("");
+			$("#add-brandcategory-modal").modal('hide');
 	   },
 	   error: handleAjaxError
 	});
@@ -29,7 +30,6 @@ function addBrandCategory(event){
 }
 
 function updateBrandCategory(event){
-	$('#edit-brandcategory-modal').modal('toggle');
 	//Get the ID
 	var id = $("#brandcategory-edit-form input[name=id]").val();	
 	var url = getBrandCategoryUrl() + "/" + id;
@@ -46,7 +46,8 @@ function updateBrandCategory(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
-	   		getBrandCategoryList();   
+	   		getBrandCategoryList();  
+			$('#edit-brandcategory-modal').modal('hide');
 	   },
 	   error: handleAjaxError
 	});
@@ -143,8 +144,8 @@ function displayBrandCategoryList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="displayEditBrandCategory(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'far fa-edit\' style=\'font-size:18px;color:black;\'></i></button>'
-		buttonHtml += '<button onclick="deleteBrandCategory(' + e.id + ')" style=\'border: none; margin-left:8px; background-color:transparent\'><i class=\'fas fa-trash\' style=\'font-size:18px;color:black;\'></i></button>'
+		var buttonHtml = '<button onclick="displayEditBrandCategory(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
+		// buttonHtml += '<button onclick="deleteBrandCategory(' + e.id + ')" style=\'border: none; margin-left:8px; background-color:transparent\'><i class=\'fas fa-trash\' style=\'font-size:18px;color:black;\'></i></button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.brand + '</td>'
@@ -205,8 +206,14 @@ function displayBrandCategory(data){
 }
 
 
+function OpenAddBrandCategoryModal(){
+	console.log('here');
+	$("#add-brandcategory-modal").modal('toggle');
+}
+
 //INITIALIZATION CODE
 function init(){
+	$('#add-brandcategory-button').click(OpenAddBrandCategoryModal);
 	$('#add-brandcategory').click(addBrandCategory);
 	$('#update-brandcategory').click(updateBrandCategory);
 	$('#refresh-data').click(getBrandCategoryList);
