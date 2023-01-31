@@ -217,11 +217,16 @@ function processData() {
 
 function readFileDataCallback(results) {
 	fileData = results.data;
+
+	if(fileData.length>5000){
+		alert("data is very large. max file data limit is 5000.");
+		return;
+	}
+
 	uploadRows();
 }
 
 function uploadRows() {
-	//Update progress
 	updateUploadDialog();
 	//If everything processed then return
 	if(processCount==fileData.length && errorData.length==0){
@@ -244,7 +249,6 @@ function uploadRows() {
 
 	console.log(json);
 
-	//Make ajax call
 	$.ajax({
 		url: url,
 		type: 'POST',

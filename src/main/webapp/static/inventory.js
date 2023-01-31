@@ -119,9 +119,6 @@ function processData() {
 
 	var file = $('#inventoryFile')[0].files[0];
 
-	// if($('#inventoryFile').length==0){
-	// 	return;
-	// }
 
 	if($('#upload-modal-data-row').length==0){
 		var $modalbody = $('#upload-inventory-modal').find('.modal-body');
@@ -134,8 +131,13 @@ function processData() {
 
 function readFileDataCallback(results) {
 	fileData = results.data;
+
+	if(fileData.length>5000){
+		alert("data is very large. max file data limit is 5000.");
+		return;
+	}
+
 	uploadRows();
-	getInventoryList();
 }
 
 function uploadRows() {

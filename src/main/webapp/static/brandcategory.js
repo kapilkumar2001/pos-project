@@ -118,7 +118,6 @@ function displayEditBrandCategory(id){
 }
 
 
-
 // FILE UPLOAD METHODS
 var fileData = [];
 var errorData = [];
@@ -148,6 +147,11 @@ function processData(){
 
 function readFileDataCallback(results){
 	fileData = results.data;
+
+	if(fileData.length>5000){
+		alert("data is very large. max file data limit is 5000.");
+		return;
+	}
 	uploadRows();
 }
 
@@ -230,9 +234,6 @@ function displayUploadData(){
 	$('#upload-brandcategory-modal').modal('toggle');
 }
 
-
-
-
 function displayBrandCategory(data){
 	$("#brandcategory-edit-form input[name=brand]").val(data.brand);	
 	$("#brandcategory-edit-form input[name=category]").val(data.category);	
@@ -256,8 +257,7 @@ function init(){
 	$('#refresh-data').click(getBrandCategoryList);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
-	// $('#download-errors').click(downloadErrors);
-    $('#brandcategoryFile').on('change', updateFileName)
+	$('#brandcategoryFile').on('change', updateFileName)
 }
 
 $(document).ready(init);
