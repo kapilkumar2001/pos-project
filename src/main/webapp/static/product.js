@@ -235,6 +235,10 @@ function uploadRows() {
 		return;
 	}
 	else if(processCount==fileData.length){
+		var $modalfooter = $('#upload-product-modal').find('.modal-footer');
+		var htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
+		$modalfooter.prepend(htmlButton);
+	
 		getProductList();
 		return;
 	}
@@ -291,13 +295,6 @@ function updateUploadDialog() {
 	$('#rowCount').html("" + fileData.length);
 	$('#processCount').html("" + processCount);
 	$('#errorCount').html("" + errorData.length);
-
-
-	if(errorData.length==1){
-		var $modalfooter = $('#upload-product-modal').find('.modal-footer');
-		var htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
-		$modalfooter.prepend(htmlButton);
-	}
 }
 
 function updateFileName() {
