@@ -82,60 +82,6 @@ function deleteBrandCategory(id){
 	});
 }
 
-// FILE UPLOAD METHODS
-var fileData = [];
-var errorData = [];
-var processCount = 0;
-
-
-function processData(){
-	var file = $('#brandcategoryFile')[0].files[0];
-	readFileData(file, readFileDataCallback);
-}
-
-function readFileDataCallback(results){
-	fileData = results.data;
-	uploadRows();
-}
-
-function uploadRows(){
-	//Update progress
-	updateUploadDialog();
-	//If everything processed then return
-	if(processCount==fileData.length){
-		return;
-	}
-	
-	//Process next row
-	var row = fileData[processCount];
-	processCount++;
-	
-	var json = JSON.stringify(row);
-	var url = getBrandCategoryUrl();
-
-	//Make ajax call
-	$.ajax({
-	   url: url,
-	   type: 'POST',
-	   data: json,
-	   headers: {
-       	'Content-Type': 'application/json'
-       },	   
-	   success: function(response) {
-	   		uploadRows();  
-	   },
-	   error: function(response){
-	   		row.error=response.responseText
-	   		errorData.push(row);
-	   		uploadRows();
-	   }
-	});
-
-}
-
-function downloadErrors(){
-	writeFileData(errorData);
-}
 
 //UI DISPLAY METHODS
 
@@ -171,23 +117,106 @@ function displayEditBrandCategory(id){
 	});	
 }
 
-function resetUploadDialog(){
-	//Reset file name
-	var $file = $('#brandcategoryFile');
-	$file.val('');
-	$('#brandcategoryFileName').html("Choose File");
-	//Reset various counts
+
+
+// FILE UPLOAD METHODS
+var fileData = [];
+var errorData = [];
+var processCount = 0;
+
+
+function processData(){
+
 	processCount = 0;
 	fileData = [];
 	errorData = [];
-	//Update counts	
+	$('#download-errors').remove();
+
+	var file = $('#brandcategoryFile')[0].files[0];
+    if($('#brandcategoryFile').length==0){
+		return;
+	}
+
+	if($('#upload-modal-data-row').length==0){
+		var $modalbody = $('#upload-brandcategory-modal').find('.modal-body');
+		var row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
+		$modalbody.append(row);
+	}
+
+	readFileData(file, readFileDataCallback);
+}
+
+function readFileDataCallback(results){
+	fileData = results.data;
+	uploadRows();
+}
+
+function uploadRows(){
 	updateUploadDialog();
+
+	if(processCount==fileData.length && errorData.length==0){
+		$('#upload-brandcategory-modal').modal('hide');
+		getBrandCategoryList();
+		return;
+	}
+	else if(processCount==fileData.length){
+		getBrandCategoryList();
+		return;
+	}
+
+	//Process next row
+	var row = fileData[processCount];
+	processCount++;
+	
+	var json = JSON.stringify(row);
+	var url = getBrandCategoryUrl();
+
+	$.ajax({
+	   url: url,
+	   type: 'POST',
+	   data: json,
+	   headers: {
+       	'Content-Type': 'application/json'
+       },	   
+	   success: function(response) {
+	   		uploadRows();  
+	   },
+	   error: function(response){
+	   		row.error=response.responseText
+	   		errorData.push(row);
+	   		uploadRows();
+	   }
+	});
+
+}
+
+function downloadErrors(){
+	writeFileData(errorData);
+}
+
+function resetUploadDialog(){
+	var $file = $('#brandcategoryFile');
+	$file.val('');
+	$('#brandcategoryFileName').html("Choose File");
+	
+	processCount = 0;
+	fileData = [];
+	errorData = [];
+
+	$('#upload-modal-data-row').remove();
+	$('#download-errors').remove();
 }
 
 function updateUploadDialog(){
 	$('#rowCount').html("" + fileData.length);
 	$('#processCount').html("" + processCount);
 	$('#errorCount').html("" + errorData.length);
+
+	if(errorData.length==1){
+		var $modalfooter = $('#upload-brandcategory-modal').find('.modal-footer');
+		var htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
+		$modalfooter.prepend(htmlButton);
+	}
 }
 
 function updateFileName(){
@@ -201,6 +230,9 @@ function displayUploadData(){
 	$('#upload-brandcategory-modal').modal('toggle');
 }
 
+
+
+
 function displayBrandCategory(data){
 	$("#brandcategory-edit-form input[name=brand]").val(data.brand);	
 	$("#brandcategory-edit-form input[name=category]").val(data.category);	
@@ -208,24 +240,25 @@ function displayBrandCategory(data){
 	$('#edit-brandcategory-modal').modal('toggle');
 }
 
-
 function OpenAddBrandCategoryModal(){
 	console.log('here');
 	$("#add-brandcategory-modal").modal('toggle');
 }
 
-//INITIALIZATION CODE
+
+
+
 function init(){
+	getBrandCategoryList()
 	$('#add-brandcategory-button').click(OpenAddBrandCategoryModal);
 	$('#add-brandcategory').click(addBrandCategory);
 	$('#update-brandcategory').click(updateBrandCategory);
 	$('#refresh-data').click(getBrandCategoryList);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
-	$('#download-errors').click(downloadErrors);
+	// $('#download-errors').click(downloadErrors);
     $('#brandcategoryFile').on('change', updateFileName)
 }
 
 $(document).ready(init);
-$(document).ready(getBrandCategoryList);
 
