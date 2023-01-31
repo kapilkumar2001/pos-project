@@ -120,62 +120,6 @@ function getCategoriesList() {
 	});
 }
 
-// FILE UPLOAD METHODS
-var fileData = [];
-var errorData = [];
-var processCount = 0;
-
-
-function processData() {
-	var file = $('#productFile')[0].files[0];
-	readFileData(file, readFileDataCallback);
-}
-
-function readFileDataCallback(results) {
-	fileData = results.data;
-	uploadRows();
-}
-
-function uploadRows() {
-	//Update progress
-	updateUploadDialog();
-	//If everything processed then return
-	if (processCount == fileData.length) {
-		return;
-	}
-
-	//Process next row
-	var row = fileData[processCount];
-	processCount++;
-
-	var json = JSON.stringify(row);
-	var url = getProductUrl();
-
-	console.log(json);
-
-	//Make ajax call
-	$.ajax({
-		url: url,
-		type: 'POST',
-		data: json,
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		success: function (response) {
-			uploadRows();
-		},
-		error: function (response) {
-			row.error = response.responseText
-			errorData.push(row);
-			uploadRows();
-		}
-	});
-
-}
-
-function downloadErrors() {
-	writeFileData(errorData);
-}
 
 //UI DISPLAY METHODS
 
@@ -239,6 +183,91 @@ function displayEditProduct(id) {
 	});
 }
 
+
+
+
+// FILE UPLOAD METHODS
+var fileData = [];
+var errorData = [];
+var processCount = 0;
+
+
+function processData() {
+
+	processCount = 0;
+	fileData = [];
+	errorData = [];
+	$('#download-errors').remove();
+
+	var file = $('#productFile')[0].files[0];
+
+
+	// if($('#productFile')[0].files[0].data.length==0){
+	// 	return;
+	// }
+
+	if($('#upload-modal-data-row').length==0){
+		var $modalbody = $('#upload-product-modal').find('.modal-body');
+		var row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
+		$modalbody.append(row);
+	}
+
+	readFileData(file, readFileDataCallback);
+}
+
+function readFileDataCallback(results) {
+	fileData = results.data;
+	uploadRows();
+}
+
+function uploadRows() {
+	//Update progress
+	updateUploadDialog();
+	//If everything processed then return
+	if(processCount==fileData.length && errorData.length==0){
+		$('#upload-product-modal').modal('hide');
+		getProductList();
+		return;
+	}
+	else if(processCount==fileData.length){
+		getProductList();
+		return;
+	}
+
+
+	//Process next row
+	var row = fileData[processCount];
+	processCount++;
+
+	var json = JSON.stringify(row);
+	var url = getProductUrl();
+
+	console.log(json);
+
+	//Make ajax call
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: json,
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		success: function (response) {
+			uploadRows();
+		},
+		error: function (response) {
+			row.error = response.responseText
+			errorData.push(row);
+			uploadRows();
+		}
+	});
+
+}
+
+function downloadErrors() {
+	writeFileData(errorData);
+}
+
 function resetUploadDialog() {
 	//Reset file name
 	var $file = $('#productFile');
@@ -248,14 +277,23 @@ function resetUploadDialog() {
 	processCount = 0;
 	fileData = [];
 	errorData = [];
-	//Update counts	
-	updateUploadDialog();
+
+	$('#upload-modal-data-row').remove();
+	$('#download-errors').remove();
+
 }
 
 function updateUploadDialog() {
 	$('#rowCount').html("" + fileData.length);
 	$('#processCount').html("" + processCount);
 	$('#errorCount').html("" + errorData.length);
+
+
+	if(errorData.length==1){
+		var $modalfooter = $('#upload-product-modal').find('.modal-footer');
+		var htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
+		$modalfooter.prepend(htmlButton);
+	}
 }
 
 function updateFileName() {
@@ -268,6 +306,9 @@ function displayUploadData() {
 	resetUploadDialog();
 	$('#upload-product-modal').modal('toggle');
 }
+
+
+
 
 function displayProduct(data) {
 	$("#product-edit-form input[name=name]").val(data.name);
@@ -285,18 +326,17 @@ function OpenAddProductModal() {
 
 //INITIALIZATION CODE
 function init() {
+	getProductList();
+	getBrandsList();
 	$('#add-product-button').click(OpenAddProductModal);
 	$('#add-product').click(addProduct);
 	$('#update-product').click(updateProduct);
 	$('#refresh-data').click(getProductList);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
-	$('#download-errors').click(downloadErrors);
 	$('#productFile').on('change', updateFileName);
 	$('#inputBrand').on('change', getCategoriesList);
 }
 
 $(document).ready(init);
-$(document).ready(getProductList);
-$(document).ready(getBrandsList);
 
