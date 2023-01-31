@@ -100,7 +100,7 @@
     </div>
 
 
-    <!-- inventory Edit Modal -->
+    <!-- inventory upload Modal -->
     <div class="modal" tabindex="-1" role="dialog" id="upload-inventory-modal">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -113,30 +113,22 @@
           </div>
 
           <div class="modal-body">
-            <div class="inventory-file">
-              <input type="file" class="custom-file-input" id="inventoryFile">
-              <label class="custom-file-label" for="inventoryFile" id="inventoryFileName">Choose file</label>
+            <div class="inventory-file p-2 col-12">
+              <input type="file" accept=".tsv" class="custom-file-input p-2" id="inventoryFile">
+              <label class="custom-file-label p-2" for="inventoryFile" id="inventoryFileName">Choose File</label>
             </div>
-            <a th:href="@{/sample/inventory.tsv}" target="_blank">Download Sample</a>
-            <br>
-            Rows: <span id="rowCount">0</span>,
-            Processed: <span id="processCount">0</span>,
-            Errors: <span id="errorCount">0</span>
+            <a th:href="@{/sample/inventory.tsv}" target="_blank">Download Sample File</a>
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class='fa fa-close'
-                style='font-size:16px;color:white; padding-right: 4px;'></i>Cancel</button>
             <button type="button" class="btn btn-primary btn-sm" id="process-data"><i class='fa fa-upload'
                 style='font-size:16px;color:white;padding-right: 4px;'></i>Upload</button>
-            <button type="button" class="btn btn-warning btn-sm" id="download-errors"><i class='fa fa-download'
-                style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>
           </div>
         </div>
       </div>
     </div>
 
-  </div> <!-- Container end-->
+  </div>
 
   <footer th:replace="snippets.html :: name_footer"></footer>
 
