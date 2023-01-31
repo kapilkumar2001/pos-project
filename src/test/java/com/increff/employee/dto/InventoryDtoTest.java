@@ -41,8 +41,27 @@ public class InventoryDtoTest extends AbstractUnitTest{
         productDto.add(productForm);
 
         InventoryData inventoryData = inventoryDto.get("testb1");
-
         assertEquals(0, inventoryData.getQuantity()); 
+
+        InventoryForm inventoryForm = new InventoryForm();
+        inventoryForm.setBarcode("testb1");
+        inventoryForm.setQuantity(54);
+
+        inventoryDto.add(inventoryForm);
+
+        inventoryData = inventoryDto.get("testb1");
+        assertEquals(54, inventoryData.getQuantity()); 
+
+        inventoryForm = new InventoryForm();
+        inventoryForm.setBarcode("testb1");
+        inventoryForm.setQuantity(46);
+
+        inventoryDto.add(inventoryForm);
+
+        inventoryData = inventoryDto.get("testb1");
+        assertEquals(100, inventoryData.getQuantity()); 
+
+
     }
 
     @Test
