@@ -113,9 +113,9 @@
           </div>
 
           <div class="modal-body">
-            <div class="inventory-file p-2">
-              <input type="file" class="custom-file-input p-2" id="inventoryFile">
-              <label class="custom-file-label p-2" for="inventoryFile" id="inventoryFileName">Choose file</label>
+            <div class="inventory-file p-2 col-12">
+              <input type="file" accept=".tsv" class="custom-file-input p-2" id="inventoryFile">
+              <label class="custom-file-label p-2" for="inventoryFile" id="inventoryFileName">Choose File</label>
             </div>
             <a th:href="@{/sample/inventory.tsv}" target="_blank">Download Sample File</a>
           </div>

@@ -118,7 +118,6 @@ function displayEditBrandCategory(id){
 }
 
 
-
 // FILE UPLOAD METHODS
 var fileData = [];
 var errorData = [];
@@ -148,6 +147,11 @@ function processData(){
 
 function readFileDataCallback(results){
 	fileData = results.data;
+
+	if(fileData.length>5000){
+		alert("data is very large. max file data limit is 5000.");
+		return;
+	}
 	uploadRows();
 }
 
@@ -160,6 +164,10 @@ function uploadRows(){
 		return;
 	}
 	else if(processCount==fileData.length){
+		var $modalfooter = $('#upload-brandcategory-modal').find('.modal-footer');
+		var htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
+		$modalfooter.prepend(htmlButton);
+
 		getBrandCategoryList();
 		return;
 	}
@@ -212,11 +220,6 @@ function updateUploadDialog(){
 	$('#processCount').html("" + processCount);
 	$('#errorCount').html("" + errorData.length);
 
-	if(errorData.length==1){
-		var $modalfooter = $('#upload-brandcategory-modal').find('.modal-footer');
-		var htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
-		$modalfooter.prepend(htmlButton);
-	}
 }
 
 function updateFileName(){
@@ -229,9 +232,6 @@ function displayUploadData(){
  	resetUploadDialog(); 	
 	$('#upload-brandcategory-modal').modal('toggle');
 }
-
-
-
 
 function displayBrandCategory(data){
 	$("#brandcategory-edit-form input[name=brand]").val(data.brand);	
@@ -256,8 +256,7 @@ function init(){
 	$('#refresh-data').click(getBrandCategoryList);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
-	// $('#download-errors').click(downloadErrors);
-    $('#brandcategoryFile').on('change', updateFileName)
+	$('#brandcategoryFile').on('change', updateFileName)
 }
 
 $(document).ready(init);

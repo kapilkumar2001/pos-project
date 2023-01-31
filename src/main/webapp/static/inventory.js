@@ -119,9 +119,6 @@ function processData() {
 
 	var file = $('#inventoryFile')[0].files[0];
 
-	// if($('#inventoryFile').length==0){
-	// 	return;
-	// }
 
 	if($('#upload-modal-data-row').length==0){
 		var $modalbody = $('#upload-inventory-modal').find('.modal-body');
@@ -134,8 +131,13 @@ function processData() {
 
 function readFileDataCallback(results) {
 	fileData = results.data;
+
+	if(fileData.length>5000){
+		alert("data is very large. max file data limit is 5000.");
+		return;
+	}
+
 	uploadRows();
-	getInventoryList();
 }
 
 function uploadRows() {
@@ -147,6 +149,11 @@ function uploadRows() {
 		return;
 	}
 	else if(processCount == fileData.length) {
+		var $modalfooter = $('#upload-inventory-modal').find('.modal-footer');
+		var htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
+		$modalfooter.prepend(htmlButton);
+
+		getInventoryList();
 		return;
 	}
 
@@ -235,7 +242,6 @@ function init() {
 	$('#refresh-data').click(getInventoryList);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
-	$('#download-errors').click(downloadErrors);
 	$('#inventoryFile').on('change', updateFileName);
 }
 
