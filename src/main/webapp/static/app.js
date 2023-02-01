@@ -15,52 +15,31 @@ function toJson($form){
 function handleAjaxError(response){
 	var response = JSON.parse(response.responseText);
 
-    
-    Toastify({
-        text: response.message,
-        duration: 5000,
-        newWindow: true,
-        close: true,
-        gravity: "top", 
-        position: "right",
-        stopOnFocus: true, 
-        style: {
-          background: "red",
-          color: "black"
-        },
-      }).showToast();
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: response.message,
+    })
 }
 
 function showError(error){
-    Toastify({
-        text: error,
-        duration: 5000,
-        newWindow: true,
-        close: true,
-        gravity: "top", 
-        position: "right",
-        stopOnFocus: true, 
-        style: {
-          background: "red",
-          color: "black"
-        },
-      }).showToast();
+
+  Swal.fire({
+    icon: 'error',
+    title: 'Oops...',
+    text: error,
+  })
+
 }
 
 function showSuccess(message){
-    Toastify({
-        text: message,
-        duration: 5000,
-        newWindow: true,
-        close: true,
-        gravity: "top", 
-        position: "right",
-        stopOnFocus: true, 
-        style: {
-          background: "green",
-          color: "white"
-        },
-      }).showToast();
+    
+  Swal.fire({
+    icon: 'success',
+  
+    text: message,
+  })
+
 }
 
 function readFileData(file, callback){

@@ -35,6 +35,7 @@ function createOrder() {
 			var $tbody = $('#order-item-table').find('tbody');
 			$tbody.empty();
 			$('#create-order-modal').modal('hide');
+			tmpc = 0;
 
 			showSuccess("Order created succesfully!");
 		},
