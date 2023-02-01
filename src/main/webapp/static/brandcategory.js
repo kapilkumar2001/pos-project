@@ -1,13 +1,10 @@
-
-
 function getBrandCategoryUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/brandcategory";
 }
 
-//BUTTON ACTIONS
+
 function addBrandCategory(event){
-	//Set the values to update
 	var $form = $("#brandcategory-form");
 	var json = toJson($form);
 	var url = getBrandCategoryUrl();
@@ -34,11 +31,9 @@ function addBrandCategory(event){
 }
 
 function updateBrandCategory(event){
-	//Get the ID
 	var id = $("#brandcategory-edit-form input[name=id]").val();	
 	var url = getBrandCategoryUrl() + "/" + id;
 
-	//Set the values to update
 	var $form = $("#brandcategory-edit-form");
 	var json = toJson($form);
 
@@ -94,6 +89,7 @@ function displayBrandCategoryList(data){
 	var $tbody = $('#brandcategory-table').find('tbody');
 	$tbody.empty();
 	var role = $('.user-role').find('span').text();
+	data = data.reverse();
 	for(var i in data){
 		var e = data[i];
 		var buttonHtml = '';
@@ -124,10 +120,10 @@ function displayEditBrandCategory(id){
 
 
 // FILE UPLOAD METHODS
+
 var fileData = [];
 var errorData = [];
 var processCount = 0;
-
 
 function processData(){
 
@@ -181,7 +177,6 @@ function uploadRows(){
 		return;
 	}
 
-	//Process next row
 	var row = fileData[processCount];
 	processCount++;
 	
@@ -204,7 +199,6 @@ function uploadRows(){
 	   		uploadRows();
 	   }
 	});
-
 }
 
 function downloadErrors(){
@@ -252,7 +246,6 @@ function displayBrandCategory(data){
 function OpenAddBrandCategoryModal(){
 	$("#add-brandcategory-modal").modal('toggle');
 }
-
 
 
 
