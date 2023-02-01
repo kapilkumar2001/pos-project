@@ -9,7 +9,6 @@ function getBrandCategoryUrl() {
 
 //BUTTON ACTIONS
 function addProduct(event) {
-	//Set the values to update
 	var $form = $("#product-form");
 	var json = toJson($form);
 	var url = getProductUrl();
@@ -44,11 +43,9 @@ function addProduct(event) {
 }
 
 function updateProduct(event) {
-	//Get the ID
 	var id = $("#product-edit-form input[name=id]").val();
 	var url = getProductUrl() + "/" + id;
 
-	//Set the values to update
 	var $form = $("#product-edit-form");
 	var json = toJson($form);
 
@@ -230,7 +227,7 @@ function readFileDataCallback(results) {
 
 function uploadRows() {
 	updateUploadDialog();
-	//If everything processed then return
+	
 	if(processCount==fileData.length && errorData.length==0){
 		$('#upload-product-modal').modal('hide');
 		getProductList();
@@ -247,7 +244,6 @@ function uploadRows() {
 	}
 
 
-	//Process next row
 	var row = fileData[processCount];
 	processCount++;
 
@@ -280,11 +276,10 @@ function downloadErrors() {
 }
 
 function resetUploadDialog() {
-	//Reset file name
 	var $file = $('#productFile');
 	$file.val('');
 	$('#productFileName').html("Choose File");
-	//Reset various counts
+	
 	processCount = 0;
 	fileData = [];
 	errorData = [];

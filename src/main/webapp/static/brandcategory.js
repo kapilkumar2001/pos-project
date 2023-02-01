@@ -248,7 +248,6 @@ function OpenAddBrandCategoryModal(){
 }
 
 
-
 function init(){
 	getBrandCategoryList()
 	$('#add-brandcategory-button').click(OpenAddBrandCategoryModal);
@@ -257,8 +256,7 @@ function init(){
 	$('#refresh-data').click(getBrandCategoryList);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
-	$('#brandcategoryFile').on('change', updateFileName)
-	
+	$('#brandcategoryFile').on('change', updateFileName);
 	$(function () {
 		$('[data-toggle="tooltip"]').tooltip()
 	})

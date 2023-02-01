@@ -238,7 +238,6 @@ function editOrderItems(data) {
 		$tbody.append(row);
 		tmpe = tmpe + 1;
 	}
-
 }
 
 function openCreateOrderModel() {
