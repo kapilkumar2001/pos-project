@@ -120,10 +120,9 @@ function processData() {
 	var file = $('#inventoryFile')[0].files[0];
 
 	if($('#inventoryFile')[0].files.length==0){
-		showError("please choose file");
+		showError("Please Choose File");
 		return;
 	}
-
 
 	readFileData(file, readFileDataCallback);
 }
@@ -132,7 +131,7 @@ function readFileDataCallback(results) {
 	fileData = results.data;
 
 	if(fileData.length>5000){
-	showError("data limit exceeded. Max data limit - 5000 rows");
+	showError("Data limit exceeded. Max data limit - 5000 rows");
 		return;
 	}
 
@@ -151,7 +150,7 @@ function uploadRows() {
 	if(processCount==fileData.length && errorData.length==0){
 		$('#upload-inventory-modal').modal('hide');
 
-		showSuccess("inventory data uploaded succesfully!");
+		showSuccess("Inventory data uploaded succesfully!");
 		getInventoryList();
 		return;
 	}

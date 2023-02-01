@@ -7,10 +7,10 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class AppUiController extends AbstractUiController {
 
-	@RequestMapping(value = "/ui/home")
-	public ModelAndView home() {
-		return mav("home.html");
-	}
+	// @RequestMapping(value = "/ui/brands")
+	// public ModelAndView home() {
+	// 	return mav("home.html");
+	// }
 
 //	@RequestMapping(value = "/ui/employee")
 //	public ModelAndView employee() {
@@ -22,12 +22,12 @@ public class AppUiController extends AbstractUiController {
 //		return mav("user.html");
 //	}
 
-	@RequestMapping(value = "/ui/brandcategory")
+	@RequestMapping(value = "/ui/brands")
 	public ModelAndView brandcategory() {
 		return mav("brandcategory.html");
 	}
 
-	@RequestMapping(value = "/ui/product")
+	@RequestMapping(value = "/ui/products")
 	public ModelAndView product() {
 		return mav("product.html");
 	}
@@ -37,7 +37,7 @@ public class AppUiController extends AbstractUiController {
 		return mav("inventory.html");
 	}
 	
-	@RequestMapping(value = "/ui/order")
+	@RequestMapping(value = "/ui/orders")
 	public ModelAndView order() {
 		return mav("order.html");
 	}

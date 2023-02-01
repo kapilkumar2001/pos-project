@@ -20,7 +20,7 @@ function addBrandCategory(event){
          	'Content-Type': 'application/json'
         },	   
 	    success: function(response) {
-			showSuccess("brand added succesfully!");
+			showSuccess("Brand added succesfully!");
 	   	 	getBrandCategoryList();  
 			$("#brandcategory-form input[name=brand]").val("");
 			$("#brandcategory-form input[name=category]").val("");
@@ -50,7 +50,7 @@ function updateBrandCategory(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
-		showSuccess("brand updated succesfully!");
+		showSuccess("Brand updated succesfully!");
 	   		getBrandCategoryList();  
 			$('#edit-brandcategory-modal').modal('hide');
 	   },
@@ -138,7 +138,7 @@ function processData(){
 
 	var file = $('#brandcategoryFile')[0].files[0];
     if($('#brandcategoryFile')[0].files.length==0){
-		showError("please choose file");
+		showError("Please Choose File");
 		return;
 	}
 
@@ -149,7 +149,7 @@ function readFileDataCallback(results){
 	fileData = results.data;
 
 	if(fileData.length>5000){
-		showError("data limit exceeded. Max data limit - 5000 rows");
+		showError("Data limit exceeded. Max data limit - 5000 rows");
 		return;
 	}
 
@@ -168,7 +168,7 @@ function uploadRows(){
 	if(processCount==fileData.length && errorData.length==0){
 		$('#upload-brandcategory-modal').modal('hide');
 
-		showSuccess("brands uploaded succesfully!");
+		showSuccess("Brands uploaded succesfully!");
 		getBrandCategoryList();
 		return;
 	}
