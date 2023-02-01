@@ -17,6 +17,12 @@ function createOrder() {
 	console.log(json);
 	var url = getOrderUrl();
 
+	console.log(json.length);
+	if(json.length==2){
+		showError("Order can't be created without item");
+		return;
+	}
+
 	$.ajax({
 		url: url,
 		type: 'POST',
@@ -145,15 +151,14 @@ function displayOrderList(data) {
 }
 
 // add items to the order list
-var tmpc = 0;
+var tmpc = 1;
 function displayOrderItemList() {
-
 	var $tbody = $('#order-item-table').find('tbody');
 	var buttonHtml = '<button onclick="deleteItem(' + tmpc + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
 	var row = '<tr id="row' + tmpc + '">'
-		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpc + '" id="barcode' + tmpc + '" placeholder="enter barcode"></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpc + '" id="quantity' + tmpc + '" placeholder="enter quantity"></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpc + '" id="sellingPrice' + tmpc + '" placeholder="enter price"></div> </td>'
+		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpc + '" id="barcode' + tmpc + '" placeholder="Enter Barcode" required></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpc + '" id="quantity' + tmpc + '" placeholder="Enter Quantity" required></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpc + '" id="sellingPrice' + tmpc + '" placeholder="Enter Price" required></div> </td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
 	$tbody.prepend(row);
@@ -223,8 +228,8 @@ function editOrderItems(data) {
 		var buttonHtml = '<button onclick="deleteItem(' + tmpe + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
 		var row = '<tr id="row' + tmpe + '">'
 			+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpe + '" id="barcode' + tmpe + '" value="' + e.barcode + '" readonly="true"></div> </td>'
-			+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpe + '" id="quantity' + tmpe + '" value="' + e.quantity + '"></div> </td>'
-			+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpe + '" id="sellingPrice' + tmpe + '" value="' + e.sellingPrice + '"></div> </td>'
+			+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpe + '" id="quantity' + tmpe + '" value="' + e.quantity + '" required></div> </td>'
+			+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpe + '" id="sellingPrice' + tmpe + '" value="' + e.sellingPrice + '" required></div> </td>'
 			+ '<td>' + buttonHtml + '</td>'
 			+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderItemId' + tmpe + '" id="orderItemId' + tmpe + '" value="' + e.orderItemId + '"></input>'
 			+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderId" id="orderId" value="' + orderId + '"></input>'
@@ -238,6 +243,7 @@ function editOrderItems(data) {
 
 function openCreateOrderModel() {
 	$('#create-order-modal').modal('toggle');
+	addItemInList()
 }
 
 function addItemInList() {
@@ -297,9 +303,9 @@ function addIteminEditForm() {
 
 	var buttonHtml = '<button onclick="deleteItem(' + tmpe + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
 	var row = '<tr id="row' + tmpe + '">'
-		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpe + '" id="barcode' + tmpe + '" value="" ></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpe + '" id="quantity' + tmpe + '" value=""></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpe + '" id="sellingPrice' + tmpe + '" value=""></div> </td>'
+		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpe + '" id="barcode' + tmpe + '" value="" required></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpe + '" id="quantity' + tmpe + '" value="" required></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpe + '" id="sellingPrice' + tmpe + '" value="" required></div> </td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderItemId' + tmpe + '" id="orderItemId' + tmpe + '" value="0"></input>'
 		+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderId" id="orderId" value="' + orderId + '"></input>'
