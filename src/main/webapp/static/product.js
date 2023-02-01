@@ -24,6 +24,7 @@ function addProduct(event) {
 			'Content-Type': 'application/json'
 		},
 		success: function (response) {
+			showSuccess("Product added succesfully!");
 			getProductList();
 
 			$("#product-form input[name=name]").val("");
@@ -59,6 +60,7 @@ function updateProduct(event) {
 			'Content-Type': 'application/json'
 		},
 		success: function (response) {
+			showSuccess("Product updated succesfully!");
 			getProductList();
 			$('#edit-product-modal').modal('hide');
 		},
@@ -201,15 +203,9 @@ function processData() {
 
 	var file = $('#productFile')[0].files[0];
 
-
-	// if($('#productFile')[0].files[0].data.length==0){
-	// 	return;
-	// }
-
-	if($('#upload-modal-data-row').length==0){
-		var $modalbody = $('#upload-product-modal').find('.modal-body');
-		var row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
-		$modalbody.append(row);
+	if($('#productFile')[0].files.length==0){
+		handleError("please choose file");
+		return;
 	}
 
 	readFileData(file, readFileDataCallback);
@@ -219,8 +215,14 @@ function readFileDataCallback(results) {
 	fileData = results.data;
 
 	if(fileData.length>5000){
-		alert("data is very large. max file data limit is 5000.");
+		handleError("data limit exceeded. Max data limit: 5000 rows");
 		return;
+	}
+
+	if($('#upload-modal-data-row').length==0){
+		var $modalbody = $('#upload-product-modal').find('.modal-body');
+		var row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
+		$modalbody.append(row);
 	}
 
 	uploadRows();
@@ -232,6 +234,7 @@ function uploadRows() {
 	if(processCount==fileData.length && errorData.length==0){
 		$('#upload-product-modal').modal('hide');
 		getProductList();
+		showSuccess("Products uploaded succesfully!");
 		return;
 	}
 	else if(processCount==fileData.length){

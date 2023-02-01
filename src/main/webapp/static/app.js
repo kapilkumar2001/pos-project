@@ -1,5 +1,3 @@
-
-
 function toJson($form){
     var serialized = $form.serializeArray();
     console.log(serialized);
@@ -17,14 +15,52 @@ function toJson($form){
 function handleAjaxError(response){
 	var response = JSON.parse(response.responseText);
 
-    // $.getScript("https://cdn.notiflix.com/notiflix-2.2.0.min.js", function() {
-     
-    //   Notiflix.Notify.Failure(response.message);
-    // });
+    
+    Toastify({
+        text: response.message,
+        duration: 5000,
+        newWindow: true,
+        close: true,
+        gravity: "top", 
+        position: "right",
+        stopOnFocus: true, 
+        style: {
+          background: "red",
+          color: "black"
+        },
+      }).showToast();
+}
 
-    // Notify.warning(response.message);
-    // Notify.warning(response.message);
-	alert(response.message);
+function handleError(error){
+    Toastify({
+        text: error,
+        duration: 5000,
+        newWindow: true,
+        close: true,
+        gravity: "top", 
+        position: "right",
+        stopOnFocus: true, 
+        style: {
+          background: "red",
+          color: "black"
+        },
+      }).showToast();
+}
+
+function showSuccess(message){
+    Toastify({
+        text: message,
+        duration: 5000,
+        newWindow: true,
+        close: true,
+        gravity: "top", 
+        position: "right",
+        stopOnFocus: true, 
+        style: {
+          background: "green",
+          color: "white"
+        },
+      }).showToast();
 }
 
 function readFileData(file, callback){

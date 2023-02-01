@@ -29,6 +29,8 @@ function createOrder() {
 			var $tbody = $('#order-item-table').find('tbody');
 			$tbody.empty();
 			$('#create-order-modal').modal('hide');
+
+			showSuccess("Order created succesfully!");
 		},
 		error: handleAjaxError
 	});
@@ -62,6 +64,8 @@ function updateOrder(id) {
 			var $tbody = $('#edit-order-item-table').find('tbody');
 			$tbody.empty();
 			$('#edit-order-modal').modal('hide');
+
+			showSuccess("Order updated succesfully!");
 		},
 		error: handleAjaxError
 	});
@@ -112,7 +116,7 @@ function displayOrderList(data) {
 		var updatedAt = new Intl.DateTimeFormat('en-US', options).format(date);
 
 		if (e.status == 'invoiced') {
-			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="View Order"><i class=\'fa fa-eye\' style=\'font-size:18px;color:green;\'></i></button>'
+			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="View Order"><i class=\'fa fa-eye\' style=\'font-size:18px;color:blue;\'></i></button>'
 			buttonHtml += '<button onclick="getInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Download Invoice"><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
 		}
 		else {

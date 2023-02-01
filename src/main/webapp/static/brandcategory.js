@@ -13,19 +13,21 @@ function addBrandCategory(event){
 	var url = getBrandCategoryUrl();
 
 	$.ajax({
-	   url: url,
-	   type: 'POST',
-	   data: json,
-	   headers: {
-       	'Content-Type': 'application/json'
-       },	   
-	   success: function(response) {
-	   		getBrandCategoryList();  
+	    url: url,
+	    type: 'POST',
+ 	    data: json,
+ 	    headers: {
+         	'Content-Type': 'application/json'
+        },	   
+	    success: function(response) {
+			showSuccess("brand added succesfully!");
+	   	 	getBrandCategoryList();  
 			$("#brandcategory-form input[name=brand]").val("");
 			$("#brandcategory-form input[name=category]").val("");
 			$("#add-brandcategory-modal").modal('hide');
-	   },
-	   error: handleAjaxError
+	    },
+	    
+	    error: handleAjaxError
 	});
 
 	return false;
@@ -48,6 +50,7 @@ function updateBrandCategory(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+		showSuccess("brand updated succesfully!");
 	   		getBrandCategoryList();  
 			$('#edit-brandcategory-modal').modal('hide');
 	   },
@@ -134,14 +137,9 @@ function processData(){
 	$('#download-errors').remove();
 
 	var file = $('#brandcategoryFile')[0].files[0];
-    if($('#brandcategoryFile').length==0){
+    if($('#brandcategoryFile')[0].files.length==0){
+		handleError("please choose file");
 		return;
-	}
-
-	if($('#upload-modal-data-row').length==0){
-		var $modalbody = $('#upload-brandcategory-modal').find('.modal-body');
-		var row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
-		$modalbody.append(row);
 	}
 
 	readFileData(file, readFileDataCallback);
@@ -151,9 +149,16 @@ function readFileDataCallback(results){
 	fileData = results.data;
 
 	if(fileData.length>5000){
-		alert("data is very large. max file data limit is 5000.");
+		handleError("data limit exceeded. Max data limit - 5000 rows");
 		return;
 	}
+
+	if($('#upload-modal-data-row').length==0){
+		var $modalbody = $('#upload-brandcategory-modal').find('.modal-body');
+		var row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
+		$modalbody.append(row);
+	}
+
 	uploadRows();
 }
 
@@ -162,6 +167,8 @@ function uploadRows(){
 
 	if(processCount==fileData.length && errorData.length==0){
 		$('#upload-brandcategory-modal').modal('hide');
+
+		showSuccess("brands uploaded succesfully!");
 		getBrandCategoryList();
 		return;
 	}
@@ -243,7 +250,6 @@ function displayBrandCategory(data){
 }
 
 function OpenAddBrandCategoryModal(){
-	console.log('here');
 	$("#add-brandcategory-modal").modal('toggle');
 }
 
