@@ -243,13 +243,14 @@ function displayInventory(data) {
 
 //INITIALIZATION CODE
 function init() {
+	getInventoryList();
 	$('#add-inventory').click(addInventory);
 	$('#update-inventory').click(updateInventory);
 	$('#refresh-data').click(getInventoryList);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
 	$('#inventoryFile').on('change', updateFileName);
+	$('[data-toggle="tooltip"]').tooltip()
 }
 
 $(document).ready(init);
-$(document).ready(getInventoryList);

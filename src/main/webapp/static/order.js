@@ -7,7 +7,7 @@ function getInvoiceUrl() {
 	return baseUrl + "/api/invoice";
 }
 
-//BUTTON ACTIONS
+
 
 function createOrder() {
 
@@ -127,7 +127,7 @@ function displayOrderList(data) {
 			// 	buttonHtml += '<button onclick="" style=\'border: none;margin-right:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="You don\'t have permission to edit order" disabled><i class=\'far fa-edit\' style=\'font-size:18px;color:gray;\'></i></button>'
 			// }
 			// if (role == "supervisor") {
-			buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Generate Invoice"><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
+			buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Generate Invoice"><i class=\'fa fa-file-text\' style=\'font-size:18px;color:black;\'></i></button>'
 			// }
 			// else {
 			// 	buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Invoice not generated yet" disabled><i class=\'fa fa-file-text\' style=\'font-size:18px;color:gray;\'></i></button>'
@@ -340,6 +340,7 @@ function generateInvoice(id) {
 
 //INITIALIZATION CODE
 function init() {
+	getOrderList();
 	$('#create-order-button').click(openCreateOrderModel);
 	$('#add-item').click(addItemInList);
 	$('#create-order').click(createOrder);
@@ -348,8 +349,9 @@ function init() {
 	$('#cancel-update').click(cancelUpdate);
 	$('#edit-add-item').click(addIteminEditForm);
 	$('#refresh-data').click(getOrderList);
+	$('[data-toggle="tooltip"]').tooltip()
 }
 
 $(document).ready(init);
-$(document).ready(getOrderList);
+
 

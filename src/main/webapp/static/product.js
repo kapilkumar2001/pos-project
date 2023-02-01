@@ -340,6 +340,7 @@ function init() {
 	$('#process-data').click(processData);
 	$('#productFile').on('change', updateFileName);
 	$('#inputBrand').on('change', getCategoriesList);
+	$('[data-toggle="tooltip"]').tooltip()
 }
 
 $(document).ready(init);

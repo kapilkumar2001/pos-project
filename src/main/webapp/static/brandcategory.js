@@ -265,6 +265,10 @@ function init(){
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
 	$('#brandcategoryFile').on('change', updateFileName)
+	
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
 }
 
 $(document).ready(init);
