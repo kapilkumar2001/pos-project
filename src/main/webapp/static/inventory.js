@@ -69,6 +69,7 @@ function getInventoryList() {
 //UI DISPLAY METHODS
 
 function displayInventoryList(data) {
+	data = data.reverse();
 	var $tbody = $('#inventory-table').find('tbody');
 	$tbody.empty();
 	var role = $('.user-role').find('span').text();
