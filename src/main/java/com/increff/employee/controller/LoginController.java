@@ -57,7 +57,7 @@ public class LoginController {
 
 		info.setRole(p.getRole());
 		// System.out.println(p.getRole());
-		return new ModelAndView("redirect:/ui/home");
+		return new ModelAndView("redirect:/ui/brands");
 	}
 
 	@RequestMapping(path = "/session/logout", method = RequestMethod.GET)

@@ -119,11 +119,9 @@ function processData() {
 
 	var file = $('#inventoryFile')[0].files[0];
 
-
-	if($('#upload-modal-data-row').length==0){
-		var $modalbody = $('#upload-inventory-modal').find('.modal-body');
-		var row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
-		$modalbody.append(row);
+	if($('#inventoryFile')[0].files.length==0){
+		showError("Please Choose File");
+		return;
 	}
 
 	readFileData(file, readFileDataCallback);
@@ -133,8 +131,14 @@ function readFileDataCallback(results) {
 	fileData = results.data;
 
 	if(fileData.length>5000){
-		alert("data is very large. max file data limit is 5000.");
+	showError("Data limit exceeded. Max data limit - 5000 rows");
 		return;
+	}
+
+	if($('#upload-modal-data-row').length==0){
+		var $modalbody = $('#upload-inventory-modal').find('.modal-body');
+		var row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
+		$modalbody.append(row);
 	}
 
 	uploadRows();
@@ -145,6 +149,8 @@ function uploadRows() {
 	updateUploadDialog();
 	if(processCount==fileData.length && errorData.length==0){
 		$('#upload-inventory-modal').modal('hide');
+
+		showSuccess("Inventory data uploaded succesfully!");
 		getInventoryList();
 		return;
 	}
@@ -237,13 +243,14 @@ function displayInventory(data) {
 
 //INITIALIZATION CODE
 function init() {
+	getInventoryList();
 	$('#add-inventory').click(addInventory);
 	$('#update-inventory').click(updateInventory);
 	$('#refresh-data').click(getInventoryList);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
 	$('#inventoryFile').on('change', updateFileName);
+	$('[data-toggle="tooltip"]').tooltip()
 }
 
 $(document).ready(init);
-$(document).ready(getInventoryList);
