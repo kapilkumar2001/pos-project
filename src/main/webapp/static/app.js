@@ -31,7 +31,7 @@ function handleAjaxError(response){
       }).showToast();
 }
 
-function handleError(error){
+function showError(error){
     Toastify({
         text: error,
         duration: 5000,

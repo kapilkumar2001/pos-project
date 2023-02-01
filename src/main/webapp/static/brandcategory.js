@@ -138,7 +138,7 @@ function processData(){
 
 	var file = $('#brandcategoryFile')[0].files[0];
     if($('#brandcategoryFile')[0].files.length==0){
-		handleError("please choose file");
+		showError("please choose file");
 		return;
 	}
 
@@ -149,7 +149,7 @@ function readFileDataCallback(results){
 	fileData = results.data;
 
 	if(fileData.length>5000){
-		handleError("data limit exceeded. Max data limit - 5000 rows");
+		showError("data limit exceeded. Max data limit - 5000 rows");
 		return;
 	}
 

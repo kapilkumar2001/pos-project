@@ -204,7 +204,7 @@ function processData() {
 	var file = $('#productFile')[0].files[0];
 
 	if($('#productFile')[0].files.length==0){
-		handleError("please choose file");
+		showError("Please Choose File");
 		return;
 	}
 
@@ -215,7 +215,7 @@ function readFileDataCallback(results) {
 	fileData = results.data;
 
 	if(fileData.length>5000){
-		handleError("data limit exceeded. Max data limit: 5000 rows");
+		showError("Data limit exceeded. Max data limit: 5000 rows");
 		return;
 	}
 
