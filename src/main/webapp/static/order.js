@@ -151,7 +151,7 @@ function displayOrderList(data) {
 }
 
 // add items to the order list
-var tmpc = 1;
+var tmpc = 0;
 function displayOrderItemList() {
 	var $tbody = $('#order-item-table').find('tbody');
 	var buttonHtml = '<button onclick="deleteItem(' + tmpc + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
@@ -243,7 +243,9 @@ function editOrderItems(data) {
 
 function openCreateOrderModel() {
 	$('#create-order-modal').modal('toggle');
-	addItemInList()
+	if(tmpc==0){
+	    addItemInList()
+	}
 }
 
 function addItemInList() {
