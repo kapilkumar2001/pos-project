@@ -9,17 +9,12 @@ function getBrandCategoryUrl(){
 
 function getSalesReport() {
 
-    // var brand = $("#sales-report-form input[name=brand]").val();
-    // var category = $("#sales-report-form input[name=category]").val();
 	var brandField = document.querySelector("#inputBrand");
     var brand = brandField.value;
 	var categoryField = document.querySelector("#inputCategory");
     var category = categoryField.value;
     var startDate = $("#sales-report-form input[name=startDate]").val();
     var endDate = $("#sales-report-form input[name=endDate]").val();
-
-
-
 
 	var url = getSalesReportUrl() + '/?startdate=' + startDate + '&enddate=' + endDate + '&brand=' + brand + '&category=' + category;
 
