@@ -1,5 +1,5 @@
 
-//HELPER METHOD
+
 function toJson($form){
     var serialized = $form.serializeArray();
     console.log(serialized);
@@ -17,6 +17,13 @@ function toJson($form){
 function handleAjaxError(response){
 	var response = JSON.parse(response.responseText);
 
+    // $.getScript("https://cdn.notiflix.com/notiflix-2.2.0.min.js", function() {
+     
+    //   Notiflix.Notify.Failure(response.message);
+    // });
+
+    // Notify.warning(response.message);
+    // Notify.warning(response.message);
 	alert(response.message);
 }
 
@@ -54,3 +61,6 @@ function writeFileData(arr){
     tempLink.setAttribute('download', 'download.tsv');
     tempLink.click(); 
 }
+
+
+

@@ -1,3 +1,5 @@
+
+
 function getBrandCategoryUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/brandcategory";
