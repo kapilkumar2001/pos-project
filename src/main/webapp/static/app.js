@@ -22,21 +22,17 @@ function handleAjaxError(response){
 }
 
 function showError(error){
-
   Swal.fire({
     icon: 'error',
     text: error,
   })
-
 }
 
 function showSuccess(message){
-    
   Swal.fire({
     icon: 'success',
     text: message,
   })
-
 }
 
 function readFileData(file, callback){

@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
 
 <head th:replace="snippets.html :: name_head"></head>
@@ -9,43 +8,30 @@
 	<nav th:replace="snippets.html :: name_app_navbar"></nav>
 
 	<div class="container">
-
 		<div class="row">
-			&nbsp;
-		</div>
-
-		<div class="row">
-			&nbsp;
-			&nbsp;
-            <h4 class="alignleft">Brands</h4>
-			<th:block th:switch="${info.getRole()}">
-				<div th:case="supervisor" style="margin-left: auto;margin-right: 0;">
-					<div class="row">
-						<div class="col-12">
-							<button type="button" class="btn btn-primary btn-sm" id="add-brandcategory-button"
-								style="padding: 4px">
-								<i class='fa fa-plus align-middle'
-									style='font-size:16px;color:white; padding-right: 4px;'></i><span class="align-middle">Add Brand</span></button>
-							&nbsp;&nbsp;
-							<button type="button" class="btn btn-primary btn-sm" id="upload-data"><i class='fa fa-upload align-middle'
-									style='font-size:16px;color:white;padding-right: 4px;'></i><span class="align-middle">Upload Brands</span></button>
+			<div class="col-12">
+				<h4 class="alignleft">Brands</h4>
+				<th:block th:switch="${info.getRole()}">
+					<div th:case="supervisor" style="margin-left: auto;margin-right: 0;">
+						<div class="row">
+							<div class="col-12">
+								<button type="button" class="btn btn-primary btn-sm" id="add-brandcategory-button"
+									style="padding: 4px">
+									<i class='fa fa-plus align-middle'
+										style='font-size:16px;color:white; padding-right: 4px;'></i><span
+										class="align-middle">Add Brand</span></button>
+							
+								<button type="button" class="btn btn-primary btn-sm ml-3" id="upload-data">
+									<i class='fa fa-upload align-middle'
+										style='font-size:16px;color:white;padding-right: 4px;'></i>
+										<span class="align-middle">Upload Brands</span></button>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div th:case="operator"></div>
-			</th:block>
-			&nbsp;
-			&nbsp;
+					<div th:case="operator"></div>
+				</th:block>
+			</div>
 		</div>
-
-		<div class="row">
-			&nbsp;
-		</div>
-
-		<!-- Top row with form-->
-		
-
-
 
 		<!-- Add BrandCategory Modal -->
 		<div class="modal" tabindex="-1" role="dialog" id="add-brandcategory-modal">
@@ -76,16 +62,14 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						
+
 						<button type="button" class="btn btn-primary" id="add-brandcategory"><i class='fa fa-check'
-							style='font-size:16px;color:white; padding-right: 4px;'></i>Add</button>
+								style='font-size:16px;color:white; padding-right: 4px;'></i>Add</button>
 					</div>
 				</div>
 			</div>
 		</div>
 
-
-		
 		<div class="row">
 			<div class="col-12">
 				<div class="card shadow-4-strong rounded-5 overflow-hidden p-0">
@@ -93,8 +77,7 @@
 						<table class="table table-striped" id="brandcategory-table">
 							<thead>
 								<tr>
-									
-									<th scope="col">Brand</th>
+			   					    <th scope="col">Brand</th>
 									<th scope="col">Category</th>
 									<th:block th:switch="${info.getRole()}">
 										<div th:case="supervisor">
@@ -110,12 +93,6 @@
 				</div>
 			</div>
 		</div>
-
-
-		<div class="row">
-			&nbsp;
-		</div>
-
 
 		<!-- BrandCategory Edit Modal -->
 		<div class="modal" tabindex="-1" role="dialog" id="edit-brandcategory-modal">
@@ -133,7 +110,7 @@
 								<label for="editInputBrand" class="col-sm-2 col-form-label">Brand</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control form-control-sm" name="brand"
-										placeholder="enter brand" required>
+										placeholder="Enter brand" required>
 								</div>
 							</div>
 							<div class="form-group row">
@@ -147,14 +124,12 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						
 						<button type="button" class="btn btn-primary" id="update-brandcategory"><i class='fa fa-check'
-							style='font-size:16px;color:white; padding-right: 4px;'></i>Update</button>
+								style='font-size:16px;color:white; padding-right: 4px;'></i>Update</button>
 					</div>
 				</div>
 			</div>
 		</div>
-
 
 		<!-- BrandCategory Upload Modal -->
 		<div class="modal" tabindex="-1" role="dialog" id="upload-brandcategory-modal">
@@ -162,20 +137,19 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title">Upload Brands</h5>
-						<button type="button" class="close" data-dismiss="modal" id="close-upload-modal" aria-label="Close">
+						<button type="button" class="close" data-dismiss="modal" id="close-upload-modal"
+							aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-
 					<div class="modal-body">
 						<div class="brandcategory-file p-2 col-12">
 							<input type="file" accept=".tsv" class="custom-file-input" id="brandcategoryFile">
-							<label class="custom-file-label p-2" for="brandcategoryFile" id="brandcategoryFileName">Choose
-								File</label>
+							<label class="custom-file-label p-2" for="brandcategoryFile"
+								id="brandcategoryFileName">Choose File</label>
 						</div>
 						<a th:href="@{/sample/brandcategory.tsv}" target="_blank">Download Sample File</a>
-					</div> 
-
+					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-primary btn-sm" id="process-data"><i class='fa fa-upload'
 								style='font-size:16px;color:white;padding-right: 4px;'></i>Upload</button>
@@ -183,10 +157,7 @@
 				</div>
 			</div>
 		</div>
-
-		
-
-	</div> 
+	</div>
 
 	<footer th:replace="snippets.html :: name_footer"></footer>
 
