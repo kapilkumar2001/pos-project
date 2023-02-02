@@ -25,10 +25,10 @@ public class OrderItemService {
 				throw new ApiException("Barcode can not be empty");
 			}
 			if(orderItemPojo.getQuantity()<0) {
-				throw new ApiException("Quantity can not be less than 0");
+				throw new ApiException("Quantity should be a positive number");
 			}
 			if(orderItemPojo.getSellingPrice()<=0) {
-				throw new ApiException("Selling Price can not be less than or equal to 0");
+				throw new ApiException("Selling Price should be greater than 0");
 			}
 			orderItemPojo.setOrderId(orderId);
 			addOrderItem(orderItemPojo);

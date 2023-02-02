@@ -17,7 +17,6 @@ function handleAjaxError(response){
 
     Swal.fire({
       icon: 'error',
-      title: 'Oops...',
       text: response.message,
     })
 }
@@ -26,7 +25,6 @@ function showError(error){
 
   Swal.fire({
     icon: 'error',
-    title: 'Oops...',
     text: error,
   })
 
@@ -36,7 +34,6 @@ function showSuccess(message){
     
   Swal.fire({
     icon: 'success',
-  
     text: message,
   })
 

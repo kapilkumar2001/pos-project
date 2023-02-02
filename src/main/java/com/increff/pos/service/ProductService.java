@@ -19,23 +19,23 @@ public class ProductService{
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(ProductPojo productPojo) throws ApiException {
 		normalize(productPojo);
-		if(StringUtil.isEmpty(productPojo.getName())) {
-			throw new ApiException("product name cannot be empty");
-		}
-		else if(StringUtil.isEmpty(productPojo.getBarcode())) {
-			throw new ApiException("barcode cannot be empty");
-		}
-		else if(productPojo.getMrp()<=0) {
-			throw new ApiException("mrp cannot be less than or equal to 0");
-		}
-		else if(StringUtil.isEmpty(String.valueOf(productPojo.getBrand()))) {
-			throw new ApiException("brand cannot be empty");
+		if(StringUtil.isEmpty(String.valueOf(productPojo.getBrand()))) {
+			throw new ApiException("Brand cannot be empty");
 		}
 		else if(StringUtil.isEmpty(String.valueOf(productPojo.getCategory()))) {
-			throw new ApiException("category cannot be empty");
+			throw new ApiException("Category cannot be empty");
 		}
-		if(productPojo.getBrand_category()==0) {
-			throw new ApiException("brand & category combination doesn't exist");
+		else if(StringUtil.isEmpty(productPojo.getBarcode())) {
+			throw new ApiException("Barcode cannot be empty");
+		}
+		else if(StringUtil.isEmpty(productPojo.getName())) {
+			throw new ApiException("Product Name cannot be empty");
+		}
+		else if(productPojo.getMrp()<=0) {
+			throw new ApiException("MRP should be greater than 0");
+		}
+		else if(productPojo.getBrand_category()==0) {
+			throw new ApiException("Brand & Category combination doesn't exist");
 		}
 		
 		ProductPojo tmpPojo = productDao.getProductByBarcode(productPojo.getBarcode());
@@ -67,22 +67,22 @@ public class ProductService{
 	public void update(int id, ProductPojo productPojo) throws ApiException {
 		normalize(productPojo);
 		if(StringUtil.isEmpty(productPojo.getName())) {
-			throw new ApiException("product name cannot be empty");
+			throw new ApiException("Product Name cannot be empty");
 		}
 		else if(StringUtil.isEmpty(productPojo.getBarcode())) {
-			throw new ApiException("barcode cannot be empty");
+			throw new ApiException("Barcode cannot be empty");
 		}
 		else if(productPojo.getMrp()<=0) {
-			throw new ApiException("mrp cannot be less than or equal to 0");
+			throw new ApiException("MRP should be greater than 0");
 		}
 		else if(StringUtil.isEmpty(String.valueOf(productPojo.getBrand()))) {
-			throw new ApiException("brand cannot be empty");
+			throw new ApiException("Brand cannot be empty");
 		}
 		else if(StringUtil.isEmpty(String.valueOf(productPojo.getCategory()))) {
-			throw new ApiException("category cannot be empty");
+			throw new ApiException("Bategory cannot be empty");
 		}
 		if(productPojo.getBrand_category()==0) {
-			throw new ApiException("brand & category combination doesn't exist");
+			throw new ApiException("Brand & Category combination doesn't exist");
 		}
 		
 		ProductPojo tmpPojo = productDao.getProductByBarcode(productPojo.getBarcode());
@@ -111,9 +111,12 @@ public class ProductService{
 
 	@Transactional
 	public ProductPojo getProductByBarcode(String barcode) throws ApiException{
+		if(StringUtil.isEmpty(barcode)){
+			throw new ApiException("Barcode can not be empty");
+		}
 		ProductPojo productPojo = productDao.getProductByBarcode(barcode);
 		if(productPojo==null) {
-			throw new ApiException("product with this barcode doesn't exist, barcode: "+ barcode);
+			throw new ApiException("Product with this barcode doesn't exist, barcode: "+ barcode);
 		}
 		return productPojo;
 	}
@@ -121,6 +124,16 @@ public class ProductService{
     @Transactional
 	public List<ProductPojo> getProductsByBrandCategoryId(int brandCategoryId) throws ApiException{
         return productDao.getAllProductByBrandsCategoryId(brandCategoryId);
+	}
+
+	public void checkSellingPrice(String barcode, double sellingPrice) throws ApiException{
+		if(sellingPrice<=0){
+			throw new ApiException("Selling Price should be greater than 0");
+		}
+		ProductPojo productPojo = productDao.getProductByBarcode(barcode);
+		if(productPojo.getMrp()<sellingPrice){
+			throw new ApiException("Selling Price should be less than MRP, MRP for item " + barcode + ": " + productPojo.getMrp());
+		}
 	}
 
 	protected static void normalize(ProductPojo p) {

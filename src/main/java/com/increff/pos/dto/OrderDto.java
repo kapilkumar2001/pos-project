@@ -46,16 +46,18 @@ public class OrderDto {
 			OrderItemPojo orderItemPojo = new OrderItemPojo();
 			orderItemPojo.setBarcode(orderItemForm.getBarcode());
 			orderItemPojo.setOrderId(orderPojo.getId());
-			orderItemPojo.setQuantity((int) orderItemForm.getQuantity());
-			orderItemPojo.setSellingPrice(orderItemForm.getSellingPrice());
 
             // setting product id
             ProductPojo productPojo = productService.getProductByBarcode(orderItemForm.getBarcode());
             orderItemPojo.setProductId(productPojo.getId());
+			
+			orderItemPojo.setSellingPrice(orderItemForm.getSellingPrice());
+			orderItemPojo.setQuantity((int) orderItemForm.getQuantity());
 				
             // reduce quantity in inventory
-            InventoryPojo inventoryPojo = inventoryService.get(orderItemPojo.getProductId(), orderItemPojo.getBarcode());
-            inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(), inventoryPojo.getQuantity() - orderItemPojo.getQuantity());
+            inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(), orderItemPojo.getQuantity());
+
+			productService.checkSellingPrice(orderItemForm.getBarcode(), orderItemForm.getSellingPrice());
 
             orderItemPojoList.add(orderItemPojo);
         }
