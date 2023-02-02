@@ -185,6 +185,8 @@ function displayOrderList(data) {
 			+ '</tr>';
 		$tbody.append(row);
 	}
+
+	$('[data-toggle="tooltip"]').tooltip()
 }
 
 // add items to the order list
@@ -395,7 +397,7 @@ function init() {
 	$('#edit-add-item').click(addIteminEditForm);
 	$('#refresh-data').click(getOrderList);
 	$('#cancel-create').click(cancelCreate);
-	$('[data-toggle="tooltip"]').tooltip()
+	
 }
 
 $(document).ready(init);

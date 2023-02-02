@@ -88,6 +88,7 @@ function displayInventoryList(data) {
 			+ '</tr>';
 		$tbody.append(row);
 	}
+	$('[data-toggle="tooltip"]').tooltip()
 }
 
 

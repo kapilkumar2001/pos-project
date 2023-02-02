@@ -143,6 +143,7 @@ function displayProductList(data) {
 			+ '</tr>';
 		$tbody.append(row);
 	}
+	$('[data-toggle="tooltip"]').tooltip()
 }
 
 function displayBrandList(data) {
