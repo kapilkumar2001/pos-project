@@ -7,6 +7,7 @@ function getInvoiceUrl() {
 	return baseUrl + "/api/invoice";
 }
 
+var editOrderModelOrderId;
 
 
 function createOrder() {
@@ -50,7 +51,9 @@ function createOrder() {
 
 function updateOrder(id) {
 
-	var id = $('#edit-order-list-form input[name=orderId]').val();
+	// var id = $('#edit-order-list-form input[name=orderId]').val();
+
+	var id = editOrderModelOrderId;
 
 	console.log(id);
 	var url = getOrderUrl() + "/" + id;
@@ -85,7 +88,9 @@ function updateOrder(id) {
 
 
 function cancelOrder(id) {
-	var id = $('#edit-order-list-form input[name=orderId]').val();
+	// var id = $('#edit-order-list-form input[name=orderId]').val();
+
+	var id = editOrderModelOrderId;
 
 	console.log(id);
 	var url = getOrderUrl() + "/cancel/" + id;
@@ -204,7 +209,6 @@ function deleteItem(tmp) {
 }
 
 
-// edit order 
 
 
 // view order 
@@ -228,7 +232,9 @@ function viewOrderItems(data) {
 	}
 }
 
-// edit order
+
+
+// Edit Order
 
 var orderId;
 
@@ -241,7 +247,7 @@ function editOrder(id) {
 		url: url,
 		type: 'GET',
 		success: function (data) {
-			orderId = data['id'];
+			editOrderModelOrderId = data['id'];
 			editOrderItems(data);
 		},
 		error: handleAjaxError
