@@ -43,10 +43,15 @@ public class OrderService {
 		return orderDao.selectByTime(startTime, endTime);
 	}
 	
-	@Transactional
+	@Transactional(rollbackOn = ApiException.class)
 	public void update(OrderPojo orderPojo) throws ApiException{
 		orderPojo.setUpdatedAt(LocalDateTime.now());
 		orderDao.update(orderPojo);
+	}
+
+	@Transactional
+	public void delete(int id) throws ApiException{
+		orderDao.delete(id);
 	}
 
 	protected static void normalize(OrderPojo orderPojo) {

@@ -24,7 +24,7 @@ public class OrderItemService {
 			if(StringUtil.isEmpty(orderItemPojo.getBarcode())) {
 				throw new ApiException("Barcode can not be empty");
 			}
-			if(orderItemPojo.getQuantity()<0) {
+			if(orderItemPojo.getQuantity()<=0) {
 				throw new ApiException("Quantity should be a positive number");
 			}
 			if(orderItemPojo.getSellingPrice()<=0) {

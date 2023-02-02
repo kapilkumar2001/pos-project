@@ -51,15 +51,15 @@ public class InventoryService {
 	}
 
 	@Transactional
-	public void updateInventoryWhileCreatingOrder(int id, String barcode, int quantity) throws ApiException{
+	public void updateInventoryWhileCreatingOrder(int id, String barcode, int quantity, int prevQuantity) throws ApiException{
 		
-		if(quantity<0){
+		if(quantity<=0){
 			throw new ApiException("Quantity should be a positive number");
 		}
 
 		InventoryPojo inventoryPojo = get(id, barcode);
 
-		int updatedQuantity = inventoryPojo.getQuantity() - quantity;
+		int updatedQuantity = (inventoryPojo.getQuantity()+prevQuantity) - quantity;
 
 		if(updatedQuantity<0) {
 			throw new ApiException("Not enough quantity. Only " + inventoryPojo.getQuantity() + " items left for barcode: " + barcode);
@@ -69,7 +69,7 @@ public class InventoryService {
 	
 	@Transactional(rollbackOn  = ApiException.class)
 	public void update(int id, String barcode, int quantity) throws ApiException {
-		if(quantity<0) {
+		if(quantity<=0) {
 			throw new ApiException("Quantity should be a positive number");
 		}
 		else if(StringUtil.isEmpty(barcode)) {

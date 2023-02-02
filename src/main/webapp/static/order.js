@@ -79,6 +79,31 @@ function updateOrder(id) {
 	return false;
 }
 
+
+function cancelOrder(id) {
+	var id = $('#edit-order-list-form input[name=orderId]').val();
+
+	console.log(id);
+	var url = getOrderUrl() + "/cancel/" + id;
+
+	$.ajax({
+		url: url,
+		type: 'PUT',
+		success: function (response) {
+			getOrderList();
+			var $tbody = $('#edit-order-item-table').find('tbody');
+			$tbody.empty();
+			$('#edit-order-modal').modal('hide');
+
+			showSuccess("Order cancelled succesfully!");
+		},
+		error: handleAjaxError
+	});
+	return false;
+}
+
+
+
 function getOrderList() {
 	var url = getOrderUrl();
 	$.ajax({
@@ -122,29 +147,31 @@ function displayOrderList(data) {
 		date = new Date((e.updatedAt).replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
 		var updatedAt = new Intl.DateTimeFormat('en-US', options).format(date);
 
+		var status;
+
 		if (e.status == 'invoiced') {
+			status = '<p style="color:green;">Invoiced</p>';
 			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="View Order"><i class=\'fa fa-eye\' style=\'font-size:18px;color:blue;\'></i></button>'
 			buttonHtml += '<button onclick="getInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Download Invoice"><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
 		}
-		else {
-			// if (role == "supervisor") {
-			buttonHtml += '<button onclick="editOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
-			// }
-			// else {
-			// 	buttonHtml += '<button onclick="" style=\'border: none;margin-right:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="You don\'t have permission to edit order" disabled><i class=\'far fa-edit\' style=\'font-size:18px;color:gray;\'></i></button>'
-			// }
-			// if (role == "supervisor") {
-			buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Generate Invoice"><i class=\'fa fa-file-text\' style=\'font-size:18px;color:black;\'></i></button>'
-			// }
-			// else {
-			// 	buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Invoice not generated yet" disabled><i class=\'fa fa-file-text\' style=\'font-size:18px;color:gray;\'></i></button>'
-			// }
+		else if(e.status== 'cancelled'){
+			status = '<p style="color:red;">Cancelled</p>';
 		}
+		else {
+			status = '<p style="color:#8B8000;">Pending</p>';
+			buttonHtml += '<button onclick="editOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
+			buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Generate Invoice"><i class=\'fa fa-file-text\' style=\'font-size:18px;color:black;\'></i></button>'
+		}
+
+		
+		
+		
 
 		var row = '<tr>'
 			+ '<td>' + e.id + '</td>'
 			+ '<td>' + createdAt + '</td>'
 			+ '<td>' + updatedAt + '</td>'
+			+ '<td>' + status + '</td>'
 			+ '<td>' + buttonHtml + '</td>'
 			+ '</tr>';
 		$tbody.append(row);
@@ -288,11 +315,6 @@ function convertToArrayOfObjectToUpdate(data) {
 	return JSON.stringify(arr);
 }
 
-function cancelOrder() {
-	var $tbody = $('#order-item-table').find('tbody');
-	$tbody.empty();
-	$('#create-order-modal').modal('hide');
-}
 
 function cancelUpdate() {
 	var $tbody = $('#edit-order-item-table').find('tbody');
@@ -319,7 +341,12 @@ function addIteminEditForm() {
 }
 
 
-
+function cancelCreate() {
+	tmpc=0;
+	var $tbody = $('#order-item-table').find('tbody');
+	$tbody.empty();
+	$('#create-order-modal').modal('hide');
+}
 
 // Invoice functions
 
@@ -354,9 +381,10 @@ function init() {
 	$('#create-order').click(createOrder);
 	$('#cancel-order').click(cancelOrder);
 	$('#update-order').click(updateOrder);
-	$('#cancel-update').click(cancelUpdate);
+	// $('#cancel-update').click(cancelUpdate);
 	$('#edit-add-item').click(addIteminEditForm);
 	$('#refresh-data').click(getOrderList);
+	$('#cancel-create').click(cancelCreate);
 	$('[data-toggle="tooltip"]').tooltip()
 }
 

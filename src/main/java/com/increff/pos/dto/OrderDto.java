@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import com.increff.pos.model.OrderData;
 import com.increff.pos.model.OrderItemData;
 import com.increff.pos.model.OrderItemForm;
-import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.pojo.ProductPojo;
@@ -55,7 +54,7 @@ public class OrderDto {
 			orderItemPojo.setQuantity((int) orderItemForm.getQuantity());
 				
             // reduce quantity in inventory
-            inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(), orderItemPojo.getQuantity());
+            inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(), orderItemPojo.getQuantity(), 0);
 
 			productService.checkSellingPrice(orderItemForm.getBarcode(), orderItemForm.getSellingPrice());
 
@@ -89,6 +88,20 @@ public class OrderDto {
     @Transactional
     public void update(int orderId, List<OrderItemForm> orderItemFormList) throws ApiException{
 
+		if(orderItemFormList.size()==0){
+			OrderPojo orderPojo = orderService.getOrder(orderId);
+			orderPojo.setStatus("cancelled");
+			orderService.update(orderPojo);
+
+			List<OrderItemPojo> existingOrderItemPojoList = orderItemService.getOrderItemsbyOrderId(orderId);
+		
+			for(OrderItemPojo orderItemPojo: existingOrderItemPojoList) {
+				String barcode = productService.get(orderItemPojo.getProductId()).getBarcode();
+				inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), barcode,  orderItemPojo.getQuantity(), 0);
+			}	
+		}
+
+
 		OrderPojo orderPojo = orderService.getOrder(orderId);
 		orderService.update(orderPojo);
     
@@ -117,19 +130,18 @@ public class OrderDto {
             ProductPojo productPojo = productService.getProductByBarcode(orderItemForm.getBarcode());
             orderItemPojo.setProductId(productPojo.getId());
 
-
             // reduce quantity in inventory
             if(orderItemForm.getOrderItemId()!=0){
 				OrderItemPojo orderItemPojoTemp = orderItemService.getOrderItembyItemId(orderItemForm.getOrderItemId());
 			    int prevQuantity =  orderItemPojoTemp.getQuantity();
 
-                InventoryPojo inventoryPojo = inventoryService.get(orderItemPojo.getProductId(), orderItemPojo.getBarcode());
-				inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(),  (inventoryPojo.getQuantity() + prevQuantity) - orderItemPojo.getQuantity());
+				inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(),  orderItemPojo.getQuantity(), prevQuantity);
             }
             else{ 
-                InventoryPojo inventoryPojo = inventoryService.get(orderItemPojo.getProductId(), orderItemPojo.getBarcode());
-                inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(),  inventoryPojo.getQuantity() - orderItemPojo.getQuantity());
+                inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(),  orderItemPojo.getQuantity(), 0);
             }
+
+			productService.checkSellingPrice(orderItemForm.getBarcode(), orderItemForm.getSellingPrice());
             
             orderItemPojoList.add(orderItemPojo);
         }
@@ -140,13 +152,28 @@ public class OrderDto {
 		for(Integer orderItemId: existingOrderItemIds) {
 			OrderItemPojo orderItemPojo = orderItemService.getOrderItembyItemId(orderItemId);
 			String barcode = productService.get(orderItemPojo.getProductId()).getBarcode();
-			InventoryPojo inventoryPojo = inventoryService.get(orderItemPojo.getProductId(), barcode);
-			inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), barcode,  inventoryPojo.getQuantity() + orderItemPojo.getQuantity());
+			inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), barcode,  orderItemPojo.getQuantity(), 0);
 		}	
 
 		List<Integer> orderItemIdstoRemove = existingOrderItemIds;
         orderItemService.update(orderId, orderItemPojoList, orderItemIdstoRemove);
     }
+
+
+
+	@Transactional(rollbackOn = ApiException.class)
+	public void cancelOrder(int orderId) throws ApiException{
+		OrderPojo orderPojo = orderService.getOrder(orderId);
+		orderPojo.setStatus("cancelled");
+		orderService.update(orderPojo);
+
+		List<OrderItemPojo> existingOrderItemPojoList = orderItemService.getOrderItemsbyOrderId(orderId);
+		
+		for(OrderItemPojo orderItemPojo: existingOrderItemPojoList) {
+			String barcode = productService.get(orderItemPojo.getProductId()).getBarcode();
+			inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), barcode, orderItemPojo.getQuantity(), 0);
+		}
+	}
 
 
     public OrderData convert(OrderPojo orderPojo, List<OrderItemPojo> orderItemPojoList) throws ApiException {
