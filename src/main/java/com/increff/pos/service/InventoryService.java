@@ -21,10 +21,10 @@ public class InventoryService {
 	public void add(InventoryPojo inventoryPojo) throws ApiException {
 		normalize(inventoryPojo.getBarcode());
 		if(inventoryPojo.getQuantity()<0) {
-			throw new ApiException("quantity cannot be less than 0");
+			throw new ApiException("Quantity should be a positive number");
 		}
 		else if(StringUtil.isEmpty(inventoryPojo.getBarcode())) {
-			throw new ApiException("barcode cannot be empty");
+			throw new ApiException("Barcode cannot be empty");
 		}
 
 		InventoryPojo existingInventoryPojo = inventoryDao.select(inventoryPojo.getId());
@@ -51,20 +51,29 @@ public class InventoryService {
 	}
 
 	@Transactional
-	public void updateInventoryWhileCreatingOrder(int id, String barcode, int quantity) throws ApiException{
-		if(quantity<0) {
-			throw new ApiException("not enough quantity available, barcode: " + barcode);
+	public void updateInventoryWhileCreatingOrder(int id, String barcode, int quantity, int prevQuantity) throws ApiException{
+		
+		if(quantity<=0){
+			throw new ApiException("Quantity should be a positive number");
 		}
-		update(id, barcode, quantity);
+
+		InventoryPojo inventoryPojo = get(id, barcode);
+
+		int updatedQuantity = (inventoryPojo.getQuantity()+prevQuantity) - quantity;
+
+		if(updatedQuantity<0) {
+			throw new ApiException("Not enough quantity. Only " + inventoryPojo.getQuantity() + " items left for barcode: " + barcode);
+		}
+		update(id, barcode, updatedQuantity);
 	}
 	
 	@Transactional(rollbackOn  = ApiException.class)
 	public void update(int id, String barcode, int quantity) throws ApiException {
-		if(quantity<0) {
-			throw new ApiException("quantity cannot be less than 0");
+		if(quantity<=0) {
+			throw new ApiException("Quantity should be a positive number");
 		}
 		else if(StringUtil.isEmpty(barcode)) {
-			throw new ApiException("barcode cannot be empty");
+			throw new ApiException("Barcode cannot be empty");
 		}
 
 		InventoryPojo newInventoryPojo = getCheck(id ,barcode);
@@ -77,7 +86,7 @@ public class InventoryService {
 	public InventoryPojo getCheck(int id, String barcode) throws ApiException {
 		InventoryPojo inventoryPojo = inventoryDao.select(id);
 		if (inventoryPojo == null) {
-			throw new ApiException("barcode does not exit, barcode: " + barcode);
+			throw new ApiException("Barcode does not exit, barcode: " + barcode);
 		}
 		return inventoryPojo;
 	}

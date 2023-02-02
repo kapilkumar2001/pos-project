@@ -104,6 +104,7 @@ function displayBrandCategoryList(data){
 		+ '</tr>';
         $tbody.append(row);
 	}
+	$('[data-toggle="tooltip"]').tooltip()
 }
 
 function displayEditBrandCategory(id){
