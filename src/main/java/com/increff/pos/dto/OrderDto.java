@@ -167,12 +167,16 @@ public class OrderDto {
 		orderPojo.setStatus("cancelled");
 		orderService.update(orderPojo);
 
+		System.out.println("order cancelled");
+
 		List<OrderItemPojo> existingOrderItemPojoList = orderItemService.getOrderItemsbyOrderId(orderId);
 		
 		for(OrderItemPojo orderItemPojo: existingOrderItemPojoList) {
+			System.out.println("orderitem" + orderItemPojo.getBarcode());
 			String barcode = productService.get(orderItemPojo.getProductId()).getBarcode();
 			inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), barcode, orderItemPojo.getQuantity(), 0);
 		}
+		System.out.println("done");
 	}
 
 

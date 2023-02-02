@@ -50,7 +50,6 @@ function createOrder() {
 
 function updateOrder(id) {
 
-	//Get the ID
 	var id = $('#edit-order-list-form input[name=orderId]').val();
 
 	console.log(id);
@@ -58,6 +57,11 @@ function updateOrder(id) {
 
 	var $form = $("#edit-order-list-form");
 	var json = convertToArrayOfObjectToUpdate($form);
+
+	if(json.length==2){
+		showError("Order can't be updated without any item");
+		return;
+	}
 
 	$.ajax({
 		url: url,
