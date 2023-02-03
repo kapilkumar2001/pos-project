@@ -9,21 +9,14 @@ function getInvoiceUrl() {
 
 var editOrderModelOrderId;
 
-
 function createOrder() {
-
 	var $form = $("#order-list-form");
 	var json = convertToArrayOfObjectToCreate($form);
-
-	console.log(json);
 	var url = getOrderUrl();
-
-	console.log(json.length);
 	if(json.length==2){
 		showError("Order can't be created without item");
 		return;
 	}
-
 	$.ajax({
 		url: url,
 		type: 'POST',
@@ -37,35 +30,22 @@ function createOrder() {
 			$tbody.empty();
 			$('#create-order-modal').modal('hide');
 			tmpc = 0;
-
 			showSuccess("Order created succesfully!");
 		},
 		error: handleAjaxError
 	});
-
-
 	return false;
 }
 
-
-
-function updateOrder(id) {
-
-	// var id = $('#edit-order-list-form input[name=orderId]').val();
-
-	var id = editOrderModelOrderId;
-
-	console.log(id);
-	var url = getOrderUrl() + "/" + id;
-
+function updateOrder(orderId) {
+	var orderId = editOrderModelOrderId;
+	var url = getOrderUrl() + "/" + orderId;
 	var $form = $("#edit-order-list-form");
 	var json = convertToArrayOfObjectToUpdate($form);
-
 	if(json.length==2){
 		showError("Order can't be updated without any item");
 		return;
 	}
-
 	$.ajax({
 		url: url,
 		type: 'PUT',
@@ -78,7 +58,6 @@ function updateOrder(id) {
 			var $tbody = $('#edit-order-item-table').find('tbody');
 			$tbody.empty();
 			$('#edit-order-modal').modal('hide');
-
 			showSuccess("Order updated succesfully!");
 		},
 		error: handleAjaxError
@@ -86,15 +65,9 @@ function updateOrder(id) {
 	return false;
 }
 
-
-function cancelOrder(id) {
-	// var id = $('#edit-order-list-form input[name=orderId]').val();
-
-	var id = editOrderModelOrderId;
-
-	console.log(id);
-	var url = getOrderUrl() + "/cancel/" + id;
-
+function cancelOrder(orderId) {
+	var orderId = editOrderModelOrderId;
+	var url = getOrderUrl() + "/cancel/" + orderId;
 	$.ajax({
 		url: url,
 		type: 'PUT',
@@ -103,15 +76,12 @@ function cancelOrder(id) {
 			var $tbody = $('#edit-order-item-table').find('tbody');
 			$tbody.empty();
 			$('#edit-order-modal').modal('hide');
-
 			showSuccess("Order cancelled succesfully!");
 		},
 		error: handleAjaxError
 	});
 	return false;
 }
-
-
 
 function getOrderList() {
 	var url = getOrderUrl();
@@ -137,14 +107,9 @@ function getOrderItems(id) {
 	});
 }
 
-
-
-// display orders list
 function displayOrderList(data) {
 	var $tbody = $('#order-table').find('tbody');
 	$tbody.empty();
-
-	var role = $('.user-role').find('span').text();
 	for (var i in data) {
 		var e = data[i];
 		var buttonHtml = '';
@@ -152,10 +117,8 @@ function displayOrderList(data) {
 		var date = new Date((e.createdAt).replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
 		var options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true };
 		var createdAt = new Intl.DateTimeFormat('en-US', options).format(date);
-
 		date = new Date((e.updatedAt).replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
 		var updatedAt = new Intl.DateTimeFormat('en-US', options).format(date);
-
 		var status;
 
 		if (e.status == 'invoiced') {
@@ -172,10 +135,6 @@ function displayOrderList(data) {
 			buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Generate Invoice"><i class=\'fa fa-file-text\' style=\'font-size:18px;color:black;\'></i></button>'
 		}
 
-		
-		
-		
-
 		var row = '<tr>'
 			+ '<td>' + e.id + '</td>'
 			+ '<td>' + createdAt + '</td>'
@@ -185,11 +144,10 @@ function displayOrderList(data) {
 			+ '</tr>';
 		$tbody.append(row);
 	}
-
 	$('[data-toggle="tooltip"]').tooltip()
 }
 
-// add items to the order list
+// Add items to the order list
 var tmpc = 0;
 function displayOrderItemList() {
 	var $tbody = $('#order-item-table').find('tbody');
@@ -211,9 +169,7 @@ function deleteItem(tmp) {
 }
 
 
-
-
-// view order 
+// View order 
 function viewOrder(id) {
 	$('#view-order-modal').modal('toggle');
 	getOrderItems(id);
@@ -235,16 +191,12 @@ function viewOrderItems(data) {
 }
 
 
-
 // Edit Order
 
 var orderId;
-
 function editOrder(id) {
 	$('#edit-order-modal').modal('toggle');
-
 	var url = getOrderUrl() + '/' + id;
-
 	$.ajax({
 		url: url,
 		type: 'GET',
@@ -260,7 +212,6 @@ var tmpe = 0;
 function editOrderItems(data) {
 	var $tbody = $('#edit-order-item-table').find('tbody');
 	$tbody.empty();
-
 	for (var i in data['orders']) {
 		var e = data['orders'][i];
 		var orderId = data['id'];
@@ -274,7 +225,6 @@ function editOrderItems(data) {
 			+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderItemId' + tmpe + '" id="orderItemId' + tmpe + '" value="' + e.orderItemId + '"></input>'
 			+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderId" id="orderId" value="' + orderId + '"></input>'
 			+ '</tr>';
-
 		$tbody.append(row);
 		tmpe = tmpe + 1;
 	}
@@ -291,7 +241,6 @@ function addItemInList() {
 	displayOrderItemList();
 }
 
-
 function convertToArrayOfObjectToCreate(data) {
 	var serialized = data.serializeArray();
 	let arr = []
@@ -307,7 +256,6 @@ function convertToArrayOfObjectToCreate(data) {
 	}
 	return JSON.stringify(arr);
 }
-
 
 function convertToArrayOfObjectToUpdate(data) {
 	var serialized = data.serializeArray();
@@ -327,7 +275,6 @@ function convertToArrayOfObjectToUpdate(data) {
 	return JSON.stringify(arr);
 }
 
-
 function cancelUpdate() {
 	var $tbody = $('#edit-order-item-table').find('tbody');
 	$tbody.empty();
@@ -336,7 +283,6 @@ function cancelUpdate() {
 
 function addIteminEditForm() {
 	var $tbody = $('#edit-order-item-table').find('tbody');
-
 	var buttonHtml = '<button onclick="deleteItem(' + tmpe + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
 	var row = '<tr id="row' + tmpe + '">'
 		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpe + '" id="barcode' + tmpe + '" value="" required></div> </td>'
@@ -346,12 +292,9 @@ function addIteminEditForm() {
 		+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderItemId' + tmpe + '" id="orderItemId' + tmpe + '" value="0"></input>'
 		+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderId" id="orderId" value="' + orderId + '"></input>'
 		+ '</tr>';
-
 	$tbody.prepend(row);
 	tmpe = tmpe + 1;
-
 }
-
 
 function cancelCreate() {
 	tmpc=0;
@@ -359,6 +302,7 @@ function cancelCreate() {
 	$tbody.empty();
 	$('#create-order-modal').modal('hide');
 }
+
 
 // Invoice functions
 
@@ -385,7 +329,6 @@ function generateInvoice(id) {
 }
 
 
-//INITIALIZATION CODE
 function init() {
 	getOrderList();
 	$('#create-order-button').click(openCreateOrderModel);
@@ -393,11 +336,8 @@ function init() {
 	$('#create-order').click(createOrder);
 	$('#cancel-order').click(cancelOrder);
 	$('#update-order').click(updateOrder);
-	// $('#cancel-update').click(cancelUpdate);
 	$('#edit-add-item').click(addIteminEditForm);
-	$('#refresh-data').click(getOrderList);
 	$('#cancel-create').click(cancelCreate);
-	
 }
 
 $(document).ready(init);

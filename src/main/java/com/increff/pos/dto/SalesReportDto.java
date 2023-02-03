@@ -63,10 +63,7 @@ public class SalesReportDto {
                 List<OrderPojo> orderPojoList = orderService.getOrderByTime(startDateTime, endDateTime);
 
                 for(OrderPojo orderPojo: orderPojoList){
-                  
-
                     List<OrderItemPojo> orderItemPojoList = orderItemService.getOrderItemsbyOrderId(orderPojo.getId());
-
                     for(OrderItemPojo orderItemPojo: orderItemPojoList){
                         if(orderItemPojo.getProductId()==productId){
                             quantity = quantity + orderItemPojo.getQuantity();
