@@ -177,7 +177,7 @@ function uploadRows(){
 	   		uploadRows();  
 	   },
 	   error: function(response){
-	   		row.error=response.responseText
+	   		row.error=response.responseJSON['message'];
 	   		errorData.push(row);
 	   		uploadRows();
 	   }
