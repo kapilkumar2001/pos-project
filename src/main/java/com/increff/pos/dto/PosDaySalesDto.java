@@ -95,4 +95,27 @@ public class PosDaySalesDto {
         }    
         return posDaySalesDataList;
     }
+
+    @Transactional
+    public List<PosDaySalesData> getDaySale(String startDate, String endDate){
+        System.out.println("in getDateSale");
+        List<PosDaySalesData> posDaySalesDataList = new ArrayList<>();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate startdate = LocalDate.parse(startDate, formatter);
+        LocalDate enddate = LocalDate.parse(endDate, formatter);
+
+        List<PosDaySalesPojo> posDaySalesPojoList = posDaySalesService.getByDate(startdate, enddate);
+
+        for(PosDaySalesPojo posDaySalesPojo: posDaySalesPojoList){
+            PosDaySalesData posDaySalesData = new PosDaySalesData();
+            posDaySalesData.setDate(posDaySalesPojo.getDate());
+            posDaySalesData.setInvoicedItemsCount(posDaySalesPojo.getInvoicedItemsCount());
+            posDaySalesData.setInvoicedOrdersCount(posDaySalesPojo.getInvoicedOrdersCount());
+            posDaySalesData.setTotalRevenue(posDaySalesPojo.getTotalRevenue());
+
+            posDaySalesDataList.add(posDaySalesData);
+        }
+        return posDaySalesDataList;
+    }
 }

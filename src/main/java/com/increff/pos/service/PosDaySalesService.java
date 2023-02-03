@@ -1,5 +1,6 @@
 package com.increff.pos.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -24,6 +25,11 @@ public class PosDaySalesService {
     @Transactional
     public List<PosDaySalesPojo> getAll(){
         return posDaySalesDao.selectAll();
+    }
+
+    @Transactional
+    public List<PosDaySalesPojo> getByDate(LocalDate startDate, LocalDate endDate){
+        return posDaySalesDao.selectByDate(startDate, endDate);
     }
     
 }
