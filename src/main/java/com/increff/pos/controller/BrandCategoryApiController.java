@@ -75,5 +75,4 @@ public class BrandCategoryApiController {
 		List<String> categoriesList = brandCategoryDto.getAllCategories();
 		return categoriesList;
 	}
-
 }

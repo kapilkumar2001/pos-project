@@ -17,7 +17,7 @@ public class OrderDao extends AbstractDao{
 	private static String select_id = "select p from OrderPojo p where id=:id";
 	private static String select_all = "select p from OrderPojo p";
 	private static String select_time = "select p from OrderPojo p where updated_at>=:startTime and updated_at<=:endTime";
-	private static String delete_id = "delete from EmployeePojo p where id=:id";
+	private static String delete_id = "delete from OrderPojo p where id=:id";
 
 	@PersistenceContext
 	private EntityManager em;

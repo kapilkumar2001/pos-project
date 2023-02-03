@@ -7,29 +7,14 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class AppUiController extends AbstractUiController {
 
-	// @RequestMapping(value = "/ui/brands")
-	// public ModelAndView home() {
-	// 	return mav("home.html");
-	// }
-
-//	@RequestMapping(value = "/ui/employee")
-//	public ModelAndView employee() {
-//		return mav("employee.html");
-//	}
-
-//	@RequestMapping(value = "/ui/admin")
-//	public ModelAndView admin() {
-//		return mav("user.html");
-//	}
-
 	@RequestMapping(value = "/ui/brands")
 	public ModelAndView brandcategory() {
-		return mav("brandcategory.html");
+		return mav("brands.html");
 	}
 
 	@RequestMapping(value = "/ui/products")
 	public ModelAndView product() {
-		return mav("product.html");
+		return mav("products.html");
 	}
 	
 	@RequestMapping(value = "/ui/inventory")
@@ -39,27 +24,7 @@ public class AppUiController extends AbstractUiController {
 	
 	@RequestMapping(value = "/ui/orders")
 	public ModelAndView order() {
-		return mav("order.html");
-	}
-
-	@RequestMapping(value = "/ui/inventory-report")
-	public ModelAndView inventoryReport() {
-		return mav("inventory_report.html");
-	}
-
-	@RequestMapping(value = "/ui/brands-report")
-	public ModelAndView brandReport() {
-		return mav("brand_report.html");
-	}
-
-	@RequestMapping(value = "/ui/sales-report")
-	public ModelAndView salesReport() {
-		return mav("sales_report.html");
-	}
-
-	@RequestMapping(value = "/ui/posdaysales-report")
-	public ModelAndView posDaySalesReport() {
-		return mav("posdaysales_report.html");
+		return mav("orders.html");
 	}
 
 	@RequestMapping(value = "/ui/reports")
