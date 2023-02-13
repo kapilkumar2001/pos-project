@@ -4,8 +4,14 @@ html {
 }
 
 body {
-	margin-bottom: 60px; /* Margin bottom by footer height */
+	margin-top: 85px !important;
+	margin-bottom: 60px;
 }
+/* @media (max-width: 979px) {
+    body {
+	  padding-top: 0px;
+	}
+} */
 
 .footer {
 	position: absolute;

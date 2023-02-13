@@ -169,6 +169,7 @@ function displayProduct(data) {
 	$("#product-edit-form input[name=category]").val(data.category);
 	$("#product-edit-form input[name=brand]").val(data.brand);
 	$("#product-edit-form input[name=id]").val(data.id);
+	document.getElementById("edit-product-modal-title").innerHTML = ("Edit Product: " + data.barcode);
 	$('#edit-product-modal').modal('toggle');
 }
 
@@ -285,7 +286,6 @@ function displayUploadData() {
 	resetUploadDialog();
 	$('#upload-product-modal').modal('toggle');
 }
-
 
 function init() {
 	getProductList();

@@ -49,17 +49,23 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Edit Inventory</h5>
+              <h5 class="modal-title" id="edit-inventory-modal-title">Edit Inventory</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              <form class="form-inline" id="inventory-edit-form">
-                <div class="form-group">
-                  <label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label>
-                  <div class="col-sm-10">
+              <form id="inventory-edit-form">
+                <div class="form-group row">
+                  <label for="inputQuantity" class="col-sm-3 col-form-label">Quantity</label>
+                  <div class="col-sm-9">
                     <input type="number" class="form-control" name="quantity" placeholder="enter quantity">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="inputQuantity" class="col-sm-3 col-form-label">Barcode</label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" name="barcode" readonly>
                   </div>
                 </div>
                 <input type="hidden" name="barcode">
