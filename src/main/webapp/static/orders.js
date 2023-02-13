@@ -6,6 +6,10 @@ function getInvoiceUrl() {
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/invoice";
 }
+function getProductUrl() {
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/product";
+}
 
 var editOrderModelOrderId;
 
@@ -107,9 +111,22 @@ function getOrderItems(id) {
 	});
 }
 
+function getProductsList() {
+	var url = getProductUrl();
+	$.ajax({
+		url: url,
+		type: 'GET',
+		success: function (data) {
+			displayBarcodesList(data);
+		},
+		error: handleAjaxError
+	});
+}
+
 function displayOrderList(data) {
 	var $tbody = $('#order-table').find('tbody');
 	$tbody.empty();
+	data = data.reverse();
 	for (var i in data) {
 		var e = data[i];
 		var buttonHtml = '';
@@ -151,8 +168,10 @@ function displayOrderList(data) {
 var tmpc = 0;
 function displayOrderItemList() {
 	var $tbody = $('#order-item-table').find('tbody');
+	// getProductsList();
 	var buttonHtml = '<button onclick="deleteItem(' + tmpc + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
 	var row = '<tr id="row' + tmpc + '">'
+	    // + '<td> <div class="form-group"><div id="barcodes-dropdown"><select class="form-control" name="barcode' + tmpc + '" id="barcode"></select></div></div> </td>'
 		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpc + '" id="barcode' + tmpc + '" placeholder="Enter Barcode" required></div> </td>'
 		+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpc + '" id="quantity' + tmpc + '" placeholder="Enter Quantity" required></div> </td>'
 		+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpc + '" id="sellingPrice' + tmpc + '" placeholder="Enter Price" required></div> </td>'
@@ -168,16 +187,33 @@ function deleteItem(tmp) {
 	return false;
 }
 
+function displayBarcodesList(data) {
+	var $select = $('#barcode');
+	$select.empty();
+	var row = "<option value='' disabled selected style='display: none'>Choose Barcode</option>";
+	$select.append(row);
+	data = Array.from(new Set(data));
+	for (var i in data) {
+		var e = data[i];
+		row = "<option value='" + e.barcode + "'>" + e.barcode + "</option>";
+		$select.append(row);
+	}
+}
+
+
+
 
 // View order 
 function viewOrder(id) {
 	$('#view-order-modal').modal('toggle');
+	document.getElementById("view-order-modal-title").innerHTML = ("View Order: " + id);
 	getOrderItems(id);
 }
 
 function viewOrderItems(data) {
 	var $tbody = $('#view-order-table').find('tbody');
 	$tbody.empty();
+	let totalAmount = 0;
 	for (var i in data['orders']) {
 		var e = data['orders'][i];
 		var row = '<tr>'
@@ -187,7 +223,9 @@ function viewOrderItems(data) {
 			+ '<td>' + e.sellingPrice + '</td>'
 			+ '</tr>';
 		$tbody.append(row);
+		totalAmount+=(e.sellingPrice);
 	}
+	document.getElementById("view-order-total-amount").innerHTML = ("Total Amount: " + totalAmount);
 }
 
 
@@ -196,6 +234,7 @@ function viewOrderItems(data) {
 var orderId;
 function editOrder(id) {
 	$('#edit-order-modal').modal('toggle');
+	document.getElementById("edit-order-modal-title").innerHTML = ("Edit Order: " + id);
 	var url = getOrderUrl() + '/' + id;
 	$.ajax({
 		url: url,
@@ -218,7 +257,7 @@ function editOrderItems(data) {
 		var $tbody = $('#edit-order-item-table').find('tbody');
 		var buttonHtml = '<button onclick="deleteItem(' + tmpe + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
 		var row = '<tr id="row' + tmpe + '">'
-			+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpe + '" id="barcode' + tmpe + '" value="' + e.barcode + '" readonly="true"></div> </td>'
+			+ '<td> <div class="form-group"><input type="text" class="form-control" name="editbarcode' + tmpe + '" id="editbarcode' + tmpe + '" value="' + e.barcode + '" readonly="true"></div> </td>'
 			+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpe + '" id="quantity' + tmpe + '" value="' + e.quantity + '" required></div> </td>'
 			+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpe + '" id="sellingPrice' + tmpe + '" value="' + e.sellingPrice + '" required></div> </td>'
 			+ '<td>' + buttonHtml + '</td>'
@@ -283,8 +322,10 @@ function cancelUpdate() {
 
 function addIteminEditForm() {
 	var $tbody = $('#edit-order-item-table').find('tbody');
+	// getProductsList();
 	var buttonHtml = '<button onclick="deleteItem(' + tmpe + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
 	var row = '<tr id="row' + tmpe + '">'
+	    // + '<td> <div class="form-group"><div id="barcodes-dropdown"><select class="form-control" name="barcode' + tmpe + '" id="barcode"></select></div></div> </td>'
 		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpe + '" id="barcode' + tmpe + '" value="" required></div> </td>'
 		+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpe + '" id="quantity' + tmpe + '" value="" required></div> </td>'
 		+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpe + '" id="sellingPrice' + tmpe + '" value="" required></div> </td>'
