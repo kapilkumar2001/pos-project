@@ -1,4 +1,4 @@
-package com.increff.employee.dto;
+package com.increff.pos.dto;
 
 import static org.junit.Assert.assertEquals;
 
@@ -8,14 +8,14 @@ import java.util.List;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.increff.employee.model.BrandCategoryForm;
-import com.increff.employee.model.InventoryForm;
-import com.increff.employee.model.OrderData;
-import com.increff.employee.model.OrderItemData;
-import com.increff.employee.model.OrderItemForm;
-import com.increff.employee.model.ProductForm;
-import com.increff.employee.service.AbstractUnitTest;
-import com.increff.employee.service.ApiException;
+import com.increff.pos.model.BrandCategoryForm;
+import com.increff.pos.model.InventoryForm;
+import com.increff.pos.model.OrderData;
+import com.increff.pos.model.OrderItemData;
+import com.increff.pos.model.OrderItemForm;
+import com.increff.pos.model.ProductForm;
+import com.increff.pos.service.AbstractUnitTest;
+import com.increff.pos.service.ApiException;
 
 public class orderDtoTest extends AbstractUnitTest{
     
@@ -85,7 +85,7 @@ public class orderDtoTest extends AbstractUnitTest{
 
     @Test
     public void testGetOrder() throws ApiException{
-
+        
         BrandCategoryForm brandCategoryForm = new BrandCategoryForm();
         brandCategoryForm.setBrand("test brand 1");
         brandCategoryForm.setCategory("test category 1");

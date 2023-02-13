@@ -1,4 +1,4 @@
-package com.increff.employee.dto;
+package com.increff.pos.dto;
 
 import static org.junit.Assert.assertEquals;
 
@@ -8,10 +8,10 @@ import java.util.List;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.increff.employee.model.BrandCategoryData;
-import com.increff.employee.model.BrandCategoryForm;
-import com.increff.employee.service.AbstractUnitTest;
-import com.increff.employee.service.ApiException;
+import com.increff.pos.model.BrandCategoryData;
+import com.increff.pos.model.BrandCategoryForm;
+import com.increff.pos.service.AbstractUnitTest;
+import com.increff.pos.service.ApiException;
 
 public class brandCategoryDtoTest extends AbstractUnitTest{
 
