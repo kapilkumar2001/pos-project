@@ -15,7 +15,7 @@
             <fo:page-sequence master-reference="simple">
                 <fo:flow flow-name="xsl-region-body">
                     <fo:block>
-                        <fo:external-graphic  src="src/main/webapp/static/logo2.png" height="1.5cm" width="4cm" />
+                        <fo:external-graphic  src="src/main/webapp/static/increff.png" height="1.2cm" width="3.5cm" />
                     </fo:block>
                     <fo:block>&#160;</fo:block>
                     <fo:block>&#160;</fo:block>
@@ -26,23 +26,23 @@
                     </fo:block>
                     <fo:block>&#160;</fo:block>
 
-                     <fo:block font-size="12pt" font-weight="bold" text-align-last="justify">
-                     <fo:inline space-after="5mm">
-                        Date 
+                    <fo:block font-size="12pt" font-weight="bold" text-align-last="justify">
+                    <fo:inline space-after="5mm">
+                        Order No. 
                     </fo:inline>
                     <fo:leader leader-pattern="space" />
                     <fo:inline space-after="5mm">
-                        Invoice No. 
+                        Date and Time
                     </fo:inline>
                     </fo:block>
 
                     <fo:block font-size="12pt" text-align-last="justify">
                     <fo:inline space-after="5mm">
-                        <xsl:value-of select="time"/>
+                        <xsl:value-of select="orderId"/>
                     </fo:inline>
                     <fo:leader leader-pattern="space" />
                     <fo:inline space-after="5mm">
-                        <xsl:value-of select="orderId"/>
+                        <xsl:value-of select="time"/>
                     </fo:inline>
                     </fo:block>
                     
@@ -69,12 +69,12 @@
                                         </fo:table-cell>
                                         <fo:table-cell text-align="right" border="solid 0.3mm black">
                                             <fo:block font-weight="bold">
-                                               MRP
+                                                Selling Price
                                             </fo:block>
                                         </fo:table-cell>
                                         <fo:table-cell text-align="right" border="solid 0.3mm black">
                                              <fo:block font-weight="bold">
-                                                 Amount
+                                                Amount
                                              </fo:block>
                                         </fo:table-cell>
                                 </fo:table-row>

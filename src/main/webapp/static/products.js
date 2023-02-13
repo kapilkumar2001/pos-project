@@ -102,6 +102,8 @@ function displayProductList(data) {
 	var $tbody = $('#product-table').find('tbody');
 	$tbody.empty();
 	var userRole = $('.user-role').find('span').text();
+	data = data.reverse();
+	let serialNumber = 1;
 	for (var i in data) {
 		var e = data[i];
 		var buttonHtml = '';
@@ -109,6 +111,7 @@ function displayProductList(data) {
 			buttonHtml += '<button onclick="displayEditProduct(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
 		}
 		var row = '<tr>'
+			+ '<td>' + serialNumber + '</td>'
 			+ '<td>' + e.barcode + '</td>'
 			+ '<td>' + e.name + '</td>'
 			+ '<td>' + e.mrp + '</td>'
@@ -117,6 +120,7 @@ function displayProductList(data) {
 			+ '<td>' + buttonHtml + '</td>'
 			+ '</tr>';
 		$tbody.append(row);
+		serialNumber+=1;
 	}
 	$('[data-toggle="tooltip"]').tooltip()
 }

@@ -72,6 +72,7 @@ function displayBrandsList(data){
 	$tbody.empty();
 	var userRole = $('.user-role').find('span').text();
 	data = data.reverse();
+	let serialNumber = 1;
 	for(var i in data){
 		var e = data[i];
 		var buttonHtml = '';
@@ -79,11 +80,13 @@ function displayBrandsList(data){
 			buttonHtml += '<button onclick="displayEditBrand(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
 		} 
 		var row = '<tr>'
-      + '<td>' + e.brand + '</td>'
-      + '<td>'  + e.category + '</td>'
-      + '<td>' + buttonHtml + '</td>'
-      + '</tr>';
-    $tbody.append(row);
+		+ '<td>' + serialNumber + '</td>'
+		+ '<td>' + e.brand + '</td>'
+		+ '<td>'  + e.category + '</td>'
+		+ '<td>' + buttonHtml + '</td>'
+		+ '</tr>';
+		$tbody.append(row);
+		serialNumber+=1;
 	}
 	$('[data-toggle="tooltip"]').tooltip()
 }

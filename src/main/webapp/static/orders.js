@@ -110,6 +110,7 @@ function getOrderItems(id) {
 function displayOrderList(data) {
 	var $tbody = $('#order-table').find('tbody');
 	$tbody.empty();
+	data = data.reverse();
 	for (var i in data) {
 		var e = data[i];
 		var buttonHtml = '';
