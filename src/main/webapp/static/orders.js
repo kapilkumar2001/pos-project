@@ -223,7 +223,7 @@ function viewOrderItems(data) {
 			+ '<td>' + e.sellingPrice + '</td>'
 			+ '</tr>';
 		$tbody.append(row);
-		totalAmount+=(e.sellingPrice);
+		totalAmount+=(e.sellingPrice*e.quantity);
 	}
 	document.getElementById("view-order-total-amount").innerHTML = ("Total Amount: " + totalAmount);
 }

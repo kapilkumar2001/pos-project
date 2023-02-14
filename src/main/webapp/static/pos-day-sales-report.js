@@ -3,20 +3,6 @@ function getPosDaySaleReportUrl() {
 	return baseUrl + "/api/posdaysales-report/";
 }
 
-function getPosDaySale() {
-	var url = getPosDaySaleReportUrl();
-    console.log(url);
-	$.ajax({
-		url: url,
-		type: 'GET',
-		success: function (data) {
-            console.log(data);
-			displayPosDaySale(data);
-		},
-		error: handleAjaxError
-	});
-}
-
 function displayPosDaySale(data) {
 	var $tbody = $('#posdaysales-report-table').find('tbody');
 	$tbody.empty();

@@ -30,6 +30,9 @@ function displaySalesReport(data) {
 	var $tbody = $('#sales-report-table').find('tbody');
 	$tbody.empty();
     var tmp = 1;
+	data.sort(function(a, b) { 
+		return b.revenue - a.revenue;
+	})
 	for (var i in data) {
 		var e = data[i];
 		var row = '<tr>'
@@ -57,7 +60,9 @@ function downloadSalesReport(){
 		url: url,
 		type: 'GET',
 		success: function (data) {
-			console.log(data);
+			data.sort(function(a, b) { 
+				return b.revenue - a.revenue;
+			})
 			var tsv = 'Brand	Category	Quantity	Revenue\n';  
 			for(row of data){
 				tsv+=Object.values(row).join('	');

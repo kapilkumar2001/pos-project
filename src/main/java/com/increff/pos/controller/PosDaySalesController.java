@@ -31,8 +31,8 @@ public class PosDaySalesController {
 	@ApiOperation(value = "Gets day sales data by date range")
     @RequestMapping(path = "/api/posdaysales-report/", method = RequestMethod.GET)
     public List<PosDaySalesData> get(
-        @RequestParam(value="startdate", defaultValue = "2023-01-24") String startDate,
-        @RequestParam(value="enddate", defaultValue = "2023-02-30") String endDate)
+        @RequestParam(value="startdate", defaultValue = "", required = false) String startDate,
+        @RequestParam(value="enddate", defaultValue = "", required = false) String endDate)
         throws ApiException {
             return posDaySalesDto.getDaySale(startDate, endDate);
     }
