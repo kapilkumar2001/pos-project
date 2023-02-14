@@ -3,9 +3,6 @@ function getBrandsUrl(){
 	return baseUrl + "/api/brandcategory";
 }
 
-
-// API Calls
-
 function addBrand(){
 	var $form = $("#brand-form");
 	var json = toJson($form);

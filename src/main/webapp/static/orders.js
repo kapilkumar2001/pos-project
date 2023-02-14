@@ -147,7 +147,7 @@ function displayOrderList(data) {
 			status = '<p style="color:red;">Cancelled</p>';
 		}
 		else {
-			status = '<p style="color:#8B8000;">Pending</p>';
+			status = '<p style="color:#8B8000;">Created</p>';
 			buttonHtml += '<button onclick="editOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
 			buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Generate Invoice"><i class=\'fa fa-file-text\' style=\'font-size:18px;color:black;\'></i></button>'
 		}
@@ -223,7 +223,7 @@ function viewOrderItems(data) {
 			+ '<td>' + e.sellingPrice + '</td>'
 			+ '</tr>';
 		$tbody.append(row);
-		totalAmount+=(e.sellingPrice);
+		totalAmount+=(e.sellingPrice*e.quantity);
 	}
 	document.getElementById("view-order-total-amount").innerHTML = ("Total Amount: " + totalAmount);
 }

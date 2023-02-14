@@ -98,8 +98,16 @@ public class PosDaySalesDto {
 
     @Transactional
     public List<PosDaySalesData> getDaySale(String startDate, String endDate){
-        System.out.println("in getDateSale");
         List<PosDaySalesData> posDaySalesDataList = new ArrayList<>();
+
+        // Setting up default values of start and enddate if null
+        LocalDateTime time = LocalDateTime.now();
+        if(startDate.equals("")){
+            startDate = time.minusMonths(1).toLocalDate().toString(); 
+        }
+        if(endDate.equals("")){
+            endDate = time.toLocalDate().toString();
+        }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate startdate = LocalDate.parse(startDate, formatter);

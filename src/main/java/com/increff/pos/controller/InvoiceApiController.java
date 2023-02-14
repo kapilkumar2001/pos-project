@@ -40,7 +40,7 @@ public class InvoiceApiController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         //  actual filename of pdf
-        String filename = "increff-invoice-" + id + ".pdf";
+        String filename = "invoice-" + id + ".pdf";
         headers.setContentDispositionFormData(filename, filename);
         headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
         ResponseEntity<byte[]> response = new ResponseEntity<>(contents, headers, HttpStatus.OK);
