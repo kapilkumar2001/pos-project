@@ -85,7 +85,8 @@ function getDefaultDate(){
 	if (month < 10) month = "0" + month;
 	if (day < 10) day = "0" + day;
 
-	var today = year + "-" + month + "-" + day;       
+	var today = year + "-" + month + "-" + day;  
+	// document.getElementById("inputPosEndDate").required = true;     
 	document.getElementById("inputPosEndDate").setAttribute("max", today);
 	document.getElementById("inputPosEndDate").value = today;
 
@@ -102,7 +103,8 @@ function getDefaultDate(){
 	if (month < 10) month = "0" + month;
 	if (day < 10) day = "0" + day;
 
-	var monthAgo = year + "-" + month + "-" + day;       
+	var monthAgo = year + "-" + month + "-" + day;
+	// document.getElementById("inputPosStartDate").required = true;       
 	document.getElementById("inputPosStartDate").setAttribute("max", today);
 	document.getElementById("inputPosStartDate").value = monthAgo;
 }

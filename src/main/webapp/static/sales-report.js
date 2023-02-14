@@ -131,7 +131,8 @@ function getDefaultDate(){
 	var year = date.getFullYear();
 	if (month < 10) month = "0" + month;
 	if (day < 10) day = "0" + day;
-	var today = year + "-" + month + "-" + day;       
+	var today = year + "-" + month + "-" + day;     
+	// document.getElementById("inputEndDate").required = true;  
 	document.getElementById("inputEndDate").setAttribute("max", today);
 	document.getElementById("inputEndDate").value = today;
 
@@ -145,16 +146,33 @@ function getDefaultDate(){
 	var year = date.getFullYear();
 	if (month < 10) month = "0" + month;
 	if (day < 10) day = "0" + day;
-	var monthAgo = year + "-" + month + "-" + day;       
+	var monthAgo = year + "-" + month + "-" + day;   
+	// document.getElementById("inputStartDate").required = true;    
 	document.getElementById("inputStartDate").setAttribute("max", today);
 	document.getElementById("inputStartDate").value = monthAgo;
 }
+
+// function enableFilterandDownload(){
+// 	$('#apply-filter').click(getSalesReport);
+//     $('#download-tsv-sales-report').click(downloadSalesReport);
+// }
 
 function init() {
 	getDefaultDate();
     getSalesReport();
     getBrandsList();
     getCategories();
+	// document.getElementById("sales-report-form").addEventListener("submit", function(e){
+	// 	console.log("value= " + document.getElementById("inputStartDate").value);
+	// 	if(document.getElementById("inputStartDate").value=="" || document.getElementById("inputEndDate").value==""){
+	// 		console.log("this");
+	// 	    return false;
+	// 	}
+	// 	else{
+	// 		e.preventDefault();
+	// 		enableFilterandDownload();
+	// 	}
+	// });
 	$('#apply-filter').click(getSalesReport);
     $('#download-tsv-sales-report').click(downloadSalesReport);
 }

@@ -15,7 +15,7 @@
             <fo:page-sequence master-reference="simple">
                 <fo:flow flow-name="xsl-region-body">
                     <fo:block>
-                        <fo:external-graphic  src="src/main/webapp/static/increff.png" height="1.2cm" width="3.5cm" />
+                        <fo:external-graphic  src="src/main/webapp/static/assets/images/increff.png" height="1.2cm" width="3.5cm" />
                     </fo:block>
                     <fo:block>&#160;</fo:block>
                     <fo:block>&#160;</fo:block>
