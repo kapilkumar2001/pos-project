@@ -29,7 +29,7 @@
                     <fo:block font-size="12pt" font-weight="bold" text-align-last="justify">
                     <fo:inline space-after="5mm">
                         Order No. 
-                    </fo:inline>
+                    </fo:inline> 
                     <fo:leader leader-pattern="space" />
                     <fo:inline space-after="5mm">
                         Date and Time

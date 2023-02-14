@@ -28,6 +28,8 @@ body {
     color: red;
   }
 
-
+input[type="date"]::-webkit-clear-button {
+    display: none;
+}
 
 

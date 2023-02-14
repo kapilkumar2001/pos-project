@@ -33,13 +33,24 @@
       <li class="nav-item">
         <a class="nav-link" th:href="@{/ui/orders}">Orders</a>
       </li>
-      <div th:switch="${info.getRole()}">
+      <li class="nav-item dropdown" onmouseover="showDropdown()" onmouseout="hideDropdown()">
+        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Reports
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="navbarDropdownMenu">
+          <a class="dropdown-item" th:href="@{/ui/brands-report}">Brands Report</a>
+          <a class="dropdown-item" th:href="@{/ui/inventory-report}">Inventory Report</a>
+          <a class="dropdown-item" th:href="@{/ui/sales-report}">Sales Report</a>
+          <a class="dropdown-item" th:href="@{/ui/pos-day-sales-report}">Pos Day Sales Report</a>
+        </div>
+      </li>
+      <!-- <div th:switch="${info.getRole()}">
         <div th:case="'supervisor'">
           <li class="nav-item">
             <a class="nav-link" th:href="@{/ui/reports}">Reports</a>
           </li>
         </div>
-      </div>
+      </div> -->
     </ul>
     <ul class="navbar-nav ml-auto">
       <li class="nav-item dropdown">
@@ -70,4 +81,18 @@
   <script th:src="@{/static/app.js}"></script>
   <script th:src="@{/static/papaparse.min.js}"></script>
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- <script src="//cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css"></script> -->
+  <!-- <script src="//cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css"></script>
+  <script src="//cdn.datatables.net/1.13.2/css/dataTables.bootstrap4.min.css"></script> -->
+  
+  <script>
+    function showDropdown() {
+      document.getElementById("navbarDropdownMenu").style.display = "block";
+    }
+    
+    function hideDropdown() {
+      document.getElementById("navbarDropdownMenu").style.display = "none";
+    }
+  </script>
 </footer>
