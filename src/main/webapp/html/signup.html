@@ -25,10 +25,11 @@
 				<div class="col-6 mt-4">
 					<div class="card mt-4">
 						<div class="card-header">
-							Signup
+							Sign up
 						</div>
 						<div class="card-body">
-							<form class="form" id="signup-form" name="signup-form" method="POST" th:action="@{/session/signup}">
+							<!-- <form class="form" id="signup-form" name="signup-form" method="POST" th:action="@{/session/signup}"> -->
+							<form class="form" id="signup-form" name="signup-form">
 								<div class="form-group">
 									<label for="email" class="col-sm-10 col-form-label required">Email</label>
 									<div class="col-sm-12">
@@ -44,7 +45,7 @@
                                         </span>
 									</div> 
 								</div>
-								<button type="submit" class="btn btn-primary mt-2" id="signup" style="margin-left: 11px;" onclick="validateEmailandPassword(document.signup-form.email.value, document.signup-form.password.value)">SignUp</button>
+								<button type="button" class="btn btn-primary mt-2" id="signup-button" style="margin-left: 11px;">Sign up</button>
 							</form>
 						</div>
 					</div>
@@ -52,6 +53,7 @@
 			</div>
 		</div>
 		<footer th:replace="snippets.html :: name_footer"></footer>
+		<script th:src="@{/static/signup.js}"></script>
 		<script>
 			$(".toggle-password").click(function() {
 				$(this).toggleClass("fa-eye fa-eye-slash");
@@ -62,25 +64,6 @@
 				    input.attr("type", "password");
 				}
 			});
-		</script>
-		<script>
-			function validateEmailandPassword(mail, password) 
-			{
-				console.log(mail + " : " + password);
-				var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-				if(mail.value.match(mailformat)){
-					console.log("valid");
-				}
-				else{
-					showError("Invalid email address!");
-				    return false;
-				}
-				if(password.value.length<6){
-					showError("Password should contain more than 6 characters")
-					return false
-				}
-				return true;
-			}
 		</script>
 	</body>
 </html>
