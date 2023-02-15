@@ -15,7 +15,7 @@ public class TestPDF {
         OrderFopObject orderFopObject = new OrderFopObject();
         
         orderFopObject.setOrderId(0);
-        orderFopObject.setTime("2023-01-17 06:03");
+        orderFopObject.setTime("2023-01-17 06:03:23");
         
         DecimalFormat dec = new DecimalFormat("#.##");
         double totalAmount = 0;
@@ -24,8 +24,8 @@ public class TestPDF {
             OrderItemData orderItemData = new OrderItemData();
             orderItemData.setBarcode("abcdex"+i);
             orderItemData.setQuantity((2+i));
-            double mrp = ((2.1723)*(i+1)) + i;
-            orderItemData.setSellingPrice(mrp);
+            double mrp = ((2.17)*(i+1)) + i;
+            orderItemData.setSellingPrice(Double.valueOf(dec.format(mrp)));
             orderItemData.setId(0);
             orderItemData.setProductId((i+1)*5);
             orderItemData.setProductName("GoodDay Biscuit " + (i+1)*(5));

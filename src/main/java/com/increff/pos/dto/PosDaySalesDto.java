@@ -70,10 +70,7 @@ public class PosDaySalesDto {
 
         posDaySalesPojo.setInvoicedOrdersCount(invoicedOrdersCount);
         posDaySalesPojo.setInvoicedItemsCount(invoicedItemsCount);
-        posDaySalesPojo.setTotalRevenue(totalRevenue);
-
-        System.out.println(invoicedOrdersCount + " " + invoicedItemsCount + " " + totalRevenue);
-        
+        posDaySalesPojo.setTotalRevenue(totalRevenue);    
         posDaySalesService.create(posDaySalesPojo);
     }
 

@@ -12,7 +12,6 @@ import com.increff.pos.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +88,13 @@ public class ProductDto {
     private ProductPojo convert(ProductForm productForm) throws ApiException {
         ProductPojo productPojo = new ProductPojo();
         productPojo.setBarcode(productForm.getBarcode());
-        productPojo.setMrp(productForm.getMrp());
+        double mrp;
+        try{
+            mrp = Double.parseDouble(productForm.getMrp());
+        } catch(NumberFormatException e){
+            throw new ApiException("Mrp should be a positive number");
+        }
+        productPojo.setMrp(mrp);
         productPojo.setBrand(productForm.getBrand());
         productPojo.setCategory(productForm.getCategory());
         productPojo.setName(productForm.getName());

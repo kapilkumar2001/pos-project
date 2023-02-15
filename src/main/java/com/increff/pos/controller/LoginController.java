@@ -56,7 +56,6 @@ public class LoginController {
 		SecurityUtil.setAuthentication(authentication);
 
 		info.setRole(p.getRole());
-		// System.out.println(p.getRole());
 		return new ModelAndView("redirect:/ui/brands");
 	}
 

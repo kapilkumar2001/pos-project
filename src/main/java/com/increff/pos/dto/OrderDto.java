@@ -34,7 +34,7 @@ public class OrderDto {
     @Autowired
     private InventoryService inventoryService;
 
-    @Transactional
+    @Transactional(rollbackOn = ApiException.class)
     public void createOrder(List<OrderItemForm> form) throws ApiException{
         OrderPojo orderPojo = new OrderPojo();
 		
@@ -102,7 +102,6 @@ public class OrderDto {
 
 		for(OrderItemForm orderItemForm: orderItemFormList)
 		{
-			System.out.println("edit orde id is : " + orderItemForm.getOrderItemId() + ", quantity: " + orderItemForm.getQuantity());
 			newOrderItemIds.add(orderItemForm.getOrderItemId());
 			
 			OrderItemPojo orderItemPojo = new OrderItemPojo();
@@ -123,7 +122,6 @@ public class OrderDto {
 				inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(),  orderItemPojo.getQuantity(), prevQuantity);
 			}
 			else{ 
-				System.out.println("this: " + orderItemPojo.getQuantity());
 				inventoryService.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(),  orderItemPojo.getQuantity(), 0);
 			}
 
@@ -153,7 +151,6 @@ public class OrderDto {
 		List<OrderItemPojo> existingOrderItemPojoList = orderItemService.getOrderItemsbyOrderId(orderId);
 		
 		for(OrderItemPojo orderItemPojo: existingOrderItemPojoList) {
-			System.out.println("orderitem" + orderItemPojo.getBarcode());
 			String barcode = productService.get(orderItemPojo.getProductId()).getBarcode();
 			inventoryService.increaseInventory(orderItemPojo.getProductId(), barcode, orderItemPojo.getQuantity());
 		}

@@ -1,5 +1,6 @@
 package com.increff.pos.service;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -25,10 +26,10 @@ public class OrderItemService {
 				throw new ApiException("Barcode can not be empty");
 			}
 			if(orderItemPojo.getQuantity()<=0) {
-				throw new ApiException("Quantity should be a positive number");
+				throw new ApiException("Quantity should be greater than 0");
 			}
-			if(orderItemPojo.getSellingPrice()<=0) {
-				throw new ApiException("Selling Price should be greater than 0");
+			if(orderItemPojo.getSellingPrice()<0) {
+				throw new ApiException("Selling Price should be a positive number");
 			}
 			orderItemPojo.setOrderId(orderId);
 			addOrderItem(orderItemPojo);
@@ -63,17 +64,15 @@ public class OrderItemService {
 			if(StringUtil.isEmpty(orderItemPojo.getBarcode())) {
 				throw new ApiException("Barcode can not be empty");
 			}
-			if(orderItemPojo.getQuantity()<0) {
-				throw new ApiException("Quantity can not be less than 0");
+			if(orderItemPojo.getQuantity()<=0) {
+				throw new ApiException("Quantity should be greater than 0");
 			}
-			if(orderItemPojo.getSellingPrice()<=0) {
-				throw new ApiException("Selling Price can not be less than or equal to 0");
+			if(orderItemPojo.getSellingPrice()<0) {
+				throw new ApiException("Selling Price should be a positive number");
 			}
-
 
 			if(orderItemPojo.getId()==0) {
-				OrderItemPojo orderItemPojoIn = new OrderItemPojo();
-				
+				OrderItemPojo orderItemPojoIn = new OrderItemPojo();	
 				orderItemPojoIn.setBarcode(orderItemPojo.getBarcode());
 				orderItemPojoIn.setOrderId(orderId);
 				orderItemPojoIn.setQuantity((int) orderItemPojo.getQuantity());
@@ -82,8 +81,7 @@ public class OrderItemService {
 				addOrderItem(orderItemPojoIn);	
 			}
 			else {
-				OrderItemPojo orderItemPojoNew = orderItemDao.selectByOrderItemId(orderItemPojo.getId());
-				
+				OrderItemPojo orderItemPojoNew = orderItemDao.selectByOrderItemId(orderItemPojo.getId());		
 			    orderItemPojoNew.setBarcode(orderItemPojo.getBarcode());
 			    orderItemPojoNew.setOrderId(orderId);
 			    orderItemPojoNew.setQuantity((int) orderItemPojo.getQuantity());
@@ -96,12 +94,13 @@ public class OrderItemService {
 		
 		// deleting the deleted order-items from OrderItemPojo 
 		for(Integer orderItemId: orderItemIdstoRemove) {
-			System.out.println("deleting orderItemId: "+ orderItemId);
 			orderItemDao.delete(orderItemId);
 		}	
 	}
 
     protected static void normalize(OrderItemPojo orderItemPojo) {
+		DecimalFormat dec = new DecimalFormat("#.##");
+		orderItemPojo.setSellingPrice(Double.valueOf(dec.format(orderItemPojo.getSellingPrice())));
 		orderItemPojo.setBarcode(StringUtil.toLowerCase(orderItemPojo.getBarcode()));
 	}
 }

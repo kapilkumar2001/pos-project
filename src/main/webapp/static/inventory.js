@@ -25,7 +25,6 @@ function addInventory() {
 }
 
 function updateInventory() {
-	$('#edit-inventory-modal').modal('toggle');
 	var barcode = $("#inventory-edit-form input[name=barcode]").val();
 	var url = getInventoryUrl() + "/" + barcode;
 	var $form = $("#inventory-edit-form");
@@ -39,6 +38,8 @@ function updateInventory() {
 		},
 		success: function (response) {
 			getInventoryList();
+			$('#edit-inventory-modal').modal('hide');
+			showSuccess("Quantity updated succesfully!");
 		},
 		error: handleAjaxError
 	});
@@ -198,7 +199,7 @@ function updateUploadDialog() {
 
 function updateFileName() {
 	var $file = $('#inventoryFile');
-	var fileName = $file.val();
+	var fileName = $file.val().split("\\")[2];
 	$('#inventoryFileName').html(fileName);
 }
 

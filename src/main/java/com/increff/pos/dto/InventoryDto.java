@@ -24,8 +24,8 @@ public class InventoryDto {
     private ProductService productService;
 
     public void add(InventoryForm form) throws ApiException {
-        InventoryPojo p = convert(form);
-        inventoryService.add(p);
+        InventoryPojo inventoryPojo = convert(form);
+        inventoryService.add(inventoryPojo);
     }
 
     public InventoryData get(String barcode) throws ApiException{
@@ -46,7 +46,13 @@ public class InventoryDto {
 
     public void update(String barcode, InventoryForm inventoryForm) throws ApiException {
         ProductPojo productPojo =  productService.getProductByBarcode(barcode);
-        inventoryService.update(productPojo.getId(), barcode, inventoryForm.getQuantity());
+        int quantity;
+        try{
+            quantity = Integer.parseInt(inventoryForm.getQuantity());
+        } catch(NumberFormatException e){
+            throw new ApiException("Quantity should be a integer value");
+        }
+        inventoryService.update(productPojo.getId(), barcode,  quantity);
     }
 
     private InventoryData convert(InventoryPojo p) throws ApiException{
@@ -61,7 +67,13 @@ public class InventoryDto {
 
     private InventoryPojo convert(InventoryForm f) throws ApiException {
         InventoryPojo inventoryPojo = new InventoryPojo();
-        inventoryPojo.setQuantity(f.getQuantity());
+        int quantity;
+        try{
+            quantity = Integer.parseInt(f.getQuantity());
+        } catch(NumberFormatException e){
+            throw new ApiException("Quantity should be a integer value");
+        }
+        inventoryPojo.setQuantity(quantity);
         inventoryPojo.setBarcode(f.getBarcode());
 
         int id = productService.getProductByBarcode(inventoryPojo.getBarcode()).getId();
