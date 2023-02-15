@@ -4,6 +4,11 @@ function getBrandsUrl(){
 }
 
 function addBrand(){
+	if(($("#brand-form input[name=brand]").val()=="") || ($("#brand-form input[name=category]").val()=="")){
+			showError("Please fill all the fields");
+			return;
+	}
+
 	var $form = $("#brand-form");
 	var json = toJson($form);
 	var url = getBrandsUrl();
@@ -27,6 +32,11 @@ function addBrand(){
 }
 
 function updateBrand(){
+	if(($("#brand-edit-form input[name=brand]").val()=="") || ($("#brand-edit-form input[name=category]").val()=="")){
+		showError("Please fill all the fields");
+		return;
+    }
+
 	var id = $("#brand-edit-form input[name=id]").val();	
 	var url = getBrandsUrl() + "/" + id;
 	var $form = $("#brand-edit-form");

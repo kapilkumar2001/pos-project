@@ -67,28 +67,28 @@ public class ProductService{
 	@Transactional(rollbackOn  = ApiException.class)
 	public void update(int id, ProductPojo productPojo) throws ApiException {
 		normalize(productPojo);
-		if(StringUtil.isEmpty(productPojo.getName())) {
+		if(StringUtil.isEmpty(String.valueOf(productPojo.getBrand()))) {
+			throw new ApiException("Brand cannot be empty");
+		}
+		else if(StringUtil.isEmpty(String.valueOf(productPojo.getCategory()))) {
+			throw new ApiException("Category cannot be empty");
+		}
+		if(productPojo.getBrand_category()==0) {
+			throw new ApiException("Brand & Category combination doesn't exist");
+		}
+		else if(StringUtil.isEmpty(productPojo.getName())) {
 			throw new ApiException("Product Name cannot be empty");
 		}
 		else if(StringUtil.isEmpty(productPojo.getBarcode())) {
 			throw new ApiException("Barcode cannot be empty");
 		}
-		else if(productPojo.getMrp()<=0) {
-			throw new ApiException("MRP should be greater than 0");
-		}
-		else if(StringUtil.isEmpty(String.valueOf(productPojo.getBrand()))) {
-			throw new ApiException("Brand cannot be empty");
-		}
-		else if(StringUtil.isEmpty(String.valueOf(productPojo.getCategory()))) {
-			throw new ApiException("Bategory cannot be empty");
-		}
-		if(productPojo.getBrand_category()==0) {
-			throw new ApiException("Brand & Category combination doesn't exist");
-		}
 		
 		ProductPojo tmpPojo = productDao.getProductByBarcode(productPojo.getBarcode());
 		if(tmpPojo!=null && tmpPojo.getId()!=id) {
 			throw new ApiException("Product with this barcode already exist, barcode: "+ productPojo.getBarcode());
+		}
+		if(productPojo.getMrp()<=0){
+			throw new ApiException("MRP should be greater than 0");
 		}
 
 		ProductPojo newPojo = getCheck(id);

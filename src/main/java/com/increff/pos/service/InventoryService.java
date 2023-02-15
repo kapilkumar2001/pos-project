@@ -31,6 +31,9 @@ public class InventoryService {
 		if(existingInventoryPojo==null) {
 		   inventoryDao.insert(inventoryPojo);
 		} else{
+			if(existingInventoryPojo.getQuantity()+inventoryPojo.getQuantity()<0) {
+				throw new ApiException("Quantity can not be decreased to less than 0, Available Quantity: " + existingInventoryPojo.getQuantity());
+			}
 			update(existingInventoryPojo.getId(), inventoryPojo.getBarcode(), existingInventoryPojo.getQuantity()+inventoryPojo.getQuantity());
 		}
 	}
@@ -70,6 +73,9 @@ public class InventoryService {
 	public void increaseInventory(int id, String barcode, int quantity) throws ApiException{
 		InventoryPojo inventoryPojo = get(id, barcode);
 		int updatedQuantity = (inventoryPojo.getQuantity()+quantity);
+		if(updatedQuantity<0) {
+			throw new ApiException("Quantity can not be decreased to less than 0, Available Quantity: " + inventoryPojo.getQuantity());
+		}
 		update(id, barcode, updatedQuantity);
 	}
 	
@@ -78,7 +84,7 @@ public class InventoryService {
 		if(quantity<0) {
 			throw new ApiException("Quantity should be a positive number");
 		}
-		else if(StringUtil.isEmpty(barcode)) {
+		if(StringUtil.isEmpty(barcode)) {
 			throw new ApiException("Barcode cannot be empty");
 		}
 		

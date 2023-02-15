@@ -12,11 +12,8 @@ import com.increff.pos.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Component
 public class ProductDto {
@@ -91,7 +88,13 @@ public class ProductDto {
     private ProductPojo convert(ProductForm productForm) throws ApiException {
         ProductPojo productPojo = new ProductPojo();
         productPojo.setBarcode(productForm.getBarcode());
-        productPojo.setMrp(productForm.getMrp());
+        double mrp;
+        try{
+            mrp = Double.parseDouble(productForm.getMrp());
+        } catch(NumberFormatException e){
+            throw new ApiException("Mrp should be a positive number");
+        }
+        productPojo.setMrp(mrp);
         productPojo.setBrand(productForm.getBrand());
         productPojo.setCategory(productForm.getCategory());
         productPojo.setName(productForm.getName());
@@ -99,16 +102,5 @@ public class ProductDto {
         int id = brandCategoryService.getBrandCategory(productPojo.getBrand(), productPojo.getCategory()).getId();
         productPojo.setBrand_category(id);
         return productPojo;
-    }
-
-    public static boolean containOnlyDigits(String str)
-    {
-        String regex = "[0-9]+";
-        Pattern pattern = Pattern.compile(regex);
-        if (str == null) {
-            return false;
-        }
-        Matcher matcher = pattern.matcher(str);
-        return matcher.matches();
     }
 }
