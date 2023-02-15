@@ -231,7 +231,7 @@ function viewOrderItems(data) {
 		$tbody.append(row);
 		totalAmount+=(e.sellingPrice*e.quantity);
 	}
-	document.getElementById("view-order-total-amount").innerHTML = ("Total Amount: " + totalAmount);
+	document.getElementById("view-order-total-amount").innerHTML = ("Total Amount: " + parseFloat(totalAmount).toFixed(2));
 }
 
 
