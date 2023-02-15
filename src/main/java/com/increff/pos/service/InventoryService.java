@@ -20,9 +20,10 @@ public class InventoryService {
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(InventoryPojo inventoryPojo) throws ApiException {
 		normalize(inventoryPojo.getBarcode());
-		if(inventoryPojo.getQuantity()<0) {
-			throw new ApiException("Quantity should be a positive number");
-		} else if(StringUtil.isEmpty(inventoryPojo.getBarcode())) {
+		// if(inventoryPojo.getQuantity()<0) {
+		// 	throw new ApiException("Quantity should be a positive number");
+		// } else 
+		if(StringUtil.isEmpty(inventoryPojo.getBarcode())) {
 			throw new ApiException("Barcode cannot be empty");
 		}
 
@@ -50,7 +51,7 @@ public class InventoryService {
 	public void updateInventoryWhileCreatingOrder(int id, String barcode, int quantity, int prevQuantity) throws ApiException{
 		
 		if(quantity<=0){
-			throw new ApiException("Quantity should be a positive number");
+			throw new ApiException("Quantity should be greater than 0");
 		}
 		InventoryPojo inventoryPojo = get(id, barcode);
 		int updatedQuantity = (inventoryPojo.getQuantity()+prevQuantity) - quantity;
@@ -62,7 +63,7 @@ public class InventoryService {
 		newInventoryPojo.setBarcode(barcode);
 		newInventoryPojo.setQuantity(updatedQuantity);
 	    inventoryDao.update(newInventoryPojo);
-		// update(id, barcode, updatedQuantity);
+		
 	}
 
 	@Transactional(rollbackOn = ApiException.class)
@@ -74,9 +75,10 @@ public class InventoryService {
 	
 	@Transactional(rollbackOn  = ApiException.class)
 	public void update(int id, String barcode, int quantity) throws ApiException {
-		if(quantity<=0) {
+		if(quantity<0) {
 			throw new ApiException("Quantity should be a positive number");
-		} else if(StringUtil.isEmpty(barcode)) {
+		}
+		else if(StringUtil.isEmpty(barcode)) {
 			throw new ApiException("Barcode cannot be empty");
 		}
 		

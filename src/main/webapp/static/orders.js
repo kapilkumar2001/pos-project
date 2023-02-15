@@ -16,6 +16,9 @@ var editOrderModelOrderId;
 function createOrder() {
 	var $form = $("#order-list-form");
 	var json = convertToArrayOfObjectToCreate($form);
+	if(json==false){
+		return;
+	}
 	var url = getOrderUrl();
 	if(json.length==2){
 		showError("Order can't be created without item");
@@ -46,6 +49,9 @@ function updateOrder(orderId) {
 	var url = getOrderUrl() + "/" + orderId;
 	var $form = $("#edit-order-list-form");
 	var json = convertToArrayOfObjectToUpdate($form);
+	if(json==false){
+		return;
+	}
 	if(json.length==2){
 		showError("Order can't be updated without any item");
 		return;
@@ -288,6 +294,13 @@ function convertToArrayOfObjectToCreate(data) {
 		console.log(serialized[i].value);
 		console.log(serialized[i + 1].value);
 		console.log(serialized[i + 2].value);
+		if(serialized[i].value=="" && serialized[i+1].value=="" && serialized[i+2].value==""){
+			continue;
+		}
+		if(serialized[i].value=="" || serialized[i+1].value=="" || serialized[i+2].value==""){
+			showError("Please fill all the fields!");
+			return false;
+		}
 		obj['barcode'] = serialized[i].value;
 		obj['quantity'] = serialized[i + 1].value;
 		obj['sellingPrice'] = serialized[i + 2].value;
@@ -305,6 +318,13 @@ function convertToArrayOfObjectToUpdate(data) {
 		console.log(serialized[i + 1].value);
 		console.log(serialized[i + 2].value);
 		console.log(serialized[i + 3].value);
+		if(serialized[i].value=="" && serialized[i+1].value=="" && serialized[i+2].value==""){
+			continue;
+		}
+		if(serialized[i].value=="" || serialized[i+1].value=="" || serialized[i+2].value==""){
+			showError("Please fill all the fields!");
+			return false;
+		}
 		obj['barcode'] = serialized[i].value;
 		obj['quantity'] = serialized[i + 1].value;
 		obj['sellingPrice'] = serialized[i + 2].value;

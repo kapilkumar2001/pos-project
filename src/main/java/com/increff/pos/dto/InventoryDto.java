@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class InventoryDto {
@@ -24,8 +26,8 @@ public class InventoryDto {
     private ProductService productService;
 
     public void add(InventoryForm form) throws ApiException {
-        InventoryPojo p = convert(form);
-        inventoryService.add(p);
+        InventoryPojo inventoryPojo = convert(form);
+        inventoryService.add(inventoryPojo);
     }
 
     public InventoryData get(String barcode) throws ApiException{
@@ -46,7 +48,7 @@ public class InventoryDto {
 
     public void update(String barcode, InventoryForm inventoryForm) throws ApiException {
         ProductPojo productPojo =  productService.getProductByBarcode(barcode);
-        inventoryService.update(productPojo.getId(), barcode, inventoryForm.getQuantity());
+        inventoryService.update(productPojo.getId(), barcode,  Integer.parseInt(inventoryForm.getQuantity()));
     }
 
     private InventoryData convert(InventoryPojo p) throws ApiException{
@@ -61,11 +63,25 @@ public class InventoryDto {
 
     private InventoryPojo convert(InventoryForm f) throws ApiException {
         InventoryPojo inventoryPojo = new InventoryPojo();
-        inventoryPojo.setQuantity(f.getQuantity());
+        if(!containOnlyDigits(f.getQuantity())){
+            throw new ApiException("Quantity should be a number");
+        }
+        inventoryPojo.setQuantity(Integer.parseInt(f.getQuantity()));
         inventoryPojo.setBarcode(f.getBarcode());
 
         int id = productService.getProductByBarcode(inventoryPojo.getBarcode()).getId();
         inventoryPojo.setId(id);
         return inventoryPojo;
+    }
+
+    public static boolean containOnlyDigits(String str)
+    {
+        String regex = "-?\\d+(\\.\\d+)?";
+        Pattern pattern = Pattern.compile(regex);
+        if (str == null) {
+            return false;
+        }
+        Matcher matcher = pattern.matcher(str);
+        return matcher.matches();
     }
 }
