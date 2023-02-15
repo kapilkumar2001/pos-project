@@ -34,7 +34,7 @@ public class OrderDto {
     @Autowired
     private InventoryService inventoryService;
 
-    @Transactional
+    @Transactional(rollbackOn = ApiException.class)
     public void createOrder(List<OrderItemForm> form) throws ApiException{
         OrderPojo orderPojo = new OrderPojo();
 		
@@ -102,7 +102,7 @@ public class OrderDto {
 
 		for(OrderItemForm orderItemForm: orderItemFormList)
 		{
-			System.out.println("edit orde id is : " + orderItemForm.getOrderItemId() + ", quantity: " + orderItemForm.getQuantity());
+			System.out.println("edit order id is : " + orderItemForm.getOrderItemId() + ", quantity: " + orderItemForm.getQuantity());
 			newOrderItemIds.add(orderItemForm.getOrderItemId());
 			
 			OrderItemPojo orderItemPojo = new OrderItemPojo();
