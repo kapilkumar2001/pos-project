@@ -33,14 +33,12 @@ public class SignupApiController {
 	@Value("${signup.email}")
 	private String email;
 
-
 	// signup 
 	@ApiOperation(value = "Adds a user")
 	@RequestMapping(path = "/session/signup", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ModelAndView addUser(HttpServletRequest req, UserForm form) throws ApiException {
 		UserPojo p = convert(form);
 		service.add(p);
-		
 		return new ModelAndView("redirect:/site/login");
 	}
 

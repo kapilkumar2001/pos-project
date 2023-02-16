@@ -41,11 +41,11 @@ public class LoginController {
 		UserPojo p = service.get(f.getEmail());
 		boolean authenticated = (p != null && Objects.equals(p.getPassword(), f.getPassword()));
 		if (!authenticated) {
-			info.setMessage("Invalid username or password");
-			return new ModelAndView("redirect:/site/login");
+			// info.setMessage("Invalid username or password");
+			throw new ApiException("Invalid username or password");
+			// return new ModelAndView("redirect:/site/login");
 		}
 		
-
 		// Create authentication object
 		Authentication authentication = convert(p);
 		// Create new session 

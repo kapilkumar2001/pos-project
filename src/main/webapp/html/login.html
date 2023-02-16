@@ -12,7 +12,7 @@
 			<div class="collapse navbar-collapse" id="navbarNavOut">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
-						<a class="btn btn-primary" th:href="@{/site/signup}">Signup</a>
+						<a class="btn btn-primary" th:href="@{/site/signup}">Sign up</a>
 					</li>
 				</ul>
 			</div>
@@ -28,7 +28,8 @@
 							Login
 						</div>
 						<div class="card-body">
-							<form class="form" id="login-form" method="POST" th:action="@{/session/login}">
+							<!-- <form class="form" id="login-form" method="POST" th:action="@{/session/login}"> -->
+							<form class="form" id="login-form">
 								<div class="form-group">
 									<label for="email" class="col-sm-10 col-form-label required">Email</label>
 									<div class="col-sm-12">
@@ -43,14 +44,14 @@
 											style="float: right; margin-right: 20px; margin-top: -25px; position: relative;"></span>
 									</div>
 								</div>
-								<button type="submit" class="btn btn-primary mt-2" id="login" style="margin-left: 11px;">Login</button>		
+								<button type="button" class="btn btn-primary mt-2" id="login-button" style="margin-left: 11px;">Login</button>		
 							</form>
 						</div>
-						<span th:unless="${info.getMessage()} == ''">
+						<!-- <span th:unless="${info.getMessage()} == ''">
 							<div class="card-footer text-danger">
 								[[${info.getMessage()}]]
 							</div>
-						</span>
+						</span> -->
 					</div>
 				</div>
 			</div>
@@ -63,12 +64,13 @@
 				  window.location.replace("http://localhost:9000/pos/ui/brands");
 			  </script>
 			</div>
-      <div th:case="'operator'">
+            <div th:case="'operator'">
 			  <script>
 				  window.location.replace("http://localhost:9000/pos/ui/brands");
 			  </script>
 			</div>
 		</div>
+		<script th:src="@{/static/login.js}"></script>
 		<script>
 			$(".toggle-password").click(function() {
 				$(this).toggleClass("fa-eye fa-eye-slash");
