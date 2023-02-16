@@ -72,8 +72,6 @@ function getBrandsList(){
 }
 
 
-// UI display methods
-
 function displayBrandsList(data){
 	var $tbody = $('#brands-table').find('tbody');
 	$tbody.empty();

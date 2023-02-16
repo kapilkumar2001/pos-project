@@ -136,7 +136,6 @@ function displayOrderList(data) {
 	for (var i in data) {
 		var e = data[i];
 		var buttonHtml = '';
-
 		var date = new Date((e.createdAt).replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
 		var options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true };
 		var createdAt = new Intl.DateTimeFormat('en-US', options).format(date);
@@ -174,7 +173,6 @@ function displayOrderList(data) {
 var tmpc = 0;
 function displayOrderItemList() {
 	var $tbody = $('#order-item-table').find('tbody');
-	// getProductsList();
 	var buttonHtml = '<button onclick="deleteItem(' + tmpc + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
 	var row = '<tr id="row' + tmpc + '">'
 	    // + '<td> <div class="form-group"><div id="barcodes-dropdown"><select class="form-control" name="barcode' + tmpc + '" id="barcode"></select></div></div> </td>'
@@ -231,7 +229,8 @@ function viewOrderItems(data) {
 		$tbody.append(row);
 		totalAmount+=(e.sellingPrice*e.quantity);
 	}
-	document.getElementById("view-order-total-amount").innerHTML = ("Total Amount: " + parseFloat(totalAmount).toFixed(2));
+	totalAmount = parseFloat(totalAmount).toFixed(2);
+	document.getElementById("view-order-total-amount").innerHTML = ("Total Amount: " + totalAmount);
 }
 
 
