@@ -6,6 +6,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Entity
 public class OrderItemPojo {
 
@@ -18,43 +23,4 @@ public class OrderItemPojo {
 	private double sellingPrice;
 	@Transient
 	private String barcode;
-	
-	public String getBarcode() {
-		return barcode;
-	}
-	public void setBarcode(String barcode) {
-		this.barcode = barcode;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public int getOrderId() {
-		return orderId;
-	}
-	public void setOrderId(int orderId) {
-		this.orderId = orderId;
-	}
-	public int getProductId() {
-		return productId;
-	}
-	public void setProductId(int productId) {
-		this.productId = productId;
-	}
-	public int getQuantity() {
-		return quantity;
-	}
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-	public double getSellingPrice() {
-		return sellingPrice;
-	}
-	public void setSellingPrice(double sellingPrice) {
-		this.sellingPrice = sellingPrice;
-	}
-	
-	
 }

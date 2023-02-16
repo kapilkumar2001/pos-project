@@ -10,6 +10,8 @@ import javax.persistence.Id;
 @Entity
 public class OrderPojo {
 
+	// TODO: getter setter lombok
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;

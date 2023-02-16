@@ -1,14 +1,12 @@
 package com.increff.pos.model;
 
-public class BrandData extends BrandForm{
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+public class BrandData{
 	private int id;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
+	private String brand;
+	private String category;
 }

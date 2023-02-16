@@ -56,7 +56,7 @@ public class SalesReportDto {
 
 
         if((!brand.equals("")) && (!category.equals(""))){
-            BrandPojo brandPojo = brandService.getBrand(brand, category);
+            BrandPojo brandPojo = brandService.getBrandByBrandAndCategory(brand, category);
             
             SalesReportData salesReportData = new SalesReportData();
             salesReportData.setBrand(brandPojo.getBrand());
@@ -94,11 +94,11 @@ public class SalesReportDto {
         }
 
         else if(!brand.equals("")){
-            brandPojoList = brandService.getCategories(brand);
+            brandPojoList = brandService.getByBrand(brand);
         }
 
         else if(!category.equals("")) {
-            brandPojoList = brandService.getBrands(category);
+            brandPojoList = brandService.getByCategory(category);
         }
 
         else{

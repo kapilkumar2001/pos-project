@@ -23,29 +23,29 @@ import io.swagger.annotations.ApiOperation;
 public class InventoryApiController {
 
     @Autowired
-	private InventoryDto inventoryDto;
+	private InventoryDto dto;
 	
 	@ApiOperation(value = "Adds inventory")
 	@RequestMapping(path = "/api/inventory", method= RequestMethod.POST)
 	public void add(@RequestBody InventoryForm inventoryForm) throws ApiException{
-		inventoryDto.add(inventoryForm);
+		dto.add(inventoryForm);
 	}
 
 	@ApiOperation(value = "Gets inventory by barcode")
 	@RequestMapping(path = "/api/inventory/{barcode}", method = RequestMethod.GET)
 	public InventoryData get(@PathVariable String barcode) throws ApiException{
-		return inventoryDto.get(barcode);
+		return dto.get(barcode);
 	}
 	
 	@ApiOperation(value = "Gets list of all inventories")
 	@RequestMapping(path = "/api/inventory", method = RequestMethod.GET)
 	public List<InventoryData> getAll() throws ApiException {
-		return inventoryDto.getAll();
+		return dto.getAll();
 	}
 	
 	@ApiOperation(value = "Updates an inventory")
 	@RequestMapping(path = "/api/inventory/{barcode}", method = RequestMethod.PUT)
 	public void update(@PathVariable String barcode, @RequestBody InventoryForm inventoryForm) throws ApiException {
-		inventoryDto.update(barcode, inventoryForm);
+		dto.update(barcode, inventoryForm);
 	}
 }

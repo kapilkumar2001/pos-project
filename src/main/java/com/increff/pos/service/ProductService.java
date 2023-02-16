@@ -1,6 +1,6 @@
 package com.increff.pos.service;
-import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Objects;
 
 import javax.transaction.Transactional;
 
@@ -15,72 +15,50 @@ import com.increff.pos.util.StringUtil;
 public class ProductService{
 
 	@Autowired
-	private ProductDao productDao;
+	private ProductDao dao;
 	
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(ProductPojo productPojo) throws ApiException {
-		normalize(productPojo);
-		if(StringUtil.isEmpty(String.valueOf(productPojo.getBrand()))) {
-			throw new ApiException("Brand cannot be empty");
-		}
-		else if(StringUtil.isEmpty(String.valueOf(productPojo.getCategory()))) {
-			throw new ApiException("Category cannot be empty");
-		}
-		else if(StringUtil.isEmpty(productPojo.getBarcode())) {
-			throw new ApiException("Barcode cannot be empty");
-		}
-		else if(StringUtil.isEmpty(productPojo.getName())) {
-			throw new ApiException("Product Name cannot be empty");
-		}
-		else if(productPojo.getMrp()<=0) {
-			throw new ApiException("MRP should be greater than 0");
-		}
-		else if(productPojo.getBrandId()==0) {
+		if(productPojo.getBrandId()==0) {
 			throw new ApiException("Brand & Category combination doesn't exist");
 		}
-		
-		ProductPojo tmpPojo = productDao.getProductByBarcode(productPojo.getBarcode());
+		ProductPojo tmpPojo = dao.getProductByBarcode(productPojo.getBarcode());
 		if(tmpPojo!=null) {
 			throw new ApiException("Product with this barcode already exist, barcode: "+ productPojo.getBarcode());
 		}
 
-		productDao.insert(productPojo);
+		dao.insert(productPojo);
 	}
 	
-	@Transactional(rollbackOn = ApiException.class)
-	public ProductPojo get(int id) throws ApiException {
-		ProductPojo p = getCheck(id);
-		return p;
+	@Transactional
+	public ProductPojo getById(int id) throws ApiException {
+		return dao.select(id);
 	}
 
-	@Transactional(rollbackOn = ApiException.class)
+	@Transactional
+	public ProductPojo getCheck(int id) throws ApiException {
+		ProductPojo productPojo = getById(id);
+		if (productPojo == null) {
+			throw new ApiException("ID does not exit, id: " + id);
+		}
+		return productPojo;
+	}
+
+	@Transactional
 	public List<ProductPojo> getAll() throws ApiException{
-		List<ProductPojo> products = productDao.selectAll();
+		List<ProductPojo> products = dao.selectAll();
 		return products;	
 	}
 	
 	@Transactional(rollbackOn  = ApiException.class)
 	public void update(int id, ProductPojo productPojo) throws ApiException {
-		normalize(productPojo);
-		if(StringUtil.isEmpty(String.valueOf(productPojo.getBrand()))) {
-			throw new ApiException("Brand cannot be empty");
-		}
-		else if(StringUtil.isEmpty(String.valueOf(productPojo.getCategory()))) {
-			throw new ApiException("Category cannot be empty");
-		}
 		if(productPojo.getBrandId()==0) {
 			throw new ApiException("Brand & Category combination doesn't exist");
 		}
-		else if(StringUtil.isEmpty(productPojo.getName())) {
-			throw new ApiException("Product Name cannot be empty");
-		}
-		else if(StringUtil.isEmpty(productPojo.getBarcode())) {
-			throw new ApiException("Barcode cannot be empty");
-		}
 		
-		ProductPojo tmpPojo = productDao.getProductByBarcode(productPojo.getBarcode());
-		if(tmpPojo!=null && tmpPojo.getId()!=id) {
-			throw new ApiException("Product with this barcode already exist, barcode: "+ productPojo.getBarcode());
+		ProductPojo tmpPojo = dao.getProductByBarcode(productPojo.getBarcode());
+		if(Objects.nonNull(tmpPojo) && tmpPojo.getId()!=id) {
+			throw new ApiException("Product with this barcode already exists, barcode: "+ productPojo.getBarcode());
 		}
 		if(productPojo.getMrp()<=0){
 			throw new ApiException("MRP should be greater than 0");
@@ -93,16 +71,7 @@ public class ProductService{
 		newPojo.setBrandId(productPojo.getBrandId());
 		newPojo.setMrp(productPojo.getMrp());
 		newPojo.setName(productPojo.getName());
-		productDao.update(newPojo);
-	}
-	
-	@Transactional
-	public ProductPojo getCheck(int id) throws ApiException {
-		ProductPojo p = productDao.select(id);
-		if (p == null) {
-			throw new ApiException("ID does not exit, id: " + id);
-		}
-		return p;
+		dao.update(newPojo);
 	}
 
 	@Transactional
@@ -110,8 +79,8 @@ public class ProductService{
 		if(StringUtil.isEmpty(barcode)){
 			throw new ApiException("Barcode can not be empty");
 		}
-		ProductPojo productPojo = productDao.getProductByBarcode(barcode);
-		if(productPojo==null) {
+		ProductPojo productPojo = dao.getProductByBarcode(barcode);
+		if(Objects.isNull(productPojo)) {
 			throw new ApiException("Product with this barcode doesn't exist, barcode: "+ barcode);
 		}
 		return productPojo;
@@ -119,23 +88,17 @@ public class ProductService{
 	
     @Transactional
 	public List<ProductPojo> getProductsByBrandId(int brandId) throws ApiException{
-        return productDao.getAllProductByBrandId(brandId);
+        return dao.getAllProductsByBrandId(brandId);
 	}
 
+	@Transactional
 	public void checkSellingPrice(String barcode, double sellingPrice) throws ApiException{
 		if(sellingPrice<0){
 			throw new ApiException("Selling Price should be a positive number");
 		}
-		ProductPojo productPojo = productDao.getProductByBarcode(barcode);
+		ProductPojo productPojo = dao.getProductByBarcode(barcode);
 		if(productPojo.getMrp()<sellingPrice){
 			throw new ApiException("Selling Price should be less than MRP, MRP for item " + barcode + ": " + productPojo.getMrp());
 		}
-	}
-
-	protected static void normalize(ProductPojo productPojo) {
-		DecimalFormat dec = new DecimalFormat("#.##");
-		productPojo.setMrp(Double.valueOf(dec.format(productPojo.getMrp())));
-		productPojo.setBarcode(StringUtil.toLowerCase(productPojo.getBarcode()));
-		productPojo.setName(StringUtil.toLowerCase(productPojo.getName()));
 	}
 }

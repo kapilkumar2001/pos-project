@@ -7,6 +7,8 @@ import javax.persistence.Id;
 
 @Entity
 public class PosDaySalesPojo {
+
+    // TODO: getter setter lombok
     
     @Id
     private LocalDate date;

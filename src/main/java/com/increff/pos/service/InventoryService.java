@@ -15,21 +15,13 @@ import com.increff.pos.util.StringUtil;
 public class InventoryService {
 
 	@Autowired
-	InventoryDao inventoryDao;
+	InventoryDao dao;
 
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(InventoryPojo inventoryPojo) throws ApiException {
-		normalize(inventoryPojo.getBarcode());
-		// if(inventoryPojo.getQuantity()<0) {
-		// 	throw new ApiException("Quantity should be a positive number");
-		// } else 
-		if(StringUtil.isEmpty(inventoryPojo.getBarcode())) {
-			throw new ApiException("Barcode cannot be empty");
-		}
-
-		InventoryPojo existingInventoryPojo = inventoryDao.select(inventoryPojo.getId());
+		InventoryPojo existingInventoryPojo = dao.select(inventoryPojo.getId());
 		if(existingInventoryPojo==null) {
-		   inventoryDao.insert(inventoryPojo);
+		   dao.insert(inventoryPojo);
 		} else{
 			if(existingInventoryPojo.getQuantity()+inventoryPojo.getQuantity()<0) {
 				throw new ApiException("Quantity can not be decreased to less than 0, Available Quantity: " + existingInventoryPojo.getQuantity());
@@ -47,7 +39,7 @@ public class InventoryService {
 
 	@Transactional
 	public List<InventoryPojo> getAll() {
-		return inventoryDao.selectAll();
+		return dao.selectAll();
 	}
 
 	@Transactional
@@ -65,8 +57,7 @@ public class InventoryService {
 		InventoryPojo newInventoryPojo = getCheck(id ,barcode);
 		newInventoryPojo.setBarcode(barcode);
 		newInventoryPojo.setQuantity(updatedQuantity);
-	    inventoryDao.update(newInventoryPojo);
-		
+	    dao.update(newInventoryPojo);
 	}
 
 	@Transactional(rollbackOn = ApiException.class)
@@ -91,21 +82,16 @@ public class InventoryService {
 		InventoryPojo newInventoryPojo = getCheck(id ,barcode);
 		newInventoryPojo.setBarcode(barcode);
 		newInventoryPojo.setQuantity(quantity);
-	    inventoryDao.update(newInventoryPojo);
+	    dao.update(newInventoryPojo);
 	}
 	
 	@Transactional
 	public InventoryPojo getCheck(int id, String barcode) throws ApiException {
-		InventoryPojo inventoryPojo = inventoryDao.select(id);
+		InventoryPojo inventoryPojo = dao.select(id);
 		if (inventoryPojo == null) {
 			throw new ApiException("Barcode does not exit, barcode: " + barcode);
 		}
 		return inventoryPojo;
-	}
-	
-	
-	protected static void normalize(String barcode) {
-		barcode = StringUtil.toLowerCase(barcode);
 	}
 	
 }

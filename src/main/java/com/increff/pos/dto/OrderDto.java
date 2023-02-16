@@ -134,7 +134,7 @@ public class OrderDto {
 
 		for(Integer orderItemId: existingOrderItemIds) {
 			OrderItemPojo orderItemPojo = orderItemService.getOrderItembyItemId(orderItemId);
-			String barcode = productService.get(orderItemPojo.getProductId()).getBarcode();
+			String barcode = productService.getCheck(orderItemPojo.getProductId()).getBarcode();
 			inventoryService.increaseInventory(orderItemPojo.getProductId(), barcode, orderItemPojo.getQuantity());
 		}	
 
@@ -151,7 +151,7 @@ public class OrderDto {
 		List<OrderItemPojo> existingOrderItemPojoList = orderItemService.getOrderItemsbyOrderId(orderId);
 		
 		for(OrderItemPojo orderItemPojo: existingOrderItemPojoList) {
-			String barcode = productService.get(orderItemPojo.getProductId()).getBarcode();
+			String barcode = productService.getCheck(orderItemPojo.getProductId()).getBarcode();
 			inventoryService.increaseInventory(orderItemPojo.getProductId(), barcode, orderItemPojo.getQuantity());
 		}
 	}
@@ -172,7 +172,7 @@ public class OrderDto {
 		
 		for(OrderItemPojo orderItemPojo : orderItemPojoList) {
 			OrderItemData tmp = new OrderItemData();
-			ProductPojo productPojo = productService.get(orderItemPojo.getProductId()); 
+			ProductPojo productPojo = productService.getCheck(orderItemPojo.getProductId()); 
 			tmp.setBarcode(productPojo.getBarcode());
 			tmp.setQuantity(orderItemPojo.getQuantity());
 			tmp.setSellingPrice(orderItemPojo.getSellingPrice());

@@ -55,7 +55,7 @@ public class InvoiceDto {
         List<OrderItemData> orderItemDataList = new ArrayList<>();
         for(OrderItemPojo orderItemPojo : orderItemPojoList) {
             OrderItemData orderItemData = new OrderItemData();
-            ProductPojo productPojo = productService.get(orderItemPojo.getProductId());
+            ProductPojo productPojo = productService.getCheck(orderItemPojo.getProductId());
             orderItemData.setBarcode(productPojo.getBarcode());
             orderItemData.setQuantity(orderItemPojo.getQuantity());
             orderItemData.setSellingPrice(Double.valueOf(dec.format(orderItemPojo.getSellingPrice())));

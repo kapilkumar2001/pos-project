@@ -22,31 +22,29 @@ import io.swagger.annotations.ApiOperation;
 public class ProductApiController {
 
 	@Autowired
-	private ProductDto productDto;
+	private ProductDto dto;
 	
 	@ApiOperation(value = "Adds product")
 	@RequestMapping(path = "/api/product", method = RequestMethod.POST)
 	public void add(@RequestBody ProductForm productForm) throws ApiException {
-		productDto.add(productForm);
+		dto.add(productForm);
 	}
 
 	@ApiOperation(value = "Gets a product by ID")
 	@RequestMapping(path = "/api/product/{id}", method = RequestMethod.GET)
 	public ProductData get(@PathVariable int id) throws ApiException {
-		return productDto.get(id);
+		return dto.get(id);
 	}
 
 	@ApiOperation(value = "Gets list of all products")
 	@RequestMapping(path = "/api/product", method = RequestMethod.GET)
 	public List<ProductData> getAll() throws ApiException {
-		return productDto.getAll();
+		return dto.getAll();
 	}
 
 	@ApiOperation(value = "Updates an product")
 	@RequestMapping(path = "/api/product/{id}", method = RequestMethod.PUT)
 	public void update(@PathVariable int id, @RequestBody ProductForm productForm) throws ApiException {
-		productDto.update(id, productForm);
+		dto.update(id, productForm);
 	}
-	
-
 }

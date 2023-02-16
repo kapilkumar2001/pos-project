@@ -2,9 +2,6 @@ package com.increff.pos.dao;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
@@ -20,17 +17,13 @@ public class BrandDao extends AbstractDao {
 	private static String SELECT_BY_CATEGORY = "select p from BrandPojo p where category=:category";
 	private static String SELECT_ALL = "select p from BrandPojo p";
 	private static String SELECT_BY_BRAND_AND_CATEGORY = "select p from BrandPojo p where brand=:brand AND category=:category";
-
-	
-	@PersistenceContext
-	private EntityManager em;
 	
 	@Transactional
 	public void insert(BrandPojo p) {
-		em.persist(p);
+		em().persist(p);
 	}
 	
-	public BrandPojo select(int id) {
+	public BrandPojo selectById(int id) {
 		TypedQuery<BrandPojo> query = getQuery(SELECT_BY_ID, BrandPojo.class);
 		query.setParameter("id", id);
 		return getSingle(query);
@@ -41,13 +34,13 @@ public class BrandDao extends AbstractDao {
 		return query.getResultList();
 	}
 	
-	public List<BrandPojo> selectCategories(String brand) {
+	public List<BrandPojo> selectByBrand(String brand) {
 		TypedQuery<BrandPojo> query = getQuery(SELECT_BY_BRAND, BrandPojo.class);
 		query.setParameter("brand", brand);
 		return query.getResultList();
 	}
 
-	public List<BrandPojo> selectBrands(String category) {
+	public List<BrandPojo> selectByCategory(String category) {
 		TypedQuery<BrandPojo> query = getQuery(SELECT_BY_CATEGORY, BrandPojo.class);
 		query.setParameter("category", category);
 		return query.getResultList();
@@ -56,13 +49,10 @@ public class BrandDao extends AbstractDao {
 	public void update(BrandPojo p) {
 	}
 	
-	// get brandPojo by brand and category
-	public BrandPojo getBrand(String brand, String category){
+	public BrandPojo getBrandByBrandAndCategory(String brand, String category){
 		TypedQuery<BrandPojo> query = getQuery(SELECT_BY_BRAND_AND_CATEGORY, BrandPojo.class);
 		query.setParameter("brand", brand);
 		query.setParameter("category", category);
 		return getSingle(query);
 	}
-
-
 }

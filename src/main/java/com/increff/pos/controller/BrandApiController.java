@@ -50,13 +50,13 @@ public class BrandApiController {
 	@ApiOperation(value = "Gets list of all brands names")
 	@RequestMapping(path = "/api/brand/get-brands", method = RequestMethod.GET)
 	public List<String> getAllBrands() {
-		return dto.getBrands();
+		return dto.getAllBrands();
 	}
 
 	@ApiOperation(value = "Gets list of all categories names by brand")
 	@RequestMapping(path = "/api/brand/get-categories/{brand}", method = RequestMethod.GET)
 	public List<String> getCategories(@PathVariable String brand) {
-		return dto.getCategories(brand);
+		return dto.getCategoriesByBrand(brand);
 	}
 
 	@ApiOperation(value = "Gets list of all categories")

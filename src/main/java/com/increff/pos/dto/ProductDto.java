@@ -1,5 +1,6 @@
 package com.increff.pos.dto;
 
+import com.increff.pos.helper.ProductHelper;
 import com.increff.pos.model.ProductData;
 import com.increff.pos.model.ProductForm;
 import com.increff.pos.pojo.BrandPojo;
@@ -19,84 +20,58 @@ import java.util.List;
 public class ProductDto {
 
     @Autowired
-    private ProductService productService;
-
+    private ProductService service;
     @Autowired
     private BrandService brandService;
-
     @Autowired
     private InventoryService inventoryService;
 
-    public void add(ProductForm form) throws ApiException {
-        ProductPojo productPojo = convert(form);
-        productService.add(productPojo);
+    public void add(ProductForm productForm) throws ApiException {
+        ProductHelper.validate(productForm);
+        ProductPojo productPojo = ProductHelper.convert(productForm);
+        int brandId = brandService.getBrandByBrandAndCategory(productPojo.getBrand(), productPojo.getCategory()).getId();
+        productPojo.setBrandId(brandId);
+        ProductHelper.normalize(productPojo);
 
-        // Adds inventory
-        InventoryPojo inventoryPojo = new InventoryPojo();
-        inventoryPojo.setId(productPojo.getId());
-        inventoryPojo.setQuantity(0);
-        inventoryPojo.setBarcode(form.getBarcode());
-        inventoryService.add(inventoryPojo);
+        service.add(productPojo);
+        addInventory(productPojo);
     }
 
     public ProductData get(int id) throws ApiException {
-        ProductPojo productPojo = productService.get(id);
-        BrandPojo brandPojo = brandService.get(productPojo.getBrandId());
+        ProductPojo productPojo = service.getCheck(id);
+        BrandPojo brandPojo = brandService.getById(productPojo.getBrandId());
         productPojo.setBrand(brandPojo.getBrand());
         productPojo.setCategory(brandPojo.getCategory());
-        return convert(productPojo);
+        return ProductHelper.convert(productPojo);
     }
 
     public List<ProductData> getAll() throws ApiException {
-        List<ProductPojo> productPojoList = productService.getAll();
+        List<ProductPojo> productPojoList = service.getAll();
         List<ProductData> productDataList = new ArrayList<ProductData>();
         for (ProductPojo productPojo : productPojoList) {
-            BrandPojo b = brandService.get(productPojo.getBrandId());
+            BrandPojo b = brandService.getById(productPojo.getBrandId());
             productPojo.setBrand(b.getBrand());
             productPojo.setCategory(b.getCategory());
-
-            productDataList.add(convert(productPojo));
+            productDataList.add(ProductHelper.convert(productPojo));
         }
         return productDataList;
     }
 
     public void update(int id, ProductForm productForm) throws ApiException {
-        ProductPojo productPojo = convert(productForm);
-
-        int brandId = brandService.getBrand(productPojo.getBrand(), productPojo.getCategory()).getId();
+        ProductHelper.validate(productForm);
+        ProductPojo productPojo = ProductHelper.convert(productForm);
+        int brandId = brandService.getBrandByBrandAndCategory(productPojo.getBrand(), productPojo.getCategory()).getId();
         productPojo.setBrandId(brandId);
+        ProductHelper.normalize(productPojo);
 
-        productService.update(id, productPojo);
+        service.update(id, productPojo);
     }
 
-    private ProductData convert(ProductPojo productPojo) {
-        ProductData productData = new ProductData();
-        productData.setId(productPojo.getId());
-        productData.setName(productPojo.getName());
-        productData.setBarcode(productPojo.getBarcode());
-        productData.setMrp(productPojo.getMrp());
-        productData.setBrand(productPojo.getBrand());
-        productData.setCategory(productPojo.getCategory());
-        productData.setBrandId(productPojo.getBrandId());
-        return productData;
-    }
-
-    private ProductPojo convert(ProductForm productForm) throws ApiException {
-        ProductPojo productPojo = new ProductPojo();
-        productPojo.setBarcode(productForm.getBarcode());
-        double mrp;
-        try{
-            mrp = Double.parseDouble(productForm.getMrp());
-        } catch(NumberFormatException e){
-            throw new ApiException("Mrp should be a positive number");
-        }
-        productPojo.setMrp(mrp);
-        productPojo.setBrand(productForm.getBrand());
-        productPojo.setCategory(productForm.getCategory());
-        productPojo.setName(productForm.getName());
-
-        int id = brandService.getBrand(productPojo.getBrand(), productPojo.getCategory()).getId();
-        productPojo.setBrandId(id);
-        return productPojo;
+    public void addInventory(ProductPojo productPojo) throws ApiException{
+        InventoryPojo inventoryPojo = new InventoryPojo();
+        inventoryPojo.setId(productPojo.getId());
+        inventoryPojo.setQuantity(0);
+        inventoryPojo.setBarcode(productPojo.getBarcode());
+        inventoryService.add(inventoryPojo);
     }
 }

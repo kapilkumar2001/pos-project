@@ -7,9 +7,13 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 
 import java.util.List;
 
+
 @XmlRootElement(name="OrderFopObject")
 @XmlSeeAlso({OrderItemData.class})
 public class OrderFopObject {
+
+    // TODO: getter setter lombok
+
     private int orderId;
     private String time;
     private List<OrderItemData> orders;
