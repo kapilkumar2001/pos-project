@@ -7,10 +7,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Entity
 public class OrderPojo {
-
-	// TODO: getter setter lombok
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -18,10 +21,6 @@ public class OrderPojo {
 	private LocalDateTime created_at;
 	private LocalDateTime updated_at;
 	private String status;
-	
-	public int getId() {
-		return id;
-	}
 	
 	public LocalDateTime getCreatedAt() {
 		return created_at;
@@ -38,15 +37,4 @@ public class OrderPojo {
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updated_at = updatedAt;
 	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-	public String getStatus() { 
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	
 }

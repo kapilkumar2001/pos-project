@@ -26,6 +26,9 @@ public class ProductService{
 		if(tmpPojo!=null) {
 			throw new ApiException("Product with this barcode already exist, barcode: "+ productPojo.getBarcode());
 		}
+		if(productPojo.getMrp()<=0){
+			throw new ApiException("MRP should be greater than 0");
+		}
 
 		dao.insert(productPojo);
 	}
