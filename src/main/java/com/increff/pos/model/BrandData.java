@@ -1,6 +1,6 @@
 package com.increff.pos.model;
 
-public class BrandCategoryData extends BrandCategoryForm{
+public class BrandData extends BrandForm{
 
 	private int id;
 
@@ -11,6 +11,4 @@ public class BrandCategoryData extends BrandCategoryForm{
 	public void setId(int id) {
 		this.id = id;
 	}
-	
-	
 }

@@ -12,12 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.increff.pos.model.SalesReportData;
-import com.increff.pos.pojo.BrandCategoryPojo;
+import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.ApiException;
-import com.increff.pos.service.BrandCategoryService;
+import com.increff.pos.service.BrandService;
 import com.increff.pos.service.OrderItemService;
 import com.increff.pos.service.OrderService;
 import com.increff.pos.service.ProductService;
@@ -25,7 +25,7 @@ import com.increff.pos.service.ProductService;
 @Component
 public class SalesReportDto {
     @Autowired
-    private BrandCategoryService brandCategoryService;
+    private BrandService brandService;
     @Autowired
     private ProductService productService;
     @Autowired
@@ -36,7 +36,7 @@ public class SalesReportDto {
     @Transactional
     public List<SalesReportData> get(String startDate, String endDate, String brand, String category) throws ApiException{
         List<SalesReportData> salesReportDataList = new ArrayList<>();
-        List<BrandCategoryPojo> brandCategoryPojoList = new ArrayList<>();
+        List<BrandPojo> brandPojoList = new ArrayList<>();
 
         DecimalFormat dec = new DecimalFormat("#.##");
 
@@ -56,17 +56,17 @@ public class SalesReportDto {
 
 
         if((!brand.equals("")) && (!category.equals(""))){
-            BrandCategoryPojo brandCategoryPojo = brandCategoryService.getBrandCategory(brand, category);
+            BrandPojo brandPojo = brandService.getBrand(brand, category);
             
             SalesReportData salesReportData = new SalesReportData();
-            salesReportData.setBrand(brandCategoryPojo.getBrand());
-            salesReportData.setCategory(brandCategoryPojo.getCategory());
+            salesReportData.setBrand(brandPojo.getBrand());
+            salesReportData.setCategory(brandPojo.getCategory());
 
-            int brandCategoryId = brandCategoryPojo.getId();
+            int brandId = brandPojo.getId();
             int quantity=0;
             double revenue = 0;
 
-            List<ProductPojo> productPojoList = productService.getProductsByBrandCategoryId(brandCategoryId);
+            List<ProductPojo> productPojoList = productService.getProductsByBrandId(brandId);
             List<Integer> productIds = new ArrayList<Integer>();
             for(ProductPojo productPojo: productPojoList){
                 productIds.add(productPojo.getId());
@@ -94,27 +94,27 @@ public class SalesReportDto {
         }
 
         else if(!brand.equals("")){
-            brandCategoryPojoList = brandCategoryService.getCategories(brand);
+            brandPojoList = brandService.getCategories(brand);
         }
 
         else if(!category.equals("")) {
-            brandCategoryPojoList = brandCategoryService.getBrands(category);
+            brandPojoList = brandService.getBrands(category);
         }
 
         else{
-            brandCategoryPojoList = brandCategoryService.getAll();
+            brandPojoList = brandService.getAll();
         }
 
-        for(BrandCategoryPojo brandCategoryPojo: brandCategoryPojoList){
+        for(BrandPojo brandPojo: brandPojoList){
             SalesReportData salesReportData = new SalesReportData();
-            salesReportData.setBrand(brandCategoryPojo.getBrand());
-            salesReportData.setCategory(brandCategoryPojo.getCategory());
+            salesReportData.setBrand(brandPojo.getBrand());
+            salesReportData.setCategory(brandPojo.getCategory());
 
             int quantity=0;
             double revenue = 0;
             List<Integer> productIds = new ArrayList<Integer>();
 
-            List<ProductPojo> productPojoList = productService.getProductsByBrandCategoryId(brandCategoryPojo.getId());
+            List<ProductPojo> productPojoList = productService.getProductsByBrandId(brandPojo.getId());
             for(ProductPojo productPojo: productPojoList){
                 productIds.add(productPojo.getId());
             }

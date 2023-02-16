@@ -35,7 +35,7 @@ public class ProductService{
 		else if(productPojo.getMrp()<=0) {
 			throw new ApiException("MRP should be greater than 0");
 		}
-		else if(productPojo.getBrand_category()==0) {
+		else if(productPojo.getBrandId()==0) {
 			throw new ApiException("Brand & Category combination doesn't exist");
 		}
 		
@@ -45,11 +45,6 @@ public class ProductService{
 		}
 
 		productDao.insert(productPojo);
-	}
-	
-	@Transactional
-	public void delete(int id) {
-		productDao.delete(id);
 	}
 	
 	@Transactional(rollbackOn = ApiException.class)
@@ -73,7 +68,7 @@ public class ProductService{
 		else if(StringUtil.isEmpty(String.valueOf(productPojo.getCategory()))) {
 			throw new ApiException("Category cannot be empty");
 		}
-		if(productPojo.getBrand_category()==0) {
+		if(productPojo.getBrandId()==0) {
 			throw new ApiException("Brand & Category combination doesn't exist");
 		}
 		else if(StringUtil.isEmpty(productPojo.getName())) {
@@ -95,7 +90,7 @@ public class ProductService{
 		newPojo.setBarcode(productPojo.getBarcode());
 		newPojo.setBrand(productPojo.getBrand());
 		newPojo.setCategory(productPojo.getCategory());
-		newPojo.setBrand_category(productPojo.getBrand_category());
+		newPojo.setBrandId(productPojo.getBrandId());
 		newPojo.setMrp(productPojo.getMrp());
 		newPojo.setName(productPojo.getName());
 		productDao.update(newPojo);
@@ -123,8 +118,8 @@ public class ProductService{
 	}
 	
     @Transactional
-	public List<ProductPojo> getProductsByBrandCategoryId(int brandCategoryId) throws ApiException{
-        return productDao.getAllProductByBrandsCategoryId(brandCategoryId);
+	public List<ProductPojo> getProductsByBrandId(int brandId) throws ApiException{
+        return productDao.getAllProductByBrandId(brandId);
 	}
 
 	public void checkSellingPrice(String barcode, double sellingPrice) throws ApiException{

@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class BrandCategoryPojo {
+public class BrandPojo {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

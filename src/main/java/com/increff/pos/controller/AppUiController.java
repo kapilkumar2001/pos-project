@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class AppUiController extends AbstractUiController {
 
 	@RequestMapping(value = "/ui/brands")
-	public ModelAndView brandcategory() {
+	public ModelAndView brands() {
 		return mav("brands.html");
 	}
 

@@ -2,11 +2,11 @@ package com.increff.pos.dto;
 
 import com.increff.pos.model.ProductData;
 import com.increff.pos.model.ProductForm;
-import com.increff.pos.pojo.BrandCategoryPojo;
+import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.ApiException;
-import com.increff.pos.service.BrandCategoryService;
+import com.increff.pos.service.BrandService;
 import com.increff.pos.service.InventoryService;
 import com.increff.pos.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class ProductDto {
     private ProductService productService;
 
     @Autowired
-    private BrandCategoryService brandCategoryService;
+    private BrandService brandService;
 
     @Autowired
     private InventoryService inventoryService;
@@ -39,15 +39,11 @@ public class ProductDto {
         inventoryService.add(inventoryPojo);
     }
 
-    public void delete(int id) {
-        productService.delete(id);
-    }
-
     public ProductData get(int id) throws ApiException {
         ProductPojo productPojo = productService.get(id);
-        BrandCategoryPojo brandCategoryPojo = brandCategoryService.get(productPojo.getBrand_category());
-        productPojo.setBrand(brandCategoryPojo.getBrand());
-        productPojo.setCategory(brandCategoryPojo.getCategory());
+        BrandPojo brandPojo = brandService.get(productPojo.getBrandId());
+        productPojo.setBrand(brandPojo.getBrand());
+        productPojo.setCategory(brandPojo.getCategory());
         return convert(productPojo);
     }
 
@@ -55,7 +51,7 @@ public class ProductDto {
         List<ProductPojo> productPojoList = productService.getAll();
         List<ProductData> productDataList = new ArrayList<ProductData>();
         for (ProductPojo productPojo : productPojoList) {
-            BrandCategoryPojo b = brandCategoryService.get(productPojo.getBrand_category());
+            BrandPojo b = brandService.get(productPojo.getBrandId());
             productPojo.setBrand(b.getBrand());
             productPojo.setCategory(b.getCategory());
 
@@ -67,8 +63,8 @@ public class ProductDto {
     public void update(int id, ProductForm productForm) throws ApiException {
         ProductPojo productPojo = convert(productForm);
 
-        int brandCategoryId = brandCategoryService.getBrandCategory(productPojo.getBrand(), productPojo.getCategory()).getId();
-        productPojo.setBrand_category(brandCategoryId);
+        int brandId = brandService.getBrand(productPojo.getBrand(), productPojo.getCategory()).getId();
+        productPojo.setBrandId(brandId);
 
         productService.update(id, productPojo);
     }
@@ -81,7 +77,7 @@ public class ProductDto {
         productData.setMrp(productPojo.getMrp());
         productData.setBrand(productPojo.getBrand());
         productData.setCategory(productPojo.getCategory());
-        productData.setBrandCategory(productPojo.getBrand_category());
+        productData.setBrandId(productPojo.getBrandId());
         return productData;
     }
 
@@ -99,8 +95,8 @@ public class ProductDto {
         productPojo.setCategory(productForm.getCategory());
         productPojo.setName(productForm.getName());
 
-        int id = brandCategoryService.getBrandCategory(productPojo.getBrand(), productPojo.getCategory()).getId();
-        productPojo.setBrand_category(id);
+        int id = brandService.getBrand(productPojo.getBrand(), productPojo.getCategory()).getId();
+        productPojo.setBrandId(id);
         return productPojo;
     }
 }

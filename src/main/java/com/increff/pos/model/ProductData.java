@@ -3,7 +3,7 @@ package com.increff.pos.model;
 public class ProductData{
 
 	private int id;
-	private int brand_category;
+	private int brandId;
 	private String barcode;
 	private String brand;
 	private String category;
@@ -16,11 +16,11 @@ public class ProductData{
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getBrandCategory() {
-		return brand_category;
+	public int getBrandId() {
+		return brandId;
 	}
-	public void setBrandCategory(int brand_category) {
-		this.brand_category = brand_category;
+	public void setBrandId(int brandId) {
+		this.brandId = brandId;
 	}
 	public String getBarcode() {
 		return barcode;

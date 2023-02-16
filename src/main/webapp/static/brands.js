@@ -1,6 +1,6 @@
 function getBrandsUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/brandcategory";
+	return baseUrl + "/api/brand";
 }
 
 function addBrand(){

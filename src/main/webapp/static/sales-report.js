@@ -2,9 +2,9 @@ function getSalesReportUrl() {
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/sales-report";
 }
-function getBrandCategoryUrl(){
+function getBrandUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/brandcategory";
+	return baseUrl + "/api/brand";
 }
 
 function getSalesReport() {
@@ -79,7 +79,7 @@ function downloadSalesReport(){
 }
 
 function getBrandsList() {
-	var url = getBrandCategoryUrl()+ "/get-brands";
+	var url = getBrandUrl()+ "/get-brands";
 	$.ajax({
 		url: url,
 		type: 'GET',
@@ -104,7 +104,7 @@ function displayBrandList(data) {
 }
 
 function getCategories() {
-	var url = getBrandCategoryUrl()+ "/get-categories/";
+	var url = getBrandUrl()+ "/get-categories/";
 	$.ajax({
 		url: url,
 		type: 'GET',

@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
@@ -15,11 +14,10 @@ import com.increff.pos.pojo.ProductPojo;
 @Repository
 public class ProductDao extends AbstractDao{
 
-	private static String delete_id = "delete from ProductPojo p where id=:id";
 	private static String select_id = "select p from ProductPojo p where id=:id";
 	private static String select_all = "select p from ProductPojo p";
 	private static String select_barcode = "select p from ProductPojo p where barcode=:barcode";
-	private static String select_by_brandcategoryid = "select p from ProductPojo p where brand_category=:brand_category";
+	private static String select_by_brandid = "select p from ProductPojo p where brand_id=:brand_id";
 	
 	@PersistenceContext
 	private EntityManager em;
@@ -27,12 +25,6 @@ public class ProductDao extends AbstractDao{
 	@Transactional
 	public void insert(ProductPojo p) {
 		em.persist(p);
-	}
-	
-	public int delete(int id) {
-		Query query = em.createQuery(delete_id);
-		query.setParameter("id", id);
-		return query.executeUpdate();
 	}
 	
 	public ProductPojo select(int id) {
@@ -56,9 +48,9 @@ public class ProductDao extends AbstractDao{
 		return getSingle(query);
 	}
 
-	public List<ProductPojo> getAllProductByBrandsCategoryId(int brand_category){
-		TypedQuery<ProductPojo> query = getQuery(select_by_brandcategoryid, ProductPojo.class);
-		query.setParameter("brand_category", brand_category);
+	public List<ProductPojo> getAllProductByBrandId(int brandId){
+		TypedQuery<ProductPojo> query = getQuery(select_by_brandid, ProductPojo.class);
+		query.setParameter("brand_id", brandId);
 		return query.getResultList();
 	}
 }

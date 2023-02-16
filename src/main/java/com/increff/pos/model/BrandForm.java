@@ -1,6 +1,6 @@
 package com.increff.pos.model;
 
-public class BrandCategoryForm {
+public class BrandForm {
 
 	private String brand;
 	private String category;

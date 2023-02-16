@@ -1,6 +1,6 @@
 function getBrandsUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/brandcategory";
+	return baseUrl + "/api/brand";
 }
 
 function getBrands(){
@@ -41,11 +41,12 @@ function getBrandsReport(){
 	  type: 'GET',
 	  success: function(data) { 
 		data = data.reverse();
-        let headers = 'Brand	Category	ID\n'; 
+        let headers = 'Brand	Category\n'; 
         let tsv = '';
         tsv += headers
 		for(row of data){
-			tsv+=Object.values(row).join('	');
+			tsv+=(row.brand + '	' + row.category);
+			// tsv+=Object.values(row).join('	');
 			tsv+='\n';
 		  }  
         var hiddenElement = document.createElement('a');  

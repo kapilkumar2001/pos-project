@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.increff.pos.model.InventoryReportData;
-import com.increff.pos.pojo.BrandCategoryPojo;
+import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.ApiException;
-import com.increff.pos.service.BrandCategoryService;
+import com.increff.pos.service.BrandService;
 import com.increff.pos.service.InventoryService;
 import com.increff.pos.service.ProductService;
 
@@ -21,7 +21,7 @@ import com.increff.pos.service.ProductService;
 public class InventoryReportDto {
     
     @Autowired
-    private BrandCategoryService brandCategoryService;
+    private BrandService brandService;
     @Autowired
     private ProductService productService;
     @Autowired
@@ -31,18 +31,18 @@ public class InventoryReportDto {
     public List<InventoryReportData> get() throws ApiException {
         List<InventoryReportData> inventoryReportDataList = new ArrayList<>();
 
-        List<BrandCategoryPojo> brandCategoryPojoList = brandCategoryService.getAll(); 
+        List<BrandPojo> brandPojoList = brandService.getAll(); 
 
-        for(BrandCategoryPojo brandCategoryPojo: brandCategoryPojoList){
+        for(BrandPojo brandPojo: brandPojoList){
 
             InventoryReportData inventoryReportData = new InventoryReportData();
-            inventoryReportData.setBrand(brandCategoryPojo.getBrand());
-            inventoryReportData.setCategory(brandCategoryPojo.getCategory());
+            inventoryReportData.setBrand(brandPojo.getBrand());
+            inventoryReportData.setCategory(brandPojo.getCategory());
 
-            int brandCategoryId = brandCategoryPojo.getId();
+            int brandId = brandPojo.getId();
 
             int quantity=0;
-            List<ProductPojo> productPojoList = productService.getProductsByBrandCategoryId(brandCategoryId);
+            List<ProductPojo> productPojoList = productService.getProductsByBrandId(brandId);
 
             for(ProductPojo productPojo: productPojoList) {
                 InventoryPojo inventoryPojo = inventoryService.get(productPojo.getId(), productPojo.getBarcode());
