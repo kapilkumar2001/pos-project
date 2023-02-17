@@ -36,7 +36,7 @@ function createOrder() {
 			var $tbody = $('#order-item-table').find('tbody');
 			$tbody.empty();
 			$('#create-order-modal').modal('hide');
-			tmpc = 0;
+			tmpCreateOrderId = 0;
 			showSuccess("Order created succesfully!");
 		},
 		error: handleAjaxError
@@ -145,18 +145,15 @@ function displayOrderList(data) {
 		var status;
 
 		if (e.status == 'invoiced') {
-			// status = '<span class="label label-success">Invoiced</span>';
-			status = '<p style="color:green;">Invoiced</p>';
+			status = '<span class="badge badge-pill badge-success">Invoiced</span>';
 			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="View Order"><i class=\'fa fa-eye\' style=\'font-size:18px;color:blue;\'></i></button>'
 			buttonHtml += '<button onclick="getInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Download Invoice"><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
 		}
 		else if(e.status== 'cancelled'){
-			// status = '<span class="label label-danger">Cancelled</span>';
-			status = '<p style="color:red;">Cancelled</p>';
+			status = '<span class="badge badge-pill badge-danger">Cancelled</span>';
 		}
 		else {
-			// status = '<span class="label label-warning">Created</span>';
-			status = '<p style="color:#8B8000;">Created</p>';
+			status = '<span class="badge badge-pill badge-warning">Created</span>';
 			buttonHtml += '<button onclick="editOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
 			buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Generate Invoice"><i class=\'fa fa-file-text\' style=\'font-size:18px;color:black;\'></i></button>'
 		}
@@ -174,24 +171,23 @@ function displayOrderList(data) {
 }
 
 // Add items to the order list
-var tmpc = 0;
+var tmpCreateOrderId = 0;
 function displayOrderItemList() {
 	var $tbody = $('#order-item-table').find('tbody');
-	// getProductsList();
-	var buttonHtml = '<button onclick="deleteItem(' + tmpc + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
-	var row = '<tr id="row' + tmpc + '">'
-	    // + '<td> <div class="form-group"><div id="barcodes-dropdown"><select class="form-control" name="barcode' + tmpc + '" id="barcode"></select></div></div> </td>'
-		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpc + '" id="barcode' + tmpc + '" placeholder="Enter Barcode" required></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpc + '" id="quantity' + tmpc + '" placeholder="Enter Quantity" required></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpc + '" id="sellingPrice' + tmpc + '" placeholder="Enter Price" required></div> </td>'
+	var buttonHtml = '<button onclick="deleteItem(' + tmpCreateOrderId + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
+	var row = '<tr id="row' + tmpCreateOrderId + '">'
+	    // + '<td> <div class="form-group"><div id="barcodes-dropdown"><select class="form-control" name="barcode' + tmpCreateOrderId + '" id="barcode"></select></div></div> </td>'
+		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpCreateOrderId + '" id="barcode' + tmpCreateOrderId + '" placeholder="Enter Barcode" required></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpCreateOrderId + '" id="quantity' + tmpCreateOrderId + '" placeholder="Enter Quantity" required></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpCreateOrderId + '" id="sellingPrice' + tmpCreateOrderId + '" placeholder="Enter Price" required></div> </td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
 	$tbody.prepend(row);
-	tmpc = tmpc + 1;
+	tmpCreateOrderId = tmpCreateOrderId + 1;
 }
 
-function deleteItem(tmp) {
-	rowtmp = "row" + tmp;
+function deleteItem(tmpId) {
+	rowtmp = "row" + tmpId;
 	document.getElementById(`${rowtmp}`).remove();
 	return false;
 }
@@ -256,7 +252,7 @@ function editOrder(id) {
 	});
 }
 
-var tmpe = 0;
+var tmpEditOrderId = 0;
 function editOrderItems(data) {
 	var $tbody = $('#edit-order-item-table').find('tbody');
 	$tbody.empty();
@@ -264,23 +260,23 @@ function editOrderItems(data) {
 		var e = data['orders'][i];
 		var orderId = data['id'];
 		var $tbody = $('#edit-order-item-table').find('tbody');
-		var buttonHtml = '<button onclick="deleteItem(' + tmpe + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
-		var row = '<tr id="row' + tmpe + '">'
-			+ '<td> <div class="form-group"><input type="text" class="form-control" name="editbarcode' + tmpe + '" id="editbarcode' + tmpe + '" value="' + e.barcode + '" readonly="true"></div> </td>'
-			+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpe + '" id="quantity' + tmpe + '" value="' + e.quantity + '" required></div> </td>'
-			+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpe + '" id="sellingPrice' + tmpe + '" value="' + e.sellingPrice + '" required></div> </td>'
+		var buttonHtml = '<button onclick="deleteItem(' + tmpEditOrderId + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
+		var row = '<tr id="row' + tmpEditOrderId + '">'
+			+ '<td> <div class="form-group"><input type="text" class="form-control" name="editbarcode' + tmpEditOrderId + '" id="editbarcode' + tmpEditOrderId + '" value="' + e.barcode + '" readonly="true"></div> </td>'
+			+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpEditOrderId + '" id="quantity' + tmpEditOrderId + '" value="' + e.quantity + '" required></div> </td>'
+			+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpEditOrderId + '" id="sellingPrice' + tmpEditOrderId + '" value="' + e.sellingPrice + '" required></div> </td>'
 			+ '<td>' + buttonHtml + '</td>'
-			+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderItemId' + tmpe + '" id="orderItemId' + tmpe + '" value="' + e.orderItemId + '"></input>'
+			+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderItemId' + tmpEditOrderId + '" id="orderItemId' + tmpEditOrderId + '" value="' + e.orderItemId + '"></input>'
 			+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderId" id="orderId" value="' + orderId + '"></input>'
 			+ '</tr>';
 		$tbody.append(row);
-		tmpe = tmpe + 1;
+		tmpEditOrderId = tmpEditOrderId + 1;
 	}
 }
 
 function openCreateOrderModel() {
 	$('#create-order-modal').modal('toggle');
-	if(tmpc==0){
+	if(tmpCreateOrderId==0){
 	    addItemInList()
 	}
 }
@@ -346,22 +342,22 @@ function cancelUpdate() {
 function addIteminEditForm() {
 	var $tbody = $('#edit-order-item-table').find('tbody');
 	// getProductsList();
-	var buttonHtml = '<button onclick="deleteItem(' + tmpe + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
-	var row = '<tr id="row' + tmpe + '">'
-	    // + '<td> <div class="form-group"><div id="barcodes-dropdown"><select class="form-control" name="barcode' + tmpe + '" id="barcode"></select></div></div> </td>'
-		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpe + '" id="barcode' + tmpe + '" value="" required></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpe + '" id="quantity' + tmpe + '" value="" required></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpe + '" id="sellingPrice' + tmpe + '" value="" required></div> </td>'
+	var buttonHtml = '<button onclick="deleteItem(' + tmpEditOrderId + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
+	var row = '<tr id="row' + tmpEditOrderId + '">'
+	    // + '<td> <div class="form-group"><div id="barcodes-dropdown"><select class="form-control" name="barcode' + tmpEditOrderId + '" id="barcode"></select></div></div> </td>'
+		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpEditOrderId + '" id="barcode' + tmpEditOrderId + '" value="" required></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpEditOrderId + '" id="quantity' + tmpEditOrderId + '" value="" required></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpEditOrderId + '" id="sellingPrice' + tmpEditOrderId + '" value="" required></div> </td>'
 		+ '<td>' + buttonHtml + '</td>'
-		+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderItemId' + tmpe + '" id="orderItemId' + tmpe + '" value="0"></input>'
+		+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderItemId' + tmpEditOrderId + '" id="orderItemId' + tmpEditOrderId + '" value="0"></input>'
 		+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderId" id="orderId" value="' + orderId + '"></input>'
 		+ '</tr>';
 	$tbody.prepend(row);
-	tmpe = tmpe + 1;
+	tmpEditOrderId = tmpEditOrderId + 1;
 }
 
 function cancelCreate() {
-	tmpc=0;
+	tmpCreateOrderId=0;
 	var $tbody = $('#order-item-table').find('tbody');
 	$tbody.empty();
 	$('#create-order-modal').modal('hide');
