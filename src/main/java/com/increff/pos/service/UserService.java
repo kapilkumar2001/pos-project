@@ -36,11 +36,6 @@ public class UserService {
 		return dao.selectAll();
 	}
 
-	@Transactional
-	public void delete(int id) {
-		dao.delete(id);
-	}
-
 	protected static void normalize(UserPojo p) {
 		p.setEmail(p.getEmail().toLowerCase().trim());
 		p.setRole(p.getRole().toLowerCase().trim());

@@ -17,12 +17,12 @@ import java.util.List;
 public class InventoryReportApiController {
 
     @Autowired
-    private InventoryReportDto inventoryReportDto;
+    private InventoryReportDto dto;
 
     @ApiOperation(value = "Gets inventory report")
     @RequestMapping(path = "/api/inventory-report/", method = RequestMethod.GET)
     public List<InventoryReportData> get() throws ApiException {
-        return inventoryReportDto.get();
+        return dto.get();
     }
 
 }

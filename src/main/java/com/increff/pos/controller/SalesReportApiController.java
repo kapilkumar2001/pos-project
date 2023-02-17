@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 public class SalesReportApiController {
     @Autowired
-    private SalesReportDto salesReportDto;
+    private SalesReportDto dto;
 
     @ApiOperation(value = "Gets salesreport data")
     @RequestMapping(path = "/api/sales-report/", method = RequestMethod.GET)
@@ -24,7 +24,7 @@ public class SalesReportApiController {
         @RequestParam(value="brand", required = false, defaultValue = "") String brand,
         @RequestParam(value="category", required = false, defaultValue = "") String category)
         throws ApiException {
-            return salesReportDto.get(startDate, endDate, brand, category);
+            return dto.get(startDate, endDate, brand, category);
     }
 
 }

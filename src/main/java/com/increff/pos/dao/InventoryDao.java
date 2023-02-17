@@ -15,8 +15,8 @@ import com.increff.pos.pojo.InventoryPojo;
 public class InventoryDao extends AbstractDao{
 	
 	
-	private static String select_id = "select p from InventoryPojo p where id=:id";
-	private static String select_all = "select p from InventoryPojo p";
+	private static String SELECT_BY_ID = "select p from InventoryPojo p where id=:id";
+	private static String SELECT_ALL = "select p from InventoryPojo p";
 	
 	
 	@PersistenceContext
@@ -28,13 +28,13 @@ public class InventoryDao extends AbstractDao{
 	}
 		
 	public InventoryPojo select(int id) {
-		TypedQuery<InventoryPojo> query = getQuery(select_id, InventoryPojo.class);
+		TypedQuery<InventoryPojo> query = getQuery(SELECT_BY_ID, InventoryPojo.class);
 		query.setParameter("id", id);
 		return getSingle(query);
 	}
 	
 	public List<InventoryPojo> selectAll() {
-		TypedQuery<InventoryPojo> query = getQuery(select_all, InventoryPojo.class);
+		TypedQuery<InventoryPojo> query = getQuery(SELECT_ALL, InventoryPojo.class);
 		return query.getResultList();
 	}
 	

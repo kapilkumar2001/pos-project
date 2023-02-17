@@ -41,20 +41,13 @@ public class LoginController {
 		UserPojo p = service.get(f.getEmail());
 		boolean authenticated = (p != null && Objects.equals(p.getPassword(), f.getPassword()));
 		if (!authenticated) {
-			// info.setMessage("Invalid username or password");
 			throw new ApiException("Invalid username or password");
-			// return new ModelAndView("redirect:/site/login");
 		}
 		
-		// Create authentication object
 		Authentication authentication = convert(p);
-		// Create new session 
 		HttpSession session = req.getSession(true);
-		// Attach Spring SecurityContext to this new session
 		SecurityUtil.createContext(session);
-		// Attach Authentication object to the Security Context
 		SecurityUtil.setAuthentication(authentication);
-
 		info.setRole(p.getRole());
 		return new ModelAndView("redirect:/ui/brands");
 	}
@@ -66,17 +59,13 @@ public class LoginController {
 	}
 
 	private static Authentication convert(UserPojo p) {
-		// Create principal
 		UserPrincipal principal = new UserPrincipal();
 		principal.setEmail(p.getEmail());
 		principal.setId(p.getId());
 
-		// Create Authorities
 		ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
 		authorities.add(new SimpleGrantedAuthority(p.getRole()));
-		// you can add more roles if required
-
-		// Create Authentication
+		
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, null,
 				authorities);
 		return token;

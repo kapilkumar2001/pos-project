@@ -24,7 +24,6 @@ public abstract class AbstractUiController {
 
 		info.setEmail(principal == null ? "" : principal.getEmail());
 
-		// Set info
 		ModelAndView mav = new ModelAndView(page);
 		mav.addObject("info", info);
 		mav.addObject("baseUrl", baseUrl);

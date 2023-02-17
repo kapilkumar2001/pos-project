@@ -73,5 +73,4 @@ public class BrandDto {
         }
         return categoriesList;
     }
-
 }

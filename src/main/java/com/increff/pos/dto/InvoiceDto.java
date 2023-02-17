@@ -12,6 +12,10 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.increff.pos.model.OrderItemData;
@@ -70,6 +74,20 @@ public class InvoiceDto {
         }
 
         invoiceService.generateInvoice(orderPojo, orderItemDataList, totalAmount);
+    }
+
+    @Transactional
+    public ResponseEntity<byte[]> getInvoice(int orderId) throws ApiException, IOException {
+        String sourcePath = "src/main/invoices/invoice-" + orderId + ".pdf";
+        byte[] contents = loadFile(sourcePath);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        String filename = "invoice-" + orderId + ".pdf";
+        headers.setContentDispositionFormData(filename, filename);
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+        ResponseEntity<byte[]> response = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+        return response;
     }
 
     public byte[] readFully(InputStream stream) throws IOException{

@@ -15,17 +15,16 @@ import com.increff.pos.pojo.OrderPojo;
 public class OrderService {
 
 	@Autowired
-	private OrderDao orderDao;
+	private OrderDao dao;
 	
 	@Transactional(rollbackOn = ApiException.class) 
 	public void createOrder(OrderPojo orderPojo) throws ApiException{
-		normalize(orderPojo);
-		orderDao.insert(orderPojo);
+		dao.insert(orderPojo);
 	}
 	
 	@Transactional(rollbackOn = ApiException.class) 
 	public OrderPojo getOrder(int id) throws ApiException{
-		OrderPojo orderPojo = orderDao.select(id);
+		OrderPojo orderPojo = dao.select(id);
 		if(orderPojo == null) {
 			throw new ApiException("order with this id doesn't exist, id: " + id);
 		}
@@ -34,32 +33,25 @@ public class OrderService {
 	
 	@Transactional(rollbackOn = ApiException.class)
 	public List<OrderPojo> getAllOrders() throws ApiException{
-		List<OrderPojo> orders = orderDao.selectAll();
+		List<OrderPojo> orders = dao.selectAll();
 		return orders;
 	}
 
     @Transactional
 	public List<OrderPojo> getOrderByTime(LocalDateTime startTime, LocalDateTime endTime){
-		return orderDao.selectByTime(startTime, endTime);
+		return dao.selectByTime(startTime, endTime);
 	}
 	
 	@Transactional(rollbackOn = ApiException.class)
 	public void update(OrderPojo orderPojo) throws ApiException{
 		
 		orderPojo.setUpdatedAt(LocalDateTime.now());
-		orderDao.update(orderPojo);
+		dao.update(orderPojo);
 	}
 
 	@Transactional
 	public void delete(int id) throws ApiException{
-		orderDao.delete(id);
+		dao.delete(id);
 	}
 
-	protected static void normalize(OrderPojo orderPojo) {
-		orderPojo.setCreatedAt(LocalDateTime.now());
-		orderPojo.setUpdatedAt(LocalDateTime.now());
-		orderPojo.setStatus("created");
-	}
-
-	
 }
