@@ -1,4 +1,4 @@
-package com.increff.pos.service;
+package com.increff.pos.api;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,7 +12,7 @@ import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.util.StringUtil;
 
 @Service
-public class ProductService{
+public class ProductApi{
 
 	@Autowired
 	private ProductDao dao;

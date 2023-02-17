@@ -1,4 +1,4 @@
-package com.increff.pos.service;
+package com.increff.pos.api;
 
 import com.increff.pos.model.OrderFopObject;
 import com.increff.pos.model.OrderItemData;
@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
-public class InvoiceService {
+public class InvoiceApi {
    
     @Transactional(rollbackOn = ApiException.class)
     public void generateInvoice(OrderPojo orderPojo, List<OrderItemData> orderItemDataList, double totalAmount) throws ApiException {

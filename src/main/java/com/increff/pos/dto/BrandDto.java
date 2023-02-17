@@ -1,11 +1,11 @@
 package com.increff.pos.dto;
 
+import com.increff.pos.api.ApiException;
+import com.increff.pos.api.BrandApi;
 import com.increff.pos.helper.BrandHelper;
 import com.increff.pos.model.BrandData;
 import com.increff.pos.model.BrandForm;
 import com.increff.pos.pojo.BrandPojo;
-import com.increff.pos.service.ApiException;
-import com.increff.pos.service.BrandService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,22 +17,22 @@ import java.util.List;
 public class BrandDto {
 
     @Autowired
-    private BrandService service;
+    private BrandApi api;
 
     public void add(BrandForm brandForm) throws ApiException{
         BrandHelper.validate(brandForm);
         BrandPojo brandPojo = BrandHelper.convert(brandForm);
         BrandHelper.normalize(brandPojo);
-        service.add(brandPojo);
+        api.add(brandPojo);
     }
 
     public BrandData get(int id) throws ApiException {
-        BrandPojo brandPojo = service.getCheck(id);
+        BrandPojo brandPojo = api.getCheck(id);
         return BrandHelper.convert(brandPojo);
     }
 
     public List<BrandData> getAll(){
-        List<BrandPojo> brandPojoList = service.getAll();
+        List<BrandPojo> brandPojoList = api.getAll();
         List<BrandData> brandDataList = new ArrayList<BrandData>();
         for (BrandPojo brandPojo : brandPojoList) {
             brandDataList.add(BrandHelper.convert(brandPojo));
@@ -44,11 +44,11 @@ public class BrandDto {
         BrandHelper.validate(brandForm);
         BrandPojo brandPojo = BrandHelper.convert(brandForm);
         BrandHelper.normalize(brandPojo);
-        service.update(id, brandPojo);
+        api.update(id, brandPojo);
     }
 
     public List<String> getAllBrands(){
-        List<BrandPojo> brandPojoList = service.getAll();
+        List<BrandPojo> brandPojoList = api.getAll();
         List<String> brandsList = new ArrayList<String>();
         for (BrandPojo brandPojo : brandPojoList) {
             brandsList.add(brandPojo.getBrand());
@@ -57,7 +57,7 @@ public class BrandDto {
     }
 
     public List<String> getAllCategories(){
-        List<BrandPojo> brandPojoList = service.getAll();
+        List<BrandPojo> brandPojoList = api.getAll();
         List<String> categoryList = new ArrayList<String>();
         for (BrandPojo brandPojo : brandPojoList) {
             categoryList.add(brandPojo.getCategory());
@@ -66,7 +66,7 @@ public class BrandDto {
     }
 
     public List<String> getCategoriesByBrand(String brand){
-        List<BrandPojo> brandPojoList = service.getByBrand(brand);
+        List<BrandPojo> brandPojoList = api.getByBrand(brand);
         List<String> categoriesList = new ArrayList<String>();
         for (BrandPojo p : brandPojoList) {
             categoriesList.add(p.getCategory());

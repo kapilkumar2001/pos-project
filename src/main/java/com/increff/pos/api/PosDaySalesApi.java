@@ -1,4 +1,4 @@
-package com.increff.pos.service;
+package com.increff.pos.api;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,7 +12,7 @@ import com.increff.pos.dao.PosDaySalesDao;
 import com.increff.pos.pojo.PosDaySalesPojo;
 
 @Service
-public class PosDaySalesService {
+public class PosDaySalesApi {
 
     @Autowired 
     private PosDaySalesDao dao;

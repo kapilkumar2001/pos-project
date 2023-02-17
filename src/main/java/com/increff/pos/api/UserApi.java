@@ -1,4 +1,4 @@
-package com.increff.pos.service;
+package com.increff.pos.api;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,7 +12,7 @@ import com.increff.pos.dao.UserDao;
 import com.increff.pos.pojo.UserPojo;
 
 @Service
-public class UserService {
+public class UserApi {
 
 	@Autowired
 	private UserDao dao;

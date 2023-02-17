@@ -11,26 +11,26 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.increff.pos.api.ApiException;
+import com.increff.pos.api.OrderApi;
+import com.increff.pos.api.OrderItemApi;
+import com.increff.pos.api.PosDaySalesApi;
 import com.increff.pos.helper.PosDaySalesHelper;
 import com.increff.pos.model.PosDaySalesData;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.pojo.PosDaySalesPojo;
-import com.increff.pos.service.ApiException;
-import com.increff.pos.service.OrderItemService;
-import com.increff.pos.service.OrderService;
-import com.increff.pos.service.PosDaySalesService;
 import com.increff.pos.util.StatusEnum;
 
 @Component
 public class PosDaySalesDto {
     
     @Autowired
-    private OrderItemService orderItemService;
+    private OrderItemApi orderItemApi;
     @Autowired
-    private OrderService orderService;
+    private OrderApi orderApi;
     @Autowired 
-    private PosDaySalesService service;
+    private PosDaySalesApi api;
 
     @Transactional
     public void create() throws ApiException {
@@ -42,14 +42,14 @@ public class PosDaySalesDto {
         LocalDateTime dayEndTime = formatDateTime(time);
         LocalDateTime dayStartTime = formatDateTime(time.minusHours(23).minusMinutes(59).minusSeconds(59));
      
-        List<OrderPojo> orderPojoList = orderService.getOrderByTime(dayStartTime, dayEndTime);
+        List<OrderPojo> orderPojoList = orderApi.getOrderByTime(dayStartTime, dayEndTime);
         int invoicedOrdersCount = 0;
         int invoicedItemsCount = 0;
         int totalRevenue = 0;
         for(OrderPojo orderPojo: orderPojoList){
             if((orderPojo.getStatus()).equals(StatusEnum.invoiced)){
                 invoicedOrdersCount+=1;
-                List<OrderItemPojo> orderItemPojoList =  orderItemService.getOrderItemsbyOrderId(orderPojo.getId());  
+                List<OrderItemPojo> orderItemPojoList =  orderItemApi.getOrderItemsbyOrderId(orderPojo.getId());  
                 invoicedItemsCount += orderItemPojoList.size();
                 for(OrderItemPojo orderItemPojo: orderItemPojoList){
                     totalRevenue += orderItemPojo.getSellingPrice();
@@ -59,13 +59,13 @@ public class PosDaySalesDto {
         posDaySalesPojo.setInvoicedOrdersCount(invoicedOrdersCount);
         posDaySalesPojo.setInvoicedItemsCount(invoicedItemsCount);
         posDaySalesPojo.setTotalRevenue(totalRevenue);    
-        service.create(posDaySalesPojo);
+        api.create(posDaySalesPojo);
     }
 
     @Transactional
     public List<PosDaySalesData> getAllDaySale(){
         List<PosDaySalesData> posDaySalesDataList = new ArrayList<>();
-        List<PosDaySalesPojo> posDaySalesPojoList = service.getAll();
+        List<PosDaySalesPojo> posDaySalesPojoList = api.getAll();
         for(PosDaySalesPojo posDaySalesPojo: posDaySalesPojoList){
             posDaySalesDataList.add(PosDaySalesHelper.convert(posDaySalesPojo));
         }    
@@ -87,7 +87,7 @@ public class PosDaySalesDto {
         LocalDate startdate = LocalDate.parse(startDate, formatter);
         LocalDate enddate = LocalDate.parse(endDate, formatter);
 
-        List<PosDaySalesPojo> posDaySalesPojoList = service.getByDate(startdate, enddate);
+        List<PosDaySalesPojo> posDaySalesPojoList = api.getByDate(startdate, enddate);
         for(PosDaySalesPojo posDaySalesPojo: posDaySalesPojoList){
             posDaySalesDataList.add(PosDaySalesHelper.convert(posDaySalesPojo));
         }

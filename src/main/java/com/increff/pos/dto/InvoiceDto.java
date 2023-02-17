@@ -19,32 +19,32 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import com.increff.pos.api.ApiException;
+import com.increff.pos.api.InvoiceApi;
+import com.increff.pos.api.OrderApi;
+import com.increff.pos.api.OrderItemApi;
+import com.increff.pos.api.ProductApi;
 import com.increff.pos.model.OrderItemData;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.pojo.ProductPojo;
-import com.increff.pos.service.ApiException;
-import com.increff.pos.service.InvoiceService;
-import com.increff.pos.service.OrderItemService;
-import com.increff.pos.service.OrderService;
-import com.increff.pos.service.ProductService;
 import com.increff.pos.util.StatusEnum;
 
 @Component
 public class InvoiceDto {
     @Autowired
-    InvoiceService service;
+    InvoiceApi api;
     @Autowired
-    OrderService orderService;
+    OrderApi orderApi;
     @Autowired
-    OrderItemService orderItemService;
+    OrderItemApi orderItemApi;
     @Autowired
-    ProductService productService;
+    ProductApi productApi;
 
 
     @Transactional
     public void generateInvoice(int orderId) throws ApiException {
-        OrderPojo orderPojo =  orderService.getOrder(orderId);
+        OrderPojo orderPojo =  orderApi.getOrder(orderId);
         
         if(orderPojo.getStatus().equals(StatusEnum.invoiced)){
             return;
@@ -52,16 +52,16 @@ public class InvoiceDto {
 
         // update order status to from created to invoiced
         orderPojo.setStatus(StatusEnum.invoiced);
-        orderService.update(orderPojo);
+        orderApi.update(orderPojo);
 
-        List<OrderItemPojo> orderItemPojoList =  orderItemService.getOrderItemsbyOrderId(orderId);
+        List<OrderItemPojo> orderItemPojoList =  orderItemApi.getOrderItemsbyOrderId(orderId);
 
         DecimalFormat dec = new DecimalFormat("#.##");
         double totalAmount = 0;
         List<OrderItemData> orderItemDataList = new ArrayList<>();
         for(OrderItemPojo orderItemPojo : orderItemPojoList) {
             OrderItemData orderItemData = new OrderItemData();
-            ProductPojo productPojo = productService.getCheck(orderItemPojo.getProductId());
+            ProductPojo productPojo = productApi.getCheck(orderItemPojo.getProductId());
             orderItemData.setBarcode(productPojo.getBarcode());
             orderItemData.setQuantity(orderItemPojo.getQuantity());
             orderItemData.setSellingPrice(Double.valueOf(dec.format(orderItemPojo.getSellingPrice())));
@@ -75,7 +75,7 @@ public class InvoiceDto {
             orderItemDataList.add(orderItemData);
         }
 
-        service.generateInvoice(orderPojo, orderItemDataList, totalAmount);
+        api.generateInvoice(orderPojo, orderItemDataList, totalAmount);
     }
 
     @Transactional

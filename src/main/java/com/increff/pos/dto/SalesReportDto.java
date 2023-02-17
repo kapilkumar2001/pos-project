@@ -11,16 +11,16 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.increff.pos.api.ApiException;
+import com.increff.pos.api.BrandApi;
+import com.increff.pos.api.OrderApi;
+import com.increff.pos.api.OrderItemApi;
+import com.increff.pos.api.ProductApi;
 import com.increff.pos.model.SalesReportData;
 import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.pojo.ProductPojo;
-import com.increff.pos.service.ApiException;
-import com.increff.pos.service.BrandService;
-import com.increff.pos.service.OrderItemService;
-import com.increff.pos.service.OrderService;
-import com.increff.pos.service.ProductService;
 import com.increff.pos.util.StatusEnum;
 
 @Component
@@ -29,13 +29,13 @@ public class SalesReportDto {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-ddHH:mm:ss");
 
     @Autowired
-    private BrandService brandService;
+    private BrandApi brandApi;
     @Autowired
-    private ProductService productService;
+    private ProductApi productApi;
     @Autowired
-    private OrderItemService orderItemService;
+    private OrderItemApi orderItemApi;
     @Autowired
-    private OrderService orderService;
+    private OrderApi orderApi;
 
     @Transactional
     public List<SalesReportData> get(String startDate, String endDate, String brand, String category) throws ApiException{
@@ -55,13 +55,13 @@ public class SalesReportDto {
         LocalDateTime endDateTime = LocalDateTime.parse(tmpEndDate, formatter);
 
         if((!brand.equals("")) && (!category.equals(""))){
-            brandPojoList.add(brandService.getBrandByBrandAndCategory(brand, category));
+            brandPojoList.add(brandApi.getBrandByBrandAndCategory(brand, category));
         } else if(!brand.equals("")){
-            brandPojoList = brandService.getByBrand(brand);
+            brandPojoList = brandApi.getByBrand(brand);
         } else if(!category.equals("")) {
-            brandPojoList = brandService.getByCategory(category);
+            brandPojoList = brandApi.getByCategory(category);
         } else{
-            brandPojoList = brandService.getAll();
+            brandPojoList = brandApi.getAll();
         }
 
         for(BrandPojo brandPojo: brandPojoList){
@@ -81,16 +81,16 @@ public class SalesReportDto {
         double revenue = 0;
         List<Integer> productIds = new ArrayList<Integer>();
 
-        List<ProductPojo> productPojoList = productService.getProductsByBrandId(brandPojo.getId());
+        List<ProductPojo> productPojoList = productApi.getProductsByBrandId(brandPojo.getId());
         for(ProductPojo productPojo: productPojoList){
             productIds.add(productPojo.getId());
         }
 
-        List<OrderPojo> orderPojoList = orderService.getOrderByTime(startDateTime, endDateTime);
+        List<OrderPojo> orderPojoList = orderApi.getOrderByTime(startDateTime, endDateTime);
 
         for(OrderPojo orderPojo: orderPojoList){
             if(orderPojo.getStatus().equals(StatusEnum.invoiced)){
-                List<OrderItemPojo> orderItemPojoList = orderItemService.getOrderItemsbyOrderId(orderPojo.getId());
+                List<OrderItemPojo> orderItemPojoList = orderItemApi.getOrderItemsbyOrderId(orderPojo.getId());
                 for(OrderItemPojo orderItemPojo: orderItemPojoList){
                     if(productIds.contains(orderItemPojo.getProductId())){
                         quantity = quantity + orderItemPojo.getQuantity();

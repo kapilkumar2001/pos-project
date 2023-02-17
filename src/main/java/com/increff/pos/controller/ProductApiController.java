@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.pos.model.ProductData;
 import com.increff.pos.model.ProductForm;
-import com.increff.pos.service.ApiException;
+import com.increff.pos.api.ApiException;
 import com.increff.pos.dto.ProductDto;
 
 import io.swagger.annotations.Api;

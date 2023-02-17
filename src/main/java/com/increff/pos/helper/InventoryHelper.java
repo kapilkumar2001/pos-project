@@ -1,9 +1,9 @@
 package com.increff.pos.helper;
 
+import com.increff.pos.api.ApiException;
 import com.increff.pos.model.InventoryData;
 import com.increff.pos.model.InventoryForm;
 import com.increff.pos.pojo.InventoryPojo;
-import com.increff.pos.service.ApiException;
 import com.increff.pos.util.StringUtil;
 
 public class InventoryHelper {

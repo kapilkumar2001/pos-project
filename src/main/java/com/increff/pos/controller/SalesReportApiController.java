@@ -1,8 +1,9 @@
 package com.increff.pos.controller;
 
+import com.increff.pos.api.ApiException;
 import com.increff.pos.dto.SalesReportDto;
 import com.increff.pos.model.SalesReportData;
-import com.increff.pos.service.ApiException;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,9 @@
 package com.increff.pos.helper;
 
+import com.increff.pos.api.ApiException;
 import com.increff.pos.model.BrandData;
 import com.increff.pos.model.BrandForm;
 import com.increff.pos.pojo.BrandPojo;
-import com.increff.pos.service.ApiException;
 import com.increff.pos.util.StringUtil;
 
 public class BrandHelper {

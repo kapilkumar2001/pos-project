@@ -1,4 +1,4 @@
-package com.increff.pos.service;
+package com.increff.pos.api;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.util.StringUtil;
 
 @Service
-public class OrderItemService {
+public class OrderItemApi {
 
     @Autowired
     OrderItemDao dao;

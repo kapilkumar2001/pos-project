@@ -1,4 +1,4 @@
-package com.increff.pos.service;
+package com.increff.pos.api;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,7 +12,7 @@ import com.increff.pos.dao.BrandDao;
 import com.increff.pos.pojo.BrandPojo;
 
 @Service
-public class BrandService{
+public class BrandApi{
 
 	@Autowired
 	private BrandDao dao;

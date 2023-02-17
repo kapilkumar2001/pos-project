@@ -1,4 +1,4 @@
-package com.increff.pos.service;
+package com.increff.pos.api;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +13,7 @@ import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.util.StringUtil;
 
 @Service
-public class InventoryService {
+public class InventoryApi {
 
 	@Autowired
 	InventoryDao dao;

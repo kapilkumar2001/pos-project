@@ -1,4 +1,4 @@
-package com.increff.pos.service;
+package com.increff.pos.api;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,7 +13,7 @@ import com.increff.pos.dao.OrderDao;
 import com.increff.pos.pojo.OrderPojo;
 
 @Service
-public class OrderService {
+public class OrderApi {
 
 	@Autowired
 	private OrderDao dao;
