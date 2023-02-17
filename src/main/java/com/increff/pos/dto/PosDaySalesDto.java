@@ -9,9 +9,9 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.increff.pos.helper.PosDaySalesHelper;
 import com.increff.pos.model.PosDaySalesData;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
@@ -32,26 +32,14 @@ public class PosDaySalesDto {
     private PosDaySalesService service;
 
     @Transactional
-    @Scheduled(cron = "59 59 23 * * *")
     public void create() throws ApiException {
         PosDaySalesPojo posDaySalesPojo = new PosDaySalesPojo();
         LocalDateTime time = LocalDateTime.now();
         LocalDate date = time.toLocalDate();
-        
         posDaySalesPojo.setDate(date);
-        LocalDateTime dayEndTime = time;
-        LocalDateTime dayStartTime = time.minusHours(23).minusMinutes(59).minusSeconds(59);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-ddHH:mm:ss");
-
-        LocalDateTime dateTime = LocalDateTime.parse(dayStartTime.toString());
-        String newFormat1 = dateTime.format(formatter);
-    
-        dateTime = LocalDateTime.parse(dayEndTime.toString());
-        String newFormat2 = dateTime.format(formatter);
-        
-        dayStartTime = LocalDateTime.parse(newFormat1, formatter);
-        dayEndTime = LocalDateTime.parse(newFormat2, formatter);
+        LocalDateTime dayEndTime = formatDateTime(time);
+        LocalDateTime dayStartTime = formatDateTime(time.minusHours(23).minusMinutes(59).minusSeconds(59));
      
         List<OrderPojo> orderPojoList = orderService.getOrderByTime(dayStartTime, dayEndTime);
         int invoicedOrdersCount = 0;
@@ -67,7 +55,6 @@ public class PosDaySalesDto {
                 }
             }
         }
-
         posDaySalesPojo.setInvoicedOrdersCount(invoicedOrdersCount);
         posDaySalesPojo.setInvoicedItemsCount(invoicedItemsCount);
         posDaySalesPojo.setTotalRevenue(totalRevenue);    
@@ -77,18 +64,9 @@ public class PosDaySalesDto {
     @Transactional
     public List<PosDaySalesData> getAllDaySale(){
         List<PosDaySalesData> posDaySalesDataList = new ArrayList<>();
-
         List<PosDaySalesPojo> posDaySalesPojoList = service.getAll();
-
         for(PosDaySalesPojo posDaySalesPojo: posDaySalesPojoList){
-            PosDaySalesData posDaySalesData = new PosDaySalesData();
-
-            posDaySalesData.setDate(posDaySalesPojo.getDate());
-            posDaySalesData.setInvoicedItemsCount(posDaySalesPojo.getInvoicedItemsCount());
-            posDaySalesData.setInvoicedOrdersCount(posDaySalesPojo.getInvoicedOrdersCount());
-            posDaySalesData.setTotalRevenue(posDaySalesPojo.getTotalRevenue());
-
-            posDaySalesDataList.add(posDaySalesData);
+            posDaySalesDataList.add(PosDaySalesHelper.convert(posDaySalesPojo));
         }    
         return posDaySalesDataList;
     }
@@ -97,7 +75,6 @@ public class PosDaySalesDto {
     public List<PosDaySalesData> getDaySale(String startDate, String endDate){
         List<PosDaySalesData> posDaySalesDataList = new ArrayList<>();
 
-        // Setting up default values of start and enddate if null
         LocalDateTime time = LocalDateTime.now();
         if(startDate.equals("")){
             startDate = time.minusMonths(1).toLocalDate().toString(); 
@@ -105,22 +82,22 @@ public class PosDaySalesDto {
         if(endDate.equals("")){
             endDate = time.toLocalDate().toString();
         }
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate startdate = LocalDate.parse(startDate, formatter);
         LocalDate enddate = LocalDate.parse(endDate, formatter);
 
         List<PosDaySalesPojo> posDaySalesPojoList = service.getByDate(startdate, enddate);
-
         for(PosDaySalesPojo posDaySalesPojo: posDaySalesPojoList){
-            PosDaySalesData posDaySalesData = new PosDaySalesData();
-            posDaySalesData.setDate(posDaySalesPojo.getDate());
-            posDaySalesData.setInvoicedItemsCount(posDaySalesPojo.getInvoicedItemsCount());
-            posDaySalesData.setInvoicedOrdersCount(posDaySalesPojo.getInvoicedOrdersCount());
-            posDaySalesData.setTotalRevenue(posDaySalesPojo.getTotalRevenue());
-
-            posDaySalesDataList.add(posDaySalesData);
+            posDaySalesDataList.add(PosDaySalesHelper.convert(posDaySalesPojo));
         }
         return posDaySalesDataList;
+    }
+
+    public LocalDateTime formatDateTime(LocalDateTime time){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-ddHH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(time.toString());
+        String newFormat = dateTime.format(formatter); 
+        time = LocalDateTime.parse(newFormat, formatter);
+        return time;
     }
 }
