@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.transaction.Transactional;
 
@@ -27,6 +28,7 @@ import com.increff.pos.service.InvoiceService;
 import com.increff.pos.service.OrderItemService;
 import com.increff.pos.service.OrderService;
 import com.increff.pos.service.ProductService;
+import com.increff.pos.util.StatusEnum;
 
 @Component
 public class InvoiceDto {
@@ -44,12 +46,12 @@ public class InvoiceDto {
     public void generateInvoice(int orderId) throws ApiException {
         OrderPojo orderPojo =  orderService.getOrder(orderId);
         
-        if(orderPojo.getStatus().equals("invoiced")){
+        if(orderPojo.getStatus().equals(StatusEnum.invoiced)){
             return;
         }
 
         // update order status to from created to invoiced
-        orderPojo.setStatus("invoiced");
+        orderPojo.setStatus(StatusEnum.invoiced);
         orderService.update(orderPojo);
 
         List<OrderItemPojo> orderItemPojoList =  orderItemService.getOrderItemsbyOrderId(orderId);
@@ -108,7 +110,7 @@ public class InvoiceDto {
             return readFully(inputStream);
         } 
         finally{
-            if (inputStream != null){
+            if (Objects.nonNull(inputStream)){
                 inputStream.close();
             }
         }

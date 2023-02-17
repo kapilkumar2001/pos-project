@@ -20,6 +20,7 @@ import com.increff.pos.service.ApiException;
 import com.increff.pos.service.OrderItemService;
 import com.increff.pos.service.OrderService;
 import com.increff.pos.service.PosDaySalesService;
+import com.increff.pos.util.StatusEnum;
 
 @Component
 public class PosDaySalesDto {
@@ -46,7 +47,7 @@ public class PosDaySalesDto {
         int invoicedItemsCount = 0;
         int totalRevenue = 0;
         for(OrderPojo orderPojo: orderPojoList){
-            if((orderPojo.getStatus()).equals("invoiced")){
+            if((orderPojo.getStatus()).equals(StatusEnum.invoiced)){
                 invoicedOrdersCount+=1;
                 List<OrderItemPojo> orderItemPojoList =  orderItemService.getOrderItemsbyOrderId(orderPojo.getId());  
                 invoicedItemsCount += orderItemPojoList.size();

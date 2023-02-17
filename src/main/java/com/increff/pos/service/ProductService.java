@@ -23,7 +23,7 @@ public class ProductService{
 			throw new ApiException("Brand & Category combination doesn't exist");
 		}
 		ProductPojo tmpPojo = dao.getProductByBarcode(productPojo.getBarcode());
-		if(tmpPojo!=null) {
+		if(Objects.nonNull(tmpPojo)) {
 			throw new ApiException("Product with this barcode already exist, barcode: "+ productPojo.getBarcode());
 		}
 		if(productPojo.getMrp()<=0){

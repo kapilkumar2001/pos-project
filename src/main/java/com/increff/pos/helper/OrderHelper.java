@@ -9,6 +9,7 @@ import com.increff.pos.model.OrderItemForm;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.service.ApiException;
+import com.increff.pos.util.StatusEnum;
 import com.increff.pos.util.StringUtil;
 
 public class OrderHelper {
@@ -37,7 +38,7 @@ public class OrderHelper {
 		dateTime = orderPojo.getUpdatedAt().format(format);
 		orderData.setUpdatedAt(dateTime);
 		orderData.setId(orderPojo.getId());
-		orderData.setStatus(orderPojo.getStatus());
+		orderData.setStatus(orderPojo.getStatus().toString());
 		return orderData;
 	}
 
@@ -62,7 +63,7 @@ public class OrderHelper {
     public static void normalize(OrderPojo orderPojo) {
 		orderPojo.setCreatedAt(LocalDateTime.now());
 		orderPojo.setUpdatedAt(LocalDateTime.now());
-		orderPojo.setStatus("created");
+		orderPojo.setStatus(StatusEnum.created);
 	}
 
     public static void normalize(List<OrderItemPojo> orderItemPojoList) {

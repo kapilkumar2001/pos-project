@@ -3,9 +3,13 @@ package com.increff.pos.pojo;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import com.increff.pos.util.StatusEnum;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +24,8 @@ public class OrderPojo {
 	private int id;
 	private LocalDateTime created_at;
 	private LocalDateTime updated_at;
-	private String status;
+	@Enumerated(EnumType.STRING)
+	private StatusEnum status = StatusEnum.created;
 	
 	public LocalDateTime getCreatedAt() {
 		return created_at;

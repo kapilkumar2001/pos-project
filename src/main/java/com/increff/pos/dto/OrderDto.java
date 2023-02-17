@@ -20,6 +20,7 @@ import com.increff.pos.service.InventoryService;
 import com.increff.pos.service.OrderItemService;
 import com.increff.pos.service.OrderService;
 import com.increff.pos.service.ProductService;
+import com.increff.pos.util.StatusEnum;
 
 
 @Component
@@ -71,7 +72,7 @@ public class OrderDto {
 	@Transactional(rollbackOn = ApiException.class)
 	public void cancelOrder(int orderId) throws ApiException{
 		OrderPojo orderPojo = orderService.getOrder(orderId);
-		orderPojo.setStatus("cancelled");
+		orderPojo.setStatus(StatusEnum.cancelled);
 		orderService.update(orderPojo);
 
 		List<OrderItemPojo> existingOrderItemPojoList = orderItemService.getOrderItemsbyOrderId(orderId);

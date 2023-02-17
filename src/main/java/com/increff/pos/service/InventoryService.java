@@ -1,6 +1,7 @@
 package com.increff.pos.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.transaction.Transactional;
 
@@ -20,7 +21,7 @@ public class InventoryService {
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(InventoryPojo inventoryPojo) throws ApiException {
 		InventoryPojo existingInventoryPojo = dao.select(inventoryPojo.getId());
-		if(existingInventoryPojo==null) {
+		if(Objects.isNull(existingInventoryPojo)) {
 		   dao.insert(inventoryPojo);
 		} else{
 			if(existingInventoryPojo.getQuantity()+inventoryPojo.getQuantity()<0) {
@@ -88,7 +89,7 @@ public class InventoryService {
 	@Transactional
 	public InventoryPojo getCheck(int id, String barcode) throws ApiException {
 		InventoryPojo inventoryPojo = dao.select(id);
-		if (inventoryPojo == null) {
+		if (Objects.isNull(inventoryPojo)) {
 			throw new ApiException("Barcode does not exit, barcode: " + barcode);
 		}
 		return inventoryPojo;

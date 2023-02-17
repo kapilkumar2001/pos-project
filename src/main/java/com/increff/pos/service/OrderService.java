@@ -2,6 +2,7 @@ package com.increff.pos.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import javax.transaction.Transactional;
 
@@ -25,7 +26,7 @@ public class OrderService {
 	@Transactional(rollbackOn = ApiException.class) 
 	public OrderPojo getOrder(int id) throws ApiException{
 		OrderPojo orderPojo = dao.select(id);
-		if(orderPojo == null) {
+		if(Objects.isNull(orderPojo)) {
 			throw new ApiException("order with this id doesn't exist, id: " + id);
 		}
 		return orderPojo;
