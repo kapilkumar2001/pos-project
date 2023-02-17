@@ -46,7 +46,6 @@ function getBrandsReport(){
         tsv += headers
 		for(row of data){
 			tsv+=(row.brand + '	' + row.category);
-			// tsv+=Object.values(row).join('	');
 			tsv+='\n';
 		  }  
         var hiddenElement = document.createElement('a');  

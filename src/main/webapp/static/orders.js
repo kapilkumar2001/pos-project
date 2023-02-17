@@ -145,14 +145,17 @@ function displayOrderList(data) {
 		var status;
 
 		if (e.status == 'invoiced') {
+			// status = '<span class="label label-success">Invoiced</span>';
 			status = '<p style="color:green;">Invoiced</p>';
 			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="View Order"><i class=\'fa fa-eye\' style=\'font-size:18px;color:blue;\'></i></button>'
 			buttonHtml += '<button onclick="getInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Download Invoice"><i class=\'fa fa-download\' style=\'font-size:18px;color:black;\'></i></button>'
 		}
 		else if(e.status== 'cancelled'){
+			// status = '<span class="label label-danger">Cancelled</span>';
 			status = '<p style="color:red;">Cancelled</p>';
 		}
 		else {
+			// status = '<span class="label label-warning">Created</span>';
 			status = '<p style="color:#8B8000;">Created</p>';
 			buttonHtml += '<button onclick="editOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
 			buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Generate Invoice"><i class=\'fa fa-file-text\' style=\'font-size:18px;color:black;\'></i></button>'
