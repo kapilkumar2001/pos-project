@@ -41,11 +41,9 @@ public class ProductService{
 	@Transactional
 	public ProductPojo getCheck(int id) throws ApiException {
 		ProductPojo productPojo = getById(id);
-		System.out.println("product barcode: "+ productPojo.getBarcode());
 		if (Objects.isNull(productPojo)) {
 			throw new ApiException("ID does not exit, id: " + id);
 		}
-		System.out.println("returning pojo");
 		return productPojo;
 	}
 

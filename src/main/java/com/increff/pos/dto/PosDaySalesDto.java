@@ -29,7 +29,7 @@ public class PosDaySalesDto {
     @Autowired
     private OrderService orderService;
     @Autowired 
-    private PosDaySalesService posDaySalesService;
+    private PosDaySalesService service;
 
     @Transactional
     @Scheduled(cron = "59 59 23 * * *")
@@ -71,14 +71,14 @@ public class PosDaySalesDto {
         posDaySalesPojo.setInvoicedOrdersCount(invoicedOrdersCount);
         posDaySalesPojo.setInvoicedItemsCount(invoicedItemsCount);
         posDaySalesPojo.setTotalRevenue(totalRevenue);    
-        posDaySalesService.create(posDaySalesPojo);
+        service.create(posDaySalesPojo);
     }
 
     @Transactional
     public List<PosDaySalesData> getAllDaySale(){
         List<PosDaySalesData> posDaySalesDataList = new ArrayList<>();
 
-        List<PosDaySalesPojo> posDaySalesPojoList = posDaySalesService.getAll();
+        List<PosDaySalesPojo> posDaySalesPojoList = service.getAll();
 
         for(PosDaySalesPojo posDaySalesPojo: posDaySalesPojoList){
             PosDaySalesData posDaySalesData = new PosDaySalesData();
@@ -110,7 +110,7 @@ public class PosDaySalesDto {
         LocalDate startdate = LocalDate.parse(startDate, formatter);
         LocalDate enddate = LocalDate.parse(endDate, formatter);
 
-        List<PosDaySalesPojo> posDaySalesPojoList = posDaySalesService.getByDate(startdate, enddate);
+        List<PosDaySalesPojo> posDaySalesPojoList = service.getByDate(startdate, enddate);
 
         for(PosDaySalesPojo posDaySalesPojo: posDaySalesPojoList){
             PosDaySalesData posDaySalesData = new PosDaySalesData();

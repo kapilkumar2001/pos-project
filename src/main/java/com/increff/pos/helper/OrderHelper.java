@@ -34,13 +34,9 @@ public class OrderHelper {
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"); 
         String dateTime = orderPojo.getCreatedAt().format(format);
         orderData.setCreatedAt(dateTime);
-		System.out.println("created at =" + orderData.getCreatedAt());
 		dateTime = orderPojo.getUpdatedAt().format(format);
 		orderData.setUpdatedAt(dateTime);
-		System.out.println("updated at =" + orderData.getUpdatedAt());
-
 		orderData.setId(orderPojo.getId());
-		System.out.println("id =" + orderData.getId());
 		orderData.setStatus(orderPojo.getStatus());
 		return orderData;
 	}

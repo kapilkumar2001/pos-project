@@ -2,8 +2,6 @@ package com.increff.pos.dao;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -20,13 +18,9 @@ public class OrderItemDao extends AbstractDao{
 	private static String DELETE_BY_ID = "delete from OrderItemPojo p where id=:id";
 	private static String SELECT_ALL = "select p from OrderItemPojo p";
 	private static String SELECT_BY_PRODUCTID = "select p from OrderItemPojo p where productId=:productId";
-	
-	@PersistenceContext
-	private EntityManager em;
-	
-	
+		
 	public void insert(OrderItemPojo p){
-		em.persist(p);
+		em().persist(p);
 	}
 
 	public List<OrderItemPojo> selectAll(){
@@ -53,7 +47,7 @@ public class OrderItemDao extends AbstractDao{
 	}
 	
 	public int delete(int id) {
-		Query query = em.createQuery(DELETE_BY_ID);
+		Query query = em().createQuery(DELETE_BY_ID);
 		query.setParameter("id", id);
 		return query.executeUpdate();
 	}

@@ -25,7 +25,7 @@ public class InventoryReportDto {
     @Autowired
     private ProductService productService;
     @Autowired
-    private InventoryService inventoryService;
+    private InventoryService service;
 
     @Transactional
     public List<InventoryReportData> get() throws ApiException {
@@ -45,7 +45,7 @@ public class InventoryReportDto {
             List<ProductPojo> productPojoList = productService.getProductsByBrandId(brandId);
 
             for(ProductPojo productPojo: productPojoList) {
-                InventoryPojo inventoryPojo = inventoryService.get(productPojo.getId(), productPojo.getBarcode());
+                InventoryPojo inventoryPojo = service.get(productPojo.getId(), productPojo.getBarcode());
                 quantity = quantity + inventoryPojo.getQuantity();
             }
 

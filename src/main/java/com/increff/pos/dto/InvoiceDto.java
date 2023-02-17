@@ -31,7 +31,7 @@ import com.increff.pos.service.ProductService;
 @Component
 public class InvoiceDto {
     @Autowired
-    InvoiceService invoiceService;
+    InvoiceService service;
     @Autowired
     OrderService orderService;
     @Autowired
@@ -73,7 +73,7 @@ public class InvoiceDto {
             orderItemDataList.add(orderItemData);
         }
 
-        invoiceService.generateInvoice(orderPojo, orderItemDataList, totalAmount);
+        service.generateInvoice(orderPojo, orderItemDataList, totalAmount);
     }
 
     @Transactional

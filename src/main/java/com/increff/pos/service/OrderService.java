@@ -48,10 +48,4 @@ public class OrderService {
 		orderPojo.setUpdatedAt(LocalDateTime.now());
 		dao.update(orderPojo);
 	}
-
-	@Transactional
-	public void delete(int id) throws ApiException{
-		dao.delete(id);
-	}
-
 }

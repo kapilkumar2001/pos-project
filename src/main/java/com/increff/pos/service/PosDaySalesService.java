@@ -15,21 +15,21 @@ import com.increff.pos.pojo.PosDaySalesPojo;
 public class PosDaySalesService {
 
     @Autowired 
-    private PosDaySalesDao posDaySalesDao;
+    private PosDaySalesDao dao;
     
     @Transactional(rollbackOn = ApiException.class)
     public void create(PosDaySalesPojo posDaySalesPojo) throws ApiException{
-        posDaySalesDao.insert(posDaySalesPojo);
+        dao.insert(posDaySalesPojo);
     }
 
     @Transactional
     public List<PosDaySalesPojo> getAll(){
-        return posDaySalesDao.selectAll();
+        return dao.selectAll();
     }
 
     @Transactional
     public List<PosDaySalesPojo> getByDate(LocalDate startDate, LocalDate endDate){
-        return posDaySalesDao.selectByDate(startDate, endDate);
+        return dao.selectByDate(startDate, endDate);
     }
     
 }
