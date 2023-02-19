@@ -8,54 +8,60 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import com.increff.pos.api.ApiException;
+import com.increff.pos.api.InvoiceApi;
+import com.increff.pos.api.OrderApi;
+import com.increff.pos.api.OrderItemApi;
+import com.increff.pos.api.ProductApi;
 import com.increff.pos.model.OrderItemData;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.pojo.ProductPojo;
-import com.increff.pos.service.ApiException;
-import com.increff.pos.service.InvoiceService;
-import com.increff.pos.service.OrderItemService;
-import com.increff.pos.service.OrderService;
-import com.increff.pos.service.ProductService;
+import com.increff.pos.util.StatusEnum;
 
 @Component
 public class InvoiceDto {
     @Autowired
-    InvoiceService invoiceService;
+    InvoiceApi api;
     @Autowired
-    OrderService orderService;
+    OrderApi orderApi;
     @Autowired
-    OrderItemService orderItemService;
+    OrderItemApi orderItemApi;
     @Autowired
-    ProductService productService;
+    ProductApi productApi;
 
 
     @Transactional
     public void generateInvoice(int orderId) throws ApiException {
-        OrderPojo orderPojo =  orderService.getOrder(orderId);
+        OrderPojo orderPojo =  orderApi.getOrder(orderId);
         
-        if(orderPojo.getStatus().equals("invoiced")){
+        if(orderPojo.getStatus().equals(StatusEnum.invoiced)){
             return;
         }
 
         // update order status to from created to invoiced
-        orderPojo.setStatus("invoiced");
-        orderService.update(orderPojo);
+        orderPojo.setStatus(StatusEnum.invoiced);
+        orderApi.update(orderPojo);
 
-        List<OrderItemPojo> orderItemPojoList =  orderItemService.getOrderItemsbyOrderId(orderId);
+        List<OrderItemPojo> orderItemPojoList =  orderItemApi.getOrderItemsbyOrderId(orderId);
 
         DecimalFormat dec = new DecimalFormat("#.##");
         double totalAmount = 0;
         List<OrderItemData> orderItemDataList = new ArrayList<>();
         for(OrderItemPojo orderItemPojo : orderItemPojoList) {
             OrderItemData orderItemData = new OrderItemData();
-            ProductPojo productPojo = productService.get(orderItemPojo.getProductId());
+            ProductPojo productPojo = productApi.getCheck(orderItemPojo.getProductId());
             orderItemData.setBarcode(productPojo.getBarcode());
             orderItemData.setQuantity(orderItemPojo.getQuantity());
             orderItemData.setSellingPrice(Double.valueOf(dec.format(orderItemPojo.getSellingPrice())));
@@ -69,7 +75,21 @@ public class InvoiceDto {
             orderItemDataList.add(orderItemData);
         }
 
-        invoiceService.generateInvoice(orderPojo, orderItemDataList, totalAmount);
+        api.generateInvoice(orderPojo, orderItemDataList, totalAmount);
+    }
+
+    @Transactional
+    public ResponseEntity<byte[]> getInvoice(int orderId) throws ApiException, IOException {
+        String sourcePath = "src/main/invoices/invoice-" + orderId + ".pdf";
+        byte[] contents = loadFile(sourcePath);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        String filename = "invoice-" + orderId + ".pdf";
+        headers.setContentDispositionFormData(filename, filename);
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+        ResponseEntity<byte[]> response = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+        return response;
     }
 
     public byte[] readFully(InputStream stream) throws IOException{
@@ -90,7 +110,7 @@ public class InvoiceDto {
             return readFully(inputStream);
         } 
         finally{
-            if (inputStream != null){
+            if (Objects.nonNull(inputStream)){
                 inputStream.close();
             }
         }

@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class AppUiController extends AbstractUiController {
 
 	@RequestMapping(value = "/ui/brands")
-	public ModelAndView brandcategory() {
+	public ModelAndView brands() {
 		return mav("brands.html");
 	}
 
@@ -27,8 +27,24 @@ public class AppUiController extends AbstractUiController {
 		return mav("orders.html");
 	}
 
-	@RequestMapping(value = "/ui/reports")
-	public ModelAndView Reports() {
-		return mav("reports.html");
+	@RequestMapping(value = "/ui/brands-report")
+	public ModelAndView BrandsReport() {
+		return mav("brands-report.html");
 	}
+
+	@RequestMapping(value = "/ui/inventory-report")
+	public ModelAndView InventoryReport() {
+		return mav("inventory-report.html");
+	}
+
+	@RequestMapping(value = "/ui/pos-day-sales-report")
+	public ModelAndView PosDaySalesReport() {
+		return mav("pos-day-sales-report.html");
+	}
+
+	@RequestMapping(value = "/ui/sales-report")
+	public ModelAndView SalesReport() {
+		return mav("sales-report.html");
+	}
+
 }

@@ -5,24 +5,24 @@
 		<nav th:replace="snippets.html :: name_app_navbar"></nav>
 		<div class="container">
 			<div class="row my-4">
-        <h4 class="leftAlign">Brands</h4>
-        <th:block th:switch="${info.getRole()}">
-          <div th:case="supervisor" style="margin-left: auto;margin-right: 0;">
-            <div class="row">
-              <div class="col-12">
-                <button type="button" class="btn btn-primary btn-sm" id="add-brand-button" style="padding: 4px">
-                  <i class='fa fa-plus align-middle' style='font-size:16px;color:white; padding-right: 4px;'></i>
-                  <span class="align-middle">Add Brand</span>
-                </button>
-                <button type="button" class="btn btn-primary btn-sm ml-3" id="upload-data">
-                  <i class='fa fa-upload align-middle' style='font-size:16px;color:white;padding-right: 4px;'></i>
-                  <span class="align-middle">Upload Brands</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div th:case="operator"></div>
-        </th:block>
+				<h4 class="leftAlign">Brands</h4>
+				<th:block th:switch="${info.getRole()}">
+					<div th:case="supervisor" style="margin-left: auto;margin-right: 0;">
+						<div class="row">
+						<div class="col-12">
+							<button type="button" class="btn btn-primary btn-sm" id="add-brand-button" style="padding: 4px">
+							<i class='fa fa-plus align-middle' style='font-size:16px;color:white; padding-right: 4px;'></i>
+							<span class="align-middle">Add Brand</span>
+							</button>
+							<button type="button" class="btn btn-primary btn-sm ml-3" id="upload-data">
+							<i class='fa fa-upload align-middle' style='font-size:16px;color:white;padding-right: 4px;'></i>
+							<span class="align-middle">Upload Brands</span>
+							</button>
+						</div>
+						</div>
+					</div>
+					<div th:case="operator"></div>
+				</th:block>
 			</div>
 			<div class="row">
 				<div class="col-12">
@@ -31,6 +31,7 @@
 							<table class="table table-striped" id="brands-table">
 								<thead>
 									<tr>
+										<th scope="col">S.No.</th>
 										<th scope="col">Brand</th>
 										<th scope="col">Category</th>
 										<th:block th:switch="${info.getRole()}">

@@ -1,24 +1,17 @@
 package com.increff.pos.model;
 
-public class ProductData extends ProductForm{
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class ProductData{
 
 	private int id;
-	private int brand_category;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public int getBrandCategory() {
-		return brand_category;
-	}
-
-	public void setBrandCategory(int brand_category) {
-		this.brand_category = brand_category;
-	}
-	
+	private int brandId;
+	private String barcode;
+	private String brand;
+	private String category;
+	private String name;
+	private double mrp;
 }

@@ -3,29 +3,7 @@ function getInventoryUrl() {
 	return baseUrl + "/api/inventory";
 }
 
-// API calls
-
-function addInventory() {
-	var $form = $("#inventory-form");
-	var json = toJson($form);
-	var url = getInventoryUrl();
-	$.ajax({
-		url: url,
-		type: 'POST',
-		data: json,
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		success: function (response) {
-			getInventoryList();
-		},
-		error: handleAjaxError
-	});
-	return false;
-}
-
 function updateInventory() {
-	$('#edit-inventory-modal').modal('toggle');
 	var barcode = $("#inventory-edit-form input[name=barcode]").val();
 	var url = getInventoryUrl() + "/" + barcode;
 	var $form = $("#inventory-edit-form");
@@ -39,6 +17,8 @@ function updateInventory() {
 		},
 		success: function (response) {
 			getInventoryList();
+			$('#edit-inventory-modal').modal('hide');
+			showSuccess("Quantity updated succesfully!");
 		},
 		error: handleAjaxError
 	});
@@ -65,6 +45,7 @@ function displayInventoryList(data) {
 	var $tbody = $('#inventory-table').find('tbody');
 	$tbody.empty();
 	var userRole = $('.user-role').find('span').text();
+	let serialNumber = 1;
 	for (var i in data) {
 		var e = data[i];
 		var buttonHtml = '';
@@ -72,12 +53,14 @@ function displayInventoryList(data) {
 		    buttonHtml += '<button onclick="displayEditInventory(\'' + e.barcode + '\')\" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
 		}
 		var row = '<tr>'
+			+ '<td>' + serialNumber + '</td>'
 			+ '<td>' + e.barcode + '</td>'
 			+ '<td>' + e.productName + '</td>'
 			+ '<td>' + e.quantity + '</td>'
 			+ '<td>' + buttonHtml + '</td>'
 			+ '</tr>';
 		$tbody.append(row);
+		serialNumber+=1;
 	}
 	$('[data-toggle="tooltip"]').tooltip()
 }
@@ -195,7 +178,7 @@ function updateUploadDialog() {
 
 function updateFileName() {
 	var $file = $('#inventoryFile');
-	var fileName = $file.val();
+	var fileName = $file.val().split("\\")[2];
 	$('#inventoryFileName').html(fileName);
 }
 
@@ -206,14 +189,14 @@ function displayUploadData() {
 
 function displayInventory(data) {
 	$("#inventory-edit-form input[name=barcode]").val(data.barcode);
-  $("#inventory-edit-form input[name=quantity]").val(data.quantity);
+    $("#inventory-edit-form input[name=quantity]").val(data.quantity);
+	document.getElementById("edit-inventory-modal-title").innerHTML = ("Edit Inventory : " + data.barcode);
 	$('#edit-inventory-modal').modal('toggle');
 }
 
 
 function init() {
 	getInventoryList();
-	$('#add-inventory').click(addInventory);
 	$('#update-inventory').click(updateInventory);
 	$('#refresh-data').click(getInventoryList);
 	$('#upload-data').click(displayUploadData);

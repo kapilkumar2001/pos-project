@@ -1,26 +1,14 @@
 package com.increff.pos.model;
 
-public class InventoryData extends InventoryForm{
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class InventoryData{
 
 	private int id;
 	private String productName;
-
-	public int getId() {
-		return id;
-	}
-
-	public String getProductName() {
-		return productName;
-	}
-
-	public void setProductName(String productName) {
-		this.productName = productName;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	
-	
+	private String barcode;
+	private int quantity;
 }

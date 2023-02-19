@@ -4,13 +4,21 @@ function getProductUrl() {
 }
 function getBrandsUrl() {
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/brandcategory";
+	return baseUrl + "/api/brand";
 }
 
 // API Calls
 function addProduct(event) {
+	if(($("#product-form input[name=name]").val()=="") || ($("#product-form input[name=mrp]").val()=="") || 
+	    ($("#product-form input[name=barcode]").val()=="") || (document.getElementById("inputBrand").selectedIndex == 0) || 
+		(document.getElementById("inputCategory").selectedIndex == 0)){
+			showError("Please fill all the fields");
+			return;
+	}
+
 	var $form = $("#product-form");
 	var json = toJson($form);
+
 	var url = getProductUrl();
 	$.ajax({
 		url: url,
@@ -25,9 +33,9 @@ function addProduct(event) {
 			$("#product-form input[name=name]").val("");
 			$("#product-form input[name=mrp]").val("");
 			$("#product-form input[name=barcode]").val("");
-			document.getElementById("inputBrand").selectedIndex = -1;
+			document.getElementById("inputBrand").selectedIndex = 0;
 			document.getElementById("inputBrand").innerHTML = "<option value='' disabled selected style='display: none'>Please Choose Brand</option>";
-			document.getElementById("inputCategory").selectedIndex = -1;
+			document.getElementById("inputCategory").selectedIndex = 0;
 			document.getElementById("inputCategory").innerHTML = "<option value='' disabled selected style='display: none'>Select Brand First</option>";
 			$('#add-product-modal').modal('hide');
 		},
@@ -37,10 +45,15 @@ function addProduct(event) {
 }
 
 function updateProduct() {
-	var id = $("#product-edit-form input[name=id]").val();
-	var url = getProductUrl() + "/" + id;
+	if(($("#product-edit-form input[name=name]").val()=="") || ($("#product-edit-form input[name=mrp]").val()=="")){
+			showError("Please fill all the fields");
+			return;
+	}
+
 	var $form = $("#product-edit-form");
 	var json = toJson($form);
+	var id = $("#product-edit-form input[name=id]").val();
+	var url = getProductUrl() + "/" + id;
 	$.ajax({
 		url: url,
 		type: 'PUT',
@@ -102,6 +115,8 @@ function displayProductList(data) {
 	var $tbody = $('#product-table').find('tbody');
 	$tbody.empty();
 	var userRole = $('.user-role').find('span').text();
+	data = data.reverse();
+	let serialNumber = 1;
 	for (var i in data) {
 		var e = data[i];
 		var buttonHtml = '';
@@ -109,6 +124,7 @@ function displayProductList(data) {
 			buttonHtml += '<button onclick="displayEditProduct(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
 		}
 		var row = '<tr>'
+			+ '<td>' + serialNumber + '</td>'
 			+ '<td>' + e.barcode + '</td>'
 			+ '<td>' + e.name + '</td>'
 			+ '<td>' + e.mrp + '</td>'
@@ -117,6 +133,7 @@ function displayProductList(data) {
 			+ '<td>' + buttonHtml + '</td>'
 			+ '</tr>';
 		$tbody.append(row);
+		serialNumber+=1;
 	}
 	$('[data-toggle="tooltip"]').tooltip()
 }
@@ -165,11 +182,13 @@ function displayProduct(data) {
 	$("#product-edit-form input[name=category]").val(data.category);
 	$("#product-edit-form input[name=brand]").val(data.brand);
 	$("#product-edit-form input[name=id]").val(data.id);
+	document.getElementById("edit-product-modal-title").innerHTML = ("Edit Product: " + data.barcode);
 	$('#edit-product-modal').modal('toggle');
 }
 
 function openAddProductModal() {
 	$('#add-product-modal').modal('toggle');
+	getBrandsList();
 }
 
 
@@ -273,7 +292,7 @@ function updateUploadDialog() {
 
 function updateFileName() {
 	var $file = $('#productFile');
-	var fileName = $file.val();
+	var fileName = $file.val().split("\\")[2];
 	$('#productFileName').html(fileName);
 }
 
@@ -281,7 +300,6 @@ function displayUploadData() {
 	resetUploadDialog();
 	$('#upload-product-modal').modal('toggle');
 }
-
 
 function init() {
 	getProductList();

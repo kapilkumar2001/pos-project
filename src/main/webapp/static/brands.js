@@ -1,12 +1,14 @@
 function getBrandsUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/brandcategory";
+	return baseUrl + "/api/brand";
 }
 
-
-// API Calls
-
 function addBrand(){
+	if(($("#brand-form input[name=brand]").val()=="") || ($("#brand-form input[name=category]").val()=="")){
+			showError("Please fill all the fields");
+			return;
+	}
+
 	var $form = $("#brand-form");
 	var json = toJson($form);
 	var url = getBrandsUrl();
@@ -30,6 +32,11 @@ function addBrand(){
 }
 
 function updateBrand(){
+	if(($("#brand-edit-form input[name=brand]").val()=="") || ($("#brand-edit-form input[name=category]").val()=="")){
+		showError("Please fill all the fields");
+		return;
+    }
+
 	var id = $("#brand-edit-form input[name=id]").val();	
 	var url = getBrandsUrl() + "/" + id;
 	var $form = $("#brand-edit-form");
@@ -65,13 +72,12 @@ function getBrandsList(){
 }
 
 
-// UI display methods
-
 function displayBrandsList(data){
 	var $tbody = $('#brands-table').find('tbody');
 	$tbody.empty();
 	var userRole = $('.user-role').find('span').text();
 	data = data.reverse();
+	let serialNumber = 1;
 	for(var i in data){
 		var e = data[i];
 		var buttonHtml = '';
@@ -79,11 +85,13 @@ function displayBrandsList(data){
 			buttonHtml += '<button onclick="displayEditBrand(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
 		} 
 		var row = '<tr>'
-      + '<td>' + e.brand + '</td>'
-      + '<td>'  + e.category + '</td>'
-      + '<td>' + buttonHtml + '</td>'
-      + '</tr>';
-    $tbody.append(row);
+		+ '<td>' + serialNumber + '</td>'
+		+ '<td>' + e.brand + '</td>'
+		+ '<td>'  + e.category + '</td>'
+		+ '<td>' + buttonHtml + '</td>'
+		+ '</tr>';
+		$tbody.append(row);
+		serialNumber+=1;
 	}
 	$('[data-toggle="tooltip"]').tooltip()
 }
@@ -209,7 +217,7 @@ function updateUploadDialog(){
 
 function updateFileName(){
 	var $file = $('#brandsFile');
-	var fileName = $file.val();
+	var fileName = $file.val().split("\\")[2];
 	$('#brandsFileName').html(fileName);
 }
 

@@ -2,31 +2,26 @@
 <html lang="en">
   <head th:replace="snippets.html :: name_head"></head>
 	<body>
-		<nav class="navbar navbar-expand-lg navbar-light bg-light mb-1" th:fragment="name_site_navbar" style="box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2)">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light mb-1 fixed-top" th:fragment="name_site_navbar" style="box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2)">
 			<a class="navbar-brand" th:href="@{/}">
-				<img th:src="@{/static/increff.png}" width="145" height="40" class="d-inline-block align-top" alt=""/>
+				<img th:src="@{/static/assets/images/increff.png}" width="145" height="40" class="d-inline-block align-top" alt=""/>
 			</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
-			<div class="collapse navbar-collapse" id="navbarNavOut">
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<a class="btn btn-primary" th:href="@{/site/signup}">Signup</a>
-					</li>
-				</ul>
-			</div>
 		</nav>
 		<div class="container mt-4">
 			<div class="row">
-				<div class="col-3"></div>
-				<div class="col-6">
-					<div class="card">
+				<div class="col-6 mt-4">
+					<img th:src="@{/static/assets/images/login1.jpg}" alt="login.png" width="450" height="450">
+				</div>
+				<div class="col-6 mt-4">
+					<div class="card mt-4">
 						<div class="card-header">
-							Login
+							<b>Login</b>
 						</div>
 						<div class="card-body">
-							<form class="form" id="login-form" method="POST" th:action="@{/session/login}">
+							<form class="form" id="login-form">
 								<div class="form-group">
 									<label for="email" class="col-sm-10 col-form-label required">Email</label>
 									<div class="col-sm-12">
@@ -41,14 +36,12 @@
 											style="float: right; margin-right: 20px; margin-top: -25px; position: relative;"></span>
 									</div>
 								</div>
-								<button type="submit" class="btn btn-primary mt-2" id="login" style="margin-left: 11px;">Login</button>		
+								<button type="button" class="btn btn-primary mt-2" id="login-button" style="margin-left: 11px;">Login</button>	
+								<div class="mt-4 mb-2" style="text-align: center">
+									Don't have an account? <a th:href="@{/site/signup}">Sign up here</a>
+								</div>
 							</form>
 						</div>
-						<span th:unless="${info.getMessage()} == ''">
-							<div class="card-footer text-danger">
-								[[${info.getMessage()}]]
-							</div>
-						</span>
 					</div>
 				</div>
 			</div>
@@ -61,12 +54,13 @@
 				  window.location.replace("http://localhost:9000/pos/ui/brands");
 			  </script>
 			</div>
-      <div th:case="'operator'">
+            <div th:case="'operator'">
 			  <script>
 				  window.location.replace("http://localhost:9000/pos/ui/brands");
 			  </script>
 			</div>
 		</div>
+		<script th:src="@{/static/login.js}"></script>
 		<script>
 			$(".toggle-password").click(function() {
 				$(this).toggleClass("fa-eye fa-eye-slash");
