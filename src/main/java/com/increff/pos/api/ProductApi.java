@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.increff.pos.dao.ProductDao;
 import com.increff.pos.pojo.ProductPojo;
-import com.increff.pos.util.StringUtil;
 
 @Service
 public class ProductApi{
@@ -79,9 +78,6 @@ public class ProductApi{
 
 	@Transactional
 	public ProductPojo getProductByBarcode(String barcode) throws ApiException{
-		if(StringUtil.isEmpty(barcode)){
-			throw new ApiException("Barcode can not be empty");
-		}
 		ProductPojo productPojo = dao.getProductByBarcode(barcode);
 		if(Objects.isNull(productPojo)) {
 			throw new ApiException("Product with this barcode doesn't exist, barcode: "+ barcode);

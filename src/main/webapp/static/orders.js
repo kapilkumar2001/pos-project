@@ -10,8 +10,15 @@ function getProductUrl() {
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/product";
 }
+function getInventoryUrl() {
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/inventory";
+}
+
 
 var editOrderModelOrderId;
+var productMrp;
+var availableQuantity;
 
 function createOrder() {
 	var $form = $("#order-list-form");
@@ -33,6 +40,8 @@ function createOrder() {
 		},
 		success: function (response) {
 			getOrderList();
+			var $thead = $('#order-item-table').find('thead');
+			$thead.empty();
 			var $tbody = $('#order-item-table').find('tbody');
 			$tbody.empty();
 			$('#create-order-modal').modal('hide');
@@ -65,6 +74,8 @@ function updateOrder(orderId) {
 		},
 		success: function (response) {
 			getOrderList();
+			var $thead = $('#order-item-table').find('thead');
+			$thead.empty();
 			var $tbody = $('#edit-order-item-table').find('tbody');
 			$tbody.empty();
 			$('#edit-order-modal').modal('hide');
@@ -83,6 +94,8 @@ function cancelOrder(orderId) {
 		type: 'PUT',
 		success: function (response) {
 			getOrderList();
+			var $thead = $('#order-item-table').find('thead');
+			$thead.empty();
 			var $tbody = $('#edit-order-item-table').find('tbody');
 			$tbody.empty();
 			$('#edit-order-modal').modal('hide');
@@ -129,6 +142,41 @@ function getProductsList() {
 	});
 }
 
+function getProduct(barcode){
+	var url = getProductUrl() + '/barcode/' + barcode;
+	console.log(url);
+	$.ajax({
+		url: url,
+		type: 'GET',
+		success: function (data) {
+			productMrp = data.mrp;
+			document.getElementById("mrp-field-create-order").innerHTML = ('<p style="margin-left:5px; color:green">MRP: ' + data.mrp + '</p>');
+			document.getElementById("mrp-field-edit-order").innerHTML = ('<p style="margin-left:5px; color:green">MRP: ' + data.mrp + '</p>');
+		},
+		error: function() {
+			handleAjaxError
+		}
+	});
+}
+
+function getInventory(barcode){
+	var url = getInventoryUrl() + '/' + barcode;
+	console.log(url);
+	$.ajax({
+		url: url,
+		type: 'GET',
+		success: function (data) {
+			availableQuantity = data.quantity;
+			document.getElementById("available-quantity-field-create-order").innerHTML = ('<p style="margin-left:10px; color:green">Available Quantity: ' + data.quantity + '</p>');
+			document.getElementById("available-quantity-field-edit-order").innerHTML = ('<p style="margin-left:10px; color:green">Available Quantity: ' + data.quantity + '</p>');
+		},
+		error: function() {
+			handleAjaxError
+		}
+	});
+}
+
+
 function displayOrderList(data) {
 	var $tbody = $('#order-table').find('tbody');
 	$tbody.empty();
@@ -136,14 +184,12 @@ function displayOrderList(data) {
 	for (var i in data) {
 		var e = data[i];
 		var buttonHtml = '';
-
 		var date = new Date((e.createdAt).replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
 		var options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true };
 		var createdAt = new Intl.DateTimeFormat('en-US', options).format(date);
 		date = new Date((e.updatedAt).replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
 		var updatedAt = new Intl.DateTimeFormat('en-US', options).format(date);
 		var status;
-
 		if (e.status == 'invoiced') {
 			status = '<span class="badge badge-pill badge-success">Invoiced</span>';
 			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="View Order"><i class=\'fa fa-eye\' style=\'font-size:18px;color:blue;\'></i></button>'
@@ -157,7 +203,6 @@ function displayOrderList(data) {
 			buttonHtml += '<button onclick="editOrder(' + e.id + ')" style=\'border: none;margin-right:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
 			buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" style=\'border: none; margin-left:16px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Generate Invoice"><i class=\'fa fa-file-text\' style=\'font-size:18px;color:black;\'></i></button>'
 		}
-
 		var row = '<tr>'
 			+ '<td>' + e.id + '</td>'
 			+ '<td>' + createdAt + '</td>'
@@ -170,16 +215,48 @@ function displayOrderList(data) {
 	$('[data-toggle="tooltip"]').tooltip()
 }
 
-// Add items to the order list
+// Create Order - Add items to the order list 
+function addItemInList() {
+	let barcode = document.getElementById("add-order-item-form").elements[0].value;
+	let quanity = document.getElementById("add-order-item-form").elements[1].value;
+	let sellingPrice = document.getElementById("add-order-item-form").elements[2].value;
+	console.log(barcode); 
+	console.log(quanity);
+	console.log(sellingPrice);
+	if(barcode=='' || quanity=='' || sellingPrice==''){
+		showError("Please fill all the fields!");
+		return;
+	}
+	if(quanity>availableQuantity){
+		showError("Not enough quantity available");
+		return;
+	}
+	if(sellingPrice > productMrp){
+		showError("Selling Price should be less than or equal to MRP");
+		return;
+	}
+	displayOrderItemList(barcode, quanity, sellingPrice);
+
+	$("#add-order-item-form input[name=sellingPrice]").val("");
+	$("#add-order-item-form input[name=quantity]").val("");
+	document.getElementById("inputBarcode").selectedIndex = 0;
+	document.getElementById("mrp-field-create-order").innerHTML = '';
+	document.getElementById("available-quantity-field-create-order").innerHTML = '';
+}
+
 var tmpCreateOrderId = 0;
-function displayOrderItemList() {
+function displayOrderItemList(barcode, quanity, sellingPrice) {
+	if(tmpCreateOrderId==0){
+		var $thead = $('#order-item-table').find('thead');
+		var row = '<tr> <th scope="col">Barcode</th><th scope="col">Quantity</th> <th scope="col">Selling Price</th> <th scope="col">Actions</th></tr>';
+	    $thead.prepend(row);
+	}
 	var $tbody = $('#order-item-table').find('tbody');
 	var buttonHtml = '<button onclick="deleteItem(' + tmpCreateOrderId + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
 	var row = '<tr id="row' + tmpCreateOrderId + '">'
-	    // + '<td> <div class="form-group"><div id="barcodes-dropdown"><select class="form-control" name="barcode' + tmpCreateOrderId + '" id="barcode"></select></div></div> </td>'
-		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpCreateOrderId + '" id="barcode' + tmpCreateOrderId + '" placeholder="Enter Barcode" required></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpCreateOrderId + '" id="quantity' + tmpCreateOrderId + '" placeholder="Enter Quantity" required></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpCreateOrderId + '" id="sellingPrice' + tmpCreateOrderId + '" placeholder="Enter Price" required></div> </td>'
+		+ '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="barcode' + tmpCreateOrderId + '" id="barcode' + tmpCreateOrderId + '" placeholder="Enter Barcode" value="'+ barcode + '" readonly="true"></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpCreateOrderId + '" id="quantity' + tmpCreateOrderId + '" placeholder="Enter Quantity" value="'+ quanity + '" required></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="sellingPrice' + tmpCreateOrderId + '" id="sellingPrice' + tmpCreateOrderId + '" placeholder="Enter Price" value="'+ sellingPrice + '" required></div> </td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
 	$tbody.prepend(row);
@@ -193,9 +270,20 @@ function deleteItem(tmpId) {
 }
 
 function displayBarcodesList(data) {
-	var $select = $('#barcode');
+	let $select = $('#inputBarcode');
 	$select.empty();
-	var row = "<option value='' disabled selected style='display: none'>Choose Barcode</option>";
+	var row = "<option value='' disabled selected style='display: none'>Select Barcode</option>";
+	$select.append(row);
+	data = Array.from(new Set(data));
+	for (var i in data) {
+		var e = data[i];
+		row = "<option value='" + e.barcode + "'>" + e.barcode + "</option>";
+		$select.append(row);
+	}
+
+	$select = $('#inputBarcodeEditOrder');
+	$select.empty();
+	var row = "<option value='' disabled selected style='display: none'>Select Barcode</option>";
 	$select.append(row);
 	data = Array.from(new Set(data));
 	for (var i in data) {
@@ -204,8 +292,6 @@ function displayBarcodesList(data) {
 		$select.append(row);
 	}
 }
-
-
 
 
 // View order 
@@ -235,10 +321,13 @@ function viewOrderItems(data) {
 
 
 // Edit Order
-
 var orderId;
 function editOrder(id) {
 	$('#edit-order-modal').modal('toggle');
+	getProductsList();
+	document.getElementById("mrp-field-edit-order").innerHTML = '';
+	document.getElementById("available-quantity-field-edit-order").innerHTML = '';
+
 	document.getElementById("edit-order-modal-title").innerHTML = ("Edit Order: " + id);
 	var url = getOrderUrl() + '/' + id;
 	$.ajax({
@@ -254,6 +343,7 @@ function editOrder(id) {
 
 var tmpEditOrderId = 0;
 function editOrderItems(data) {
+	getProductsList();
 	var $tbody = $('#edit-order-item-table').find('tbody');
 	$tbody.empty();
 	for (var i in data['orders']) {
@@ -262,12 +352,12 @@ function editOrderItems(data) {
 		var $tbody = $('#edit-order-item-table').find('tbody');
 		var buttonHtml = '<button onclick="deleteItem(' + tmpEditOrderId + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
 		var row = '<tr id="row' + tmpEditOrderId + '">'
-			+ '<td> <div class="form-group"><input type="text" class="form-control" name="editbarcode' + tmpEditOrderId + '" id="editbarcode' + tmpEditOrderId + '" value="' + e.barcode + '" readonly="true"></div> </td>'
-			+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpEditOrderId + '" id="quantity' + tmpEditOrderId + '" value="' + e.quantity + '" required></div> </td>'
-			+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpEditOrderId + '" id="sellingPrice' + tmpEditOrderId + '" value="' + e.sellingPrice + '" required></div> </td>'
+			+ '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="editbarcode' + tmpEditOrderId + '" id="editbarcode' + tmpEditOrderId + '" value="' + e.barcode + '" readonly="true"></div> </td>'
+			+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpEditOrderId + '" id="quantity' + tmpEditOrderId + '" value="' + e.quantity + '" required></div> </td>'
+			+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="sellingPrice' + tmpEditOrderId + '" id="sellingPrice' + tmpEditOrderId + '" value="' + e.sellingPrice + '" required></div> </td>'
 			+ '<td>' + buttonHtml + '</td>'
-			+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderItemId' + tmpEditOrderId + '" id="orderItemId' + tmpEditOrderId + '" value="' + e.orderItemId + '"></input>'
-			+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderId" id="orderId" value="' + orderId + '"></input>'
+			+ '<td> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderItemId' + tmpEditOrderId + '" id="orderItemId' + tmpEditOrderId + '" value="' + e.orderItemId + '"></input>'
+			+ '<td> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderId" id="orderId" value="' + orderId + '"></input>'
 			+ '</tr>';
 		$tbody.append(row);
 		tmpEditOrderId = tmpEditOrderId + 1;
@@ -276,13 +366,9 @@ function editOrderItems(data) {
 
 function openCreateOrderModel() {
 	$('#create-order-modal').modal('toggle');
-	if(tmpCreateOrderId==0){
-	    addItemInList()
-	}
-}
-
-function addItemInList() {
-	displayOrderItemList();
+	document.getElementById("mrp-field-create-order").innerHTML = '';
+	document.getElementById("available-quantity-field-create-order").innerHTML = '';
+	getProductsList();
 }
 
 function convertToArrayOfObjectToCreate(data) {
@@ -333,45 +419,70 @@ function convertToArrayOfObjectToUpdate(data) {
 	return JSON.stringify(arr);
 }
 
-function cancelUpdate() {
-	var $tbody = $('#edit-order-item-table').find('tbody');
-	$tbody.empty();
-	$('#edit-order-modal').modal('hide');
-}
 
 function addIteminEditForm() {
+	let barcode = document.getElementById("edit-add-order-item-form").elements[0].value;
+	let quanity = document.getElementById("edit-add-order-item-form").elements[1].value;
+	let sellingPrice = document.getElementById("edit-add-order-item-form").elements[2].value;
+	console.log(barcode); 
+	console.log(quanity);
+	console.log(sellingPrice);
+	if(barcode=='' || quanity=='' || sellingPrice==''){
+		showError("Please fill all the fields!");
+		return;
+	}
+	if(quanity>availableQuantity){
+		showError("Not enough quantity available");
+		return;
+	}
+	if(sellingPrice > productMrp){
+		showError("Selling Price should be less than or equal to MRP");
+		return;
+	}
+
 	var $tbody = $('#edit-order-item-table').find('tbody');
-	// getProductsList();
 	var buttonHtml = '<button onclick="deleteItem(' + tmpEditOrderId + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
 	var row = '<tr id="row' + tmpEditOrderId + '">'
-	    // + '<td> <div class="form-group"><div id="barcodes-dropdown"><select class="form-control" name="barcode' + tmpEditOrderId + '" id="barcode"></select></div></div> </td>'
-		+ '<td> <div class="form-group"><input type="text" class="form-control" name="barcode' + tmpEditOrderId + '" id="barcode' + tmpEditOrderId + '" value="" required></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control" name="quantity' + tmpEditOrderId + '" id="quantity' + tmpEditOrderId + '" value="" required></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control" name="sellingPrice' + tmpEditOrderId + '" id="sellingPrice' + tmpEditOrderId + '" value="" required></div> </td>'
+	    + '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="barcode' + tmpEditOrderId + '" id="barcode' + tmpEditOrderId + '" value="' + barcode + '" readonly="true"></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpEditOrderId + '" id="quantity' + tmpEditOrderId + '" value="' + quanity + '"></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="sellingPrice' + tmpEditOrderId + '" id="sellingPrice' + tmpEditOrderId + '" value="' + sellingPrice + '"></div> </td>'
 		+ '<td>' + buttonHtml + '</td>'
-		+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderItemId' + tmpEditOrderId + '" id="orderItemId' + tmpEditOrderId + '" value="0"></input>'
-		+ '<td> <div class="form-group"><input type="hidden" class="form-control" name="orderId" id="orderId" value="' + orderId + '"></input>'
+		+ '<td> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderItemId' + tmpEditOrderId + '" id="orderItemId' + tmpEditOrderId + '" value="0"></input>'
+		+ '<td> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderId" id="orderId" value="' + orderId + '"></input>'
 		+ '</tr>';
 	$tbody.prepend(row);
 	tmpEditOrderId = tmpEditOrderId + 1;
+
+	$("#edit-add-order-item-form input[name=sellingPrice]").val("");
+	$("#edit-add-order-item-form input[name=quantity]").val("");
+	document.getElementById("inputBarcodeEditOrder").selectedIndex = 0;
+	document.getElementById("mrp-field-edit-order").innerHTML = '';
+	document.getElementById("available-quantity-field-edit-order").innerHTML = '';
 }
 
 function cancelCreate() {
 	tmpCreateOrderId=0;
+	var $thead = $('#order-item-table').find('thead');
+	$thead.empty();
 	var $tbody = $('#order-item-table').find('tbody');
 	$tbody.empty();
+	$("#add-order-item-form input[name=sellingPrice]").val("");
+	$("#add-order-item-form input[name=quantity]").val("");
+	document.getElementById("inputBarcode").selectedIndex = 0;
+	document.getElementById("mrp-field").innerHTML = '';
+	document.getElementById("available-quantity-field").innerHTML = '';
 	$('#create-order-modal').modal('hide');
 }
 
 
-// Invoice functions
 
+
+// Invoice functions
 function getInvoice(id) {
 	var url = getInvoiceUrl() + '/' + id;
 	window.open(url, '_blank');
 	getOrderList();
 }
-
 function generateInvoice(id) {
 	var url = getInvoiceUrl() + '/' + id;
 	$.ajax({
@@ -392,6 +503,16 @@ function generateInvoice(id) {
 function init() {
 	getOrderList();
 	$('#create-order-button').click(openCreateOrderModel);
+	$('#inputBarcode').on('change', function (){
+		let barcode = document.getElementById("add-order-item-form").elements[0].value;
+		getProduct(barcode);
+		getInventory(barcode);
+	});
+	$('#inputBarcodeEditOrder').on('change', function (){
+		let barcode = document.getElementById("edit-add-order-item-form").elements[0].value;
+		getProduct(barcode);
+		getInventory(barcode);
+	});
 	$('#add-item').click(addItemInList);
 	$('#create-order').click(createOrder);
 	$('#cancel-order').click(cancelOrder);
@@ -399,7 +520,6 @@ function init() {
 	$('#edit-add-item').click(addIteminEditForm);
 	$('#cancel-create').click(cancelCreate);
 }
-
 $(document).ready(init);
 
 

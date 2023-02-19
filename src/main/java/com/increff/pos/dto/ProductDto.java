@@ -10,6 +10,7 @@ import com.increff.pos.model.ProductForm;
 import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.pojo.ProductPojo;
+import com.increff.pos.util.StringUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -56,6 +57,18 @@ public class ProductDto {
             productDataList.add(ProductHelper.convert(productPojo));
         }
         return productDataList;
+    }
+
+    public ProductData getByBarcode(String barcode) throws ApiException {
+        if(StringUtil.isEmpty(barcode)){
+			throw new ApiException("Barcode can not be empty");
+		}
+        barcode = StringUtil.toLowerCase(barcode);
+        ProductPojo productPojo = api.getProductByBarcode(barcode);
+        BrandPojo brandPojo = brandApi.getById(productPojo.getBrandId());
+        productPojo.setBrand(brandPojo.getBrand());
+        productPojo.setCategory(brandPojo.getCategory());
+        return ProductHelper.convert(productPojo);
     }
 
     public void update(int id, ProductForm productForm) throws ApiException {

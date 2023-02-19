@@ -42,6 +42,12 @@ public class ProductApiController {
 		return dto.getAll();
 	}
 
+	@ApiOperation(value= "Get product by barcode")
+	@RequestMapping(path= "/api/product/barcode/{barcode}", method= RequestMethod.GET)
+	public ProductData getByBarcode(@PathVariable String barcode) throws ApiException{
+		return dto.getByBarcode(barcode);
+	}
+
 	@ApiOperation(value = "Updates an product")
 	@RequestMapping(path = "/api/product/{id}", method = RequestMethod.PUT)
 	public void update(@PathVariable int id, @RequestBody ProductForm productForm) throws ApiException {
