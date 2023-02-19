@@ -13,7 +13,7 @@ public class Scheduler {
     @Autowired
     private PosDaySalesDto posDaySalesDto;
 
-    @Scheduled(cron = "00 36 13 * * *")
+    @Scheduled(cron = "59 59 23 * * *")
     public void scheduler() throws ApiException {
         posDaySalesDto.create();
     }
