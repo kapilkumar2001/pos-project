@@ -3,27 +3,6 @@ function getInventoryUrl() {
 	return baseUrl + "/api/inventory";
 }
 
-// API calls
-
-function addInventory() {
-	var $form = $("#inventory-form");
-	var json = toJson($form);
-	var url = getInventoryUrl();
-	$.ajax({
-		url: url,
-		type: 'POST',
-		data: json,
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		success: function (response) {
-			getInventoryList();
-		},
-		error: handleAjaxError
-	});
-	return false;
-}
-
 function updateInventory() {
 	var barcode = $("#inventory-edit-form input[name=barcode]").val();
 	var url = getInventoryUrl() + "/" + barcode;
@@ -218,7 +197,6 @@ function displayInventory(data) {
 
 function init() {
 	getInventoryList();
-	$('#add-inventory').click(addInventory);
 	$('#update-inventory').click(updateInventory);
 	$('#refresh-data').click(getInventoryList);
 	$('#upload-data').click(displayUploadData);

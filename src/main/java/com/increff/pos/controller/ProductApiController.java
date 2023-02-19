@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.pos.model.ProductData;
 import com.increff.pos.model.ProductForm;
-import com.increff.pos.service.ApiException;
+import com.increff.pos.api.ApiException;
 import com.increff.pos.dto.ProductDto;
 
 import io.swagger.annotations.Api;
@@ -22,37 +22,35 @@ import io.swagger.annotations.ApiOperation;
 public class ProductApiController {
 
 	@Autowired
-	private ProductDto productDto;
+	private ProductDto dto;
 	
 	@ApiOperation(value = "Adds product")
 	@RequestMapping(path = "/api/product", method = RequestMethod.POST)
 	public void add(@RequestBody ProductForm productForm) throws ApiException {
-		productDto.add(productForm);
-	}
-	
-	@ApiOperation(value = "Deletes a product")
-	@RequestMapping(path = "/api/product/{id}", method = RequestMethod.DELETE)
-	public void delete(@PathVariable int id) {
-		productDto.delete(id);
+		dto.add(productForm);
 	}
 
 	@ApiOperation(value = "Gets a product by ID")
 	@RequestMapping(path = "/api/product/{id}", method = RequestMethod.GET)
 	public ProductData get(@PathVariable int id) throws ApiException {
-		return productDto.get(id);
+		return dto.get(id);
 	}
 
 	@ApiOperation(value = "Gets list of all products")
 	@RequestMapping(path = "/api/product", method = RequestMethod.GET)
 	public List<ProductData> getAll() throws ApiException {
-		return productDto.getAll();
+		return dto.getAll();
+	}
+
+	@ApiOperation(value= "Get product by barcode")
+	@RequestMapping(path= "/api/product/barcode/{barcode}", method= RequestMethod.GET)
+	public ProductData getByBarcode(@PathVariable String barcode) throws ApiException{
+		return dto.getByBarcode(barcode);
 	}
 
 	@ApiOperation(value = "Updates an product")
 	@RequestMapping(path = "/api/product/{id}", method = RequestMethod.PUT)
 	public void update(@PathVariable int id, @RequestBody ProductForm productForm) throws ApiException {
-		productDto.update(id, productForm);
+		dto.update(id, productForm);
 	}
-	
-
 }

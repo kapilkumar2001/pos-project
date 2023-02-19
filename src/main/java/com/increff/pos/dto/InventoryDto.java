@@ -1,12 +1,14 @@
 package com.increff.pos.dto;
 
+import com.increff.pos.api.ApiException;
+import com.increff.pos.api.InventoryApi;
+import com.increff.pos.api.ProductApi;
+import com.increff.pos.helper.InventoryHelper;
 import com.increff.pos.model.InventoryData;
 import com.increff.pos.model.InventoryForm;
 import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.pojo.ProductPojo;
-import com.increff.pos.service.ApiException;
-import com.increff.pos.service.InventoryService;
-import com.increff.pos.service.ProductService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,66 +20,51 @@ import java.util.List;
 public class InventoryDto {
 
     @Autowired
-    private InventoryService inventoryService;
-
+    private InventoryApi api;
     @Autowired
-    private ProductService productService;
+    private ProductApi productApi;
 
-    public void add(InventoryForm form) throws ApiException {
-        InventoryPojo inventoryPojo = convert(form);
-        inventoryService.add(inventoryPojo);
+    public void add(InventoryForm inventoryForm) throws ApiException {
+        InventoryHelper.validate(inventoryForm);
+        InventoryPojo inventoryPojo = InventoryHelper.convert(inventoryForm);
+        int id = productApi.getProductByBarcode(inventoryPojo.getBarcode()).getId();
+        inventoryPojo.setId(id);
+        InventoryHelper.normalize(inventoryForm.getBarcode());
+        api.add(inventoryPojo);
     }
 
     public InventoryData get(String barcode) throws ApiException{
-        int id = productService.getProductByBarcode(barcode).getId();
-        InventoryPojo inventoryPojo = inventoryService.get(id, barcode);
-        return convert(inventoryPojo);
+        int id = productApi.getProductByBarcode(barcode).getId();
+        InventoryPojo inventoryPojo = api.get(id, barcode);
+        InventoryData inventoryData =  InventoryHelper.convert(inventoryPojo);
+        ProductPojo productPojo =  productApi.getCheck(inventoryPojo.getId());
+        inventoryData.setProductName(productPojo.getName());
+        return inventoryData;
     }
 
     public List<InventoryData> getAll() throws ApiException {
-        List<InventoryPojo> inventoryPojoList = inventoryService.getAll();
+        List<InventoryPojo> inventoryPojoList = api.getAll();
         List<InventoryData> inventoryDataList = new ArrayList<InventoryData>();
-        for (InventoryPojo p : inventoryPojoList) {
-            p.setBarcode(productService.get(p.getId()).getBarcode());
-            inventoryDataList.add(convert(p));
+        for (InventoryPojo inventoryPojo : inventoryPojoList) {
+            ProductPojo productPojo =  productApi.getCheck(inventoryPojo.getId());
+            inventoryPojo.setBarcode(productPojo.getBarcode());
+            InventoryData inventoryData = InventoryHelper.convert(inventoryPojo);
+            inventoryData.setProductName(productPojo.getName());
+            inventoryDataList.add(inventoryData);
         }
         return inventoryDataList;
     }
 
     public void update(String barcode, InventoryForm inventoryForm) throws ApiException {
-        ProductPojo productPojo =  productService.getProductByBarcode(barcode);
+        InventoryHelper.validate(inventoryForm);
+        InventoryHelper.normalize(barcode);
+        ProductPojo productPojo =  productApi.getProductByBarcode(barcode);
         int quantity;
         try{
             quantity = Integer.parseInt(inventoryForm.getQuantity());
         } catch(NumberFormatException e){
             throw new ApiException("Quantity should be a integer value");
         }
-        inventoryService.update(productPojo.getId(), barcode,  quantity);
-    }
-
-    private InventoryData convert(InventoryPojo p) throws ApiException{
-        InventoryData d = new InventoryData();
-        d.setQuantity(p.getQuantity());
-        d.setBarcode(p.getBarcode());
-        d.setId(p.getId());
-        ProductPojo productPojo =  productService.get(p.getId());
-        d.setProductName(productPojo.getName());
-        return d;
-    }
-
-    private InventoryPojo convert(InventoryForm f) throws ApiException {
-        InventoryPojo inventoryPojo = new InventoryPojo();
-        int quantity;
-        try{
-            quantity = Integer.parseInt(f.getQuantity());
-        } catch(NumberFormatException e){
-            throw new ApiException("Quantity should be a integer value");
-        }
-        inventoryPojo.setQuantity(quantity);
-        inventoryPojo.setBarcode(f.getBarcode());
-
-        int id = productService.getProductByBarcode(inventoryPojo.getBarcode()).getId();
-        inventoryPojo.setId(id);
-        return inventoryPojo;
+        api.update(productPojo.getId(), barcode,  quantity);
     }
 }

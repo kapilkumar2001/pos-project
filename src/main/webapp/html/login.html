@@ -9,26 +9,18 @@
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
-			<div class="collapse navbar-collapse" id="navbarNavOut">
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<a class="btn btn-primary" th:href="@{/site/signup}">Sign up</a>
-					</li>
-				</ul>
-			</div>
 		</nav>
 		<div class="container mt-4">
 			<div class="row">
 				<div class="col-6 mt-4">
-					<img th:src="@{/static/assets/images/login.png}" alt="login.png" width="400" height="400">
+					<img th:src="@{/static/assets/images/login1.jpg}" alt="login.png" width="450" height="450">
 				</div>
 				<div class="col-6 mt-4">
 					<div class="card mt-4">
 						<div class="card-header">
-							Login
+							<b>Login</b>
 						</div>
 						<div class="card-body">
-							<!-- <form class="form" id="login-form" method="POST" th:action="@{/session/login}"> -->
 							<form class="form" id="login-form">
 								<div class="form-group">
 									<label for="email" class="col-sm-10 col-form-label required">Email</label>
@@ -44,14 +36,12 @@
 											style="float: right; margin-right: 20px; margin-top: -25px; position: relative;"></span>
 									</div>
 								</div>
-								<button type="button" class="btn btn-primary mt-2" id="login-button" style="margin-left: 11px;">Login</button>		
+								<button type="button" class="btn btn-primary mt-2" id="login-button" style="margin-left: 11px;">Login</button>	
+								<div class="mt-4 mb-2" style="text-align: center">
+									Don't have an account? <a th:href="@{/site/signup}">Sign up here</a>
+								</div>
 							</form>
 						</div>
-						<!-- <span th:unless="${info.getMessage()} == ''">
-							<div class="card-footer text-danger">
-								[[${info.getMessage()}]]
-							</div>
-						</span> -->
 					</div>
 				</div>
 			</div>

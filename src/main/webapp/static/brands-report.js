@@ -1,6 +1,6 @@
 function getBrandsUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/brandcategory";
+	return baseUrl + "/api/brand";
 }
 
 function getBrands(){
@@ -45,7 +45,7 @@ function getBrandsReport(){
         let tsv = '';
         tsv += headers
 		for(row of data){
-			tsv+= (row.brand + '	' + row.category);
+			tsv+=(row.brand + '	' + row.category);
 			tsv+='\n';
 		  }  
         var hiddenElement = document.createElement('a');  

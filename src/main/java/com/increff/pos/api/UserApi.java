@@ -1,6 +1,7 @@
-package com.increff.pos.service;
+package com.increff.pos.api;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.transaction.Transactional;
 
@@ -11,7 +12,7 @@ import com.increff.pos.dao.UserDao;
 import com.increff.pos.pojo.UserPojo;
 
 @Service
-public class UserService {
+public class UserApi {
 
 	@Autowired
 	private UserDao dao;
@@ -20,7 +21,7 @@ public class UserService {
 	public void add(UserPojo p) throws ApiException {
 		normalize(p);
 		UserPojo existing = dao.select(p.getEmail());
-		if (existing != null) {
+		if (Objects.nonNull(existing)) {
 			throw new ApiException("User with given email already exists");
 		}
 		dao.insert(p);
@@ -34,11 +35,6 @@ public class UserService {
 	@Transactional
 	public List<UserPojo> getAll() {
 		return dao.selectAll();
-	}
-
-	@Transactional
-	public void delete(int id) {
-		dao.delete(id);
 	}
 
 	protected static void normalize(UserPojo p) {

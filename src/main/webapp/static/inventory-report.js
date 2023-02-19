@@ -21,6 +21,7 @@ function displayInventory(data) {
 	var $tbody = $('#inventory-report-table').find('tbody');
 	$tbody.empty();
     var tmp = 1;
+	data = data.reverse();
 	for (var i in data) {
 		var e = data[i];
 		var row = '<tr>'
@@ -40,17 +41,17 @@ function getInventoryReport() {
 		url: url,
 		type: 'GET',
 		success: function (data) {
-      console.log(data);
-      var tsv = 'Brand	Category	Quantity\n';  
-      for(row of data){
-        tsv+=Object.values(row).join('	');
-        tsv+='\n';
-      }  
-      var hiddenElement = document.createElement('a');  
-      hiddenElement.href = 'data:text/tsv;charset=utf-8,' + encodeURI(tsv);  
-      hiddenElement.target = '_blank';  
-      hiddenElement.download = 'inventory-report.tsv';  
-      hiddenElement.click();
+			data = data.reverse();
+			var tsv = 'Brand	Category	Quantity\n';  
+			for(row of data){
+				tsv+=Object.values(row).join('	');
+				tsv+='\n';
+			}  
+			var hiddenElement = document.createElement('a');  
+			hiddenElement.href = 'data:text/tsv;charset=utf-8,' + encodeURI(tsv);  
+			hiddenElement.target = '_blank';  
+			hiddenElement.download = 'inventory-report.tsv';  
+			hiddenElement.click();
 		},
 		error: handleAjaxError
 	});

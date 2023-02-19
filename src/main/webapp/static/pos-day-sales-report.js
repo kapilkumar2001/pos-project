@@ -48,8 +48,8 @@ function downloadPosDaySalesReport() {
 			console.log(data);
 			var tsv = 'Date	Invoiced Orders Count	Invoiced Items Count	Total Revenue\n';  
 			for(row of data){
-				var date = (row.date).join("/")
-				tsv += (date + '	' + row.invoicedOrdersCount + '	' + row.invoicedItemsCount + '	' + row.totalRevenue);
+				tsv += (row.date + '	' + row.invoicedOrdersCount + '	' + row.invoicedItemsCount + '	' + row.totalRevenue);
+				// tsv+=Object.values(row).join('	');
 				tsv+='\n';
 			}  
 			var hiddenElement = document.createElement('a');  

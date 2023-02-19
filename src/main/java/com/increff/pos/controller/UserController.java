@@ -1,6 +1,7 @@
 package com.increff.pos.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,44 +19,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.increff.pos.api.ApiException;
+import com.increff.pos.api.UserApi;
 import com.increff.pos.model.InfoData;
 import com.increff.pos.model.LoginForm;
+import com.increff.pos.model.UserData;
+import com.increff.pos.model.UserForm;
 import com.increff.pos.pojo.UserPojo;
-import com.increff.pos.service.ApiException;
-import com.increff.pos.service.UserService;
 import com.increff.pos.util.SecurityUtil;
 import com.increff.pos.util.UserPrincipal;
 
 import io.swagger.annotations.ApiOperation;
 
 @Controller
-public class LoginController {
-
-	@Autowired
-	private UserService service;
+public class UserController {
+    @Autowired
+	private UserApi api;
 	@Autowired
 	private InfoData info;
+    @Value("${signup.email}")
+	private String email;
 	
 	@ApiOperation(value = "Logs in a user")
 	@RequestMapping(path = "/session/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ModelAndView login(HttpServletRequest req, LoginForm f) throws ApiException {
-		UserPojo p = service.get(f.getEmail());
-		boolean authenticated = (p != null && Objects.equals(p.getPassword(), f.getPassword()));
+		UserPojo p = api.get(f.getEmail());
+		boolean authenticated = (Objects.nonNull(p) && Objects.equals(p.getPassword(), f.getPassword()));
 		if (!authenticated) {
-			// info.setMessage("Invalid username or password");
 			throw new ApiException("Invalid username or password");
-			// return new ModelAndView("redirect:/site/login");
 		}
 		
-		// Create authentication object
-		Authentication authentication = convert(p);
-		// Create new session 
+		Authentication authentication = convertUserPojo(p);
 		HttpSession session = req.getSession(true);
-		// Attach Spring SecurityContext to this new session
 		SecurityUtil.createContext(session);
-		// Attach Authentication object to the Security Context
 		SecurityUtil.setAuthentication(authentication);
-
 		info.setRole(p.getRole());
 		return new ModelAndView("redirect:/ui/brands");
 	}
@@ -65,21 +63,54 @@ public class LoginController {
 		return new ModelAndView("redirect:/site/login");
 	}
 
-	private static Authentication convert(UserPojo p) {
-		// Create principal
+    // signup
+    @ApiOperation(value = "Adds a user")
+	@RequestMapping(path = "/session/signup", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	public ModelAndView addUser(HttpServletRequest req, UserForm form) throws ApiException {
+		UserPojo p = convertUserForm(form);
+		api.add(p);
+		return new ModelAndView("redirect:/site/login");
+	}
+
+	@ApiOperation(value = "Gets list of all users")
+	@RequestMapping(path = "/session/signup", method = RequestMethod.GET)
+	public List<UserData> getAllUser() {
+		List<UserPojo> list = api.getAll();
+		List<UserData> list2 = new ArrayList<UserData>();
+		for (UserPojo p : list) {
+			list2.add(convert(p));
+		}
+		return list2;
+	}
+
+	private static UserData convert(UserPojo p) {
+		UserData d = new UserData();
+		d.setEmail(p.getEmail());
+		d.setRole(p.getRole());
+		d.setId(p.getId());
+		return d;
+	}
+
+	private UserPojo convertUserForm(UserForm f) {
+		UserPojo p = new UserPojo();
+		p.setEmail(f.getEmail());
+		if(f.getEmail().equals(email)){
+			p.setRole("supervisor");	
+		} else{
+			p.setRole("operator");
+		}
+		p.setPassword(f.getPassword());
+		return p;
+	}
+
+	private static Authentication convertUserPojo(UserPojo p) {
 		UserPrincipal principal = new UserPrincipal();
 		principal.setEmail(p.getEmail());
 		principal.setId(p.getId());
-
-		// Create Authorities
 		ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
 		authorities.add(new SimpleGrantedAuthority(p.getRole()));
-		// you can add more roles if required
-
-		// Create Authentication
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, null,
 				authorities);
 		return token;
 	}
-
 }

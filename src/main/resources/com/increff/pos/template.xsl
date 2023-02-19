@@ -58,22 +58,22 @@
                             <fo:table-header >
                                 <fo:table-row border="solid 0.3mm black">
                                         <fo:table-cell text-align="left" border="solid 0.3mm black">
-                                            <fo:block font-weight="bold">
+                                            <fo:block font-weight="bold" margin-left="0.1cm" margin-top="0.05cm" margin-bottom="0.05cm">
                                                 Product Name
                                             </fo:block>
                                         </fo:table-cell>
                                         <fo:table-cell text-align="right" border="solid 0.3mm black">
-                                            <fo:block font-weight="bold">
+                                            <fo:block font-weight="bold" margin-right="0.1cm" margin-top="0.05cm" margin-bottom="0.05cm">
                                                 Quantity
                                             </fo:block>
                                         </fo:table-cell>
                                         <fo:table-cell text-align="right" border="solid 0.3mm black">
-                                            <fo:block font-weight="bold">
+                                            <fo:block font-weight="bold" margin-right="0.1cm" margin-top="0.05cm" margin-bottom="0.05cm">
                                                 Selling Price
                                             </fo:block>
                                         </fo:table-cell>
                                         <fo:table-cell text-align="right" border="solid 0.3mm black">
-                                             <fo:block font-weight="bold">
+                                             <fo:block font-weight="bold" margin-right="0.1cm" margin-top="0.05cm" margin-bottom="0.05cm">
                                                 Amount
                                              </fo:block>
                                         </fo:table-cell>
@@ -85,25 +85,25 @@
                                     <fo:table-row border="solid 0.2mm black">
 
                                         <fo:table-cell text-align="left" border="solid 0.2mm black">
-                                            <fo:block font-size="10pt">
+                                            <fo:block font-size="10pt" margin-left="0.1cm" margin-top="0.05cm" margin-bottom="0.05cm">
                                                 <xsl:value-of select="productName" />
                                             </fo:block>
                                         </fo:table-cell>
 
                                         <fo:table-cell text-align="right" border="solid 0.2mm black">
-                                            <fo:block font-size="10pt">
+                                            <fo:block font-size="10pt" margin-right="0.1cm" margin-top="0.05cm" margin-bottom="0.05cm">
                                                 <xsl:value-of select="quantity" />
                                             </fo:block>
                                         </fo:table-cell>
 
                                         <fo:table-cell text-align="right" border="solid 0.2mm black">
-                                            <fo:block font-size="10pt">
+                                            <fo:block font-size="10pt" margin-right="0.1cm" margin-top="0.05cm" margin-bottom="0.05cm">
                                                 <xsl:value-of select="sellingPrice" />
                                             </fo:block>
                                         </fo:table-cell>
 
                                         <fo:table-cell text-align="right" border="solid 0.2mm black">
-                                            <fo:block font-size="10pt">
+                                            <fo:block font-size="10pt" margin-right="0.1cm" margin-top="0.05cm" margin-bottom="0.05cm">
                                                 <xsl:value-of select="amount" />
                                             </fo:block>
                                         </fo:table-cell>
@@ -114,7 +114,7 @@
                                <fo:table-row border="solid 0.3mm black">
 
                                         <fo:table-cell text-align="left">
-                                            <fo:block font-weight="bold">
+                                            <fo:block font-weight="bold" margin-left="0.1cm" margin-top="0.05cm" margin-bottom="0.05cm">
                                                 Total Amount
                                             </fo:block>
                                         </fo:table-cell>
@@ -132,7 +132,7 @@
                                         </fo:table-cell>
 
                                         <fo:table-cell text-align="right">
-                                            <fo:block font-weight="bold">
+                                            <fo:block font-weight="bold" margin-right="0.1cm" margin-top="0.05cm" margin-bottom="0.05cm">
                                                 <xsl:value-of select="totalAmount" />
                                             </fo:block>
                                         </fo:table-cell>

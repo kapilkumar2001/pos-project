@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.increff.pos.api.ApiException;
 import com.increff.pos.dto.PosDaySalesDto;
 import com.increff.pos.model.PosDaySalesData;
-import com.increff.pos.service.ApiException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,12 +20,12 @@ import io.swagger.annotations.ApiOperation;
 public class PosDaySalesController {
 
     @Autowired
-    private PosDaySalesDto posDaySalesDto;
+    private PosDaySalesDto dto;
     
     @ApiOperation(value = "Gets list of every day sales")
 	@RequestMapping(path = "/api/posdaysales-report", method = RequestMethod.GET)
 	public List<PosDaySalesData> getAll() throws ApiException {
-		return posDaySalesDto.getAllDaySale();
+		return dto.getAllDaySale();
 	}
 
 	@ApiOperation(value = "Gets day sales data by date range")
@@ -34,6 +34,6 @@ public class PosDaySalesController {
         @RequestParam(value="startdate", defaultValue = "", required = false) String startDate,
         @RequestParam(value="enddate", defaultValue = "", required = false) String endDate)
         throws ApiException {
-            return posDaySalesDto.getDaySale(startDate, endDate);
+            return dto.getDaySale(startDate, endDate);
     }
 }

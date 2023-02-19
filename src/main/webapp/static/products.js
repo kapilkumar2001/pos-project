@@ -4,7 +4,7 @@ function getProductUrl() {
 }
 function getBrandsUrl() {
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/brandcategory";
+	return baseUrl + "/api/brand";
 }
 
 // API Calls
@@ -188,6 +188,7 @@ function displayProduct(data) {
 
 function openAddProductModal() {
 	$('#add-product-modal').modal('toggle');
+	getBrandsList();
 }
 
 
