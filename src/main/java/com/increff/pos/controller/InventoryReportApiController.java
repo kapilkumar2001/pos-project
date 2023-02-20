@@ -18,7 +18,7 @@ import java.util.List;
 public class InventoryReportApiController {
 
     @Autowired
-    private InventoryReportDto dto;
+    private InventoryReportDto dto;//todo ove this to inventory controller
 
     @ApiOperation(value = "Gets inventory report")
     @RequestMapping(path = "/api/inventory-report/", method = RequestMethod.GET)
