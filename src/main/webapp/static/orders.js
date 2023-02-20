@@ -239,7 +239,7 @@ function addItemInList() {
 
 	if(mapQuantity.has(barcode+sellingPrice)){
         quantity = parseInt(quantity) + parseInt(mapQuantity.get(barcode+sellingPrice));
-        deleteItem(maptmpCreateOrderId.get(barcode+sellingPrice));
+        deleteItem(maptmpCreateOrderId.get(barcode+sellingPrice), barcode, sellingPrice);
         mapQuantity.set(barcode+sellingPrice, quantity);
 		maptmpCreateOrderId.set(barcode+sellingPrice, tmpCreateOrderId);
         displayOrderItemList(barcode, quantity, sellingPrice, tmpCreateOrderId);
@@ -266,7 +266,7 @@ function displayOrderItemList(barcode, quantity, sellingPrice, tmpId) {
 	    $thead.prepend(row);
 	}
 	var $tbody = $('#order-item-table').find('tbody');
-	var buttonHtml = '<button onclick="deleteItem(' + tmpId + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
+	var buttonHtml = '<button onclick="deleteItem(' + tmpId + ',\'' + barcode + '\',' + sellingPrice + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
 	var row = '<tr id="row' + tmpId + '">'
 		+ '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="barcode' + tmpId + '" id="barcode' + tmpId + '" placeholder="Enter Barcode" value="'+ barcode + '" readonly="true"></div> </td>'
 		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpId + '" id="quantity' + tmpId + '" placeholder="Enter Quantity" value="'+ quantity + '" required></div> </td>'
@@ -276,9 +276,20 @@ function displayOrderItemList(barcode, quantity, sellingPrice, tmpId) {
 	$tbody.prepend(row);
 }
 
-function deleteItem(tmpId) {
+
+// TODO: resolve issue raising on deleting item on edit order
+
+function deleteItem(tmpId, barcode, sellingPrice) {
 	rowtmp = "row" + tmpId;
 	document.getElementById(`${rowtmp}`).remove();
+	// if(mapQuantity.has(barcode+sellingPrice))
+	// mapQuantity.delete(barcode+sellingPrice);
+	// if(mapQuantityEditOrder.has(barcode+sellingPrice))
+	// mapQuantityEditOrder.delete(barcode+sellingPrice);
+	// if(maptmpCreateOrderId.has(barcode+sellingPrice))
+	// maptmpCreateOrderId.delete(barcode+sellingPrice);
+	// if(maptmpEditOrderId.has(barcode+sellingPrice))
+	// maptmpEditOrderId.delete(barcode+sellingPrice);
 	return false;
 }
 
@@ -365,7 +376,8 @@ function editOrderItems(data) {
 		var e = data['orders'][i];
 		var orderId = data['id'];
 		var $tbody = $('#edit-order-item-table').find('tbody');
-		var buttonHtml = '<button onclick="deleteItem(' + tmpEditOrderId + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
+		var buttonHtml = '<button onclick="deleteItem(' + tmpEditOrderId + ',\'' + e.barcode + '\',' + e.sellingPrice + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
+		console.log(buttonHtml);
 		var row = '<tr id="row' + tmpEditOrderId + '">'
 			+ '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="editbarcode' + tmpEditOrderId + '" id="editbarcode' + tmpEditOrderId + '" value="' + e.barcode + '" readonly="true"></div> </td>'
 			+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpEditOrderId + '" id="quantity' + tmpEditOrderId + '" value="' + e.quantity + '" required></div> </td>'
@@ -459,7 +471,7 @@ function addIteminEditForm() {
 
 	if(mapQuantityEditOrder.has(barcode+sellingPrice)){
         quantity = parseInt(quantity) + parseInt(mapQuantityEditOrder.get(barcode+sellingPrice));
-        deleteItem(maptmpEditOrderId.get(barcode+sellingPrice));
+        deleteItem(maptmpEditOrderId.get(barcode+sellingPrice), barcode, sellingPrice);
         mapQuantityEditOrder.set(barcode+sellingPrice, quantity);
 		maptmpEditOrderId.set(barcode+sellingPrice, tmpEditOrderId);
         displayEditItemForm(barcode, quantity, sellingPrice, tmpEditOrderId);
@@ -481,7 +493,8 @@ function addIteminEditForm() {
 
 function displayEditItemForm(barcode, quantity, sellingPrice, tmpId){
 	var $tbody = $('#edit-order-item-table').find('tbody');
-	var buttonHtml = '<button onclick="deleteItem(' + tmpId + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
+	var buttonHtml = '<button onclick="deleteItem(' + tmpId + ',\'' + barcode + '\',' + sellingPrice + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
+	console.log(buttonHtml);
 	var row = '<tr id="row' + tmpId + '">'
 	    + '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="barcode' + tmpId + '" id="barcode' + tmpId + '" value="' + barcode + '" readonly="true"></div> </td>'
 		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpId + '" id="quantity' + tmpId + '" value="' + quantity + '"></div> </td>'
