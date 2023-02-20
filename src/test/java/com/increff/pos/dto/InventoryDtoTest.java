@@ -7,17 +7,17 @@ import java.util.List;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.increff.pos.model.BrandCategoryForm;
+import com.increff.pos.model.BrandForm;
 import com.increff.pos.model.InventoryData;
 import com.increff.pos.model.InventoryForm;
 import com.increff.pos.model.ProductForm;
-import com.increff.pos.service.AbstractUnitTest;
-import com.increff.pos.service.ApiException;
+import com.increff.pos.api.AbstractUnitTest;
+import com.increff.pos.api.ApiException;
 
 public class InventoryDtoTest extends AbstractUnitTest{
     
     @Autowired
-    private BrandCategoryDto brandCategoryDto;
+    private BrandDto brandDto;
 
     @Autowired
     private ProductDto productDto;
@@ -27,16 +27,16 @@ public class InventoryDtoTest extends AbstractUnitTest{
 
     @Test
     public void testAdd() throws ApiException{
-        BrandCategoryForm brandCategoryForm = new BrandCategoryForm();
-        brandCategoryForm.setBrand("test brand 1");
-        brandCategoryForm.setCategory("test category 1");
-        brandCategoryDto.add(brandCategoryForm);
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("test brand 1");
+        brandForm.setCategory("test category 1");
+        brandDto.add(brandForm);
 
         ProductForm productForm = new ProductForm();
         productForm.setBarcode("testb1");
         productForm.setBrand("test brand 1");
         productForm.setCategory("test category 1");
-        productForm.setMrp(55.55);
+        productForm.setMrp("55.55");
         productForm.setName("test product 1");
         productDto.add(productForm);
 
@@ -45,57 +45,50 @@ public class InventoryDtoTest extends AbstractUnitTest{
 
         InventoryForm inventoryForm = new InventoryForm();
         inventoryForm.setBarcode("testb1");
-        inventoryForm.setQuantity(54);
-
+        inventoryForm.setQuantity("54");
         inventoryDto.add(inventoryForm);
-
         inventoryData = inventoryDto.get("testb1");
         assertEquals(54, inventoryData.getQuantity()); 
 
         inventoryForm = new InventoryForm();
         inventoryForm.setBarcode("testb1");
-        inventoryForm.setQuantity(46);
-
+        inventoryForm.setQuantity("46");
         inventoryDto.add(inventoryForm);
-
         inventoryData = inventoryDto.get("testb1");
         assertEquals(100, inventoryData.getQuantity()); 
-
-
     }
 
     @Test
     public void testGet() throws ApiException{
-        BrandCategoryForm brandCategoryForm = new BrandCategoryForm();
-        brandCategoryForm.setBrand("test brand 1");
-        brandCategoryForm.setCategory("test category 1");
-        brandCategoryDto.add(brandCategoryForm);
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("test brand 1");
+        brandForm.setCategory("test category 1");
+        brandDto.add(brandForm);
 
         ProductForm productForm = new ProductForm();
         productForm.setBarcode("testb1");
         productForm.setBrand("test brand 1");
         productForm.setCategory("test category 1");
-        productForm.setMrp(55.55);
+        productForm.setMrp("55.55");
         productForm.setName("test product 1");
         productDto.add(productForm);
 
         InventoryData inventoryData = inventoryDto.get("testb1");
-
         assertEquals(0, inventoryData.getQuantity());
     }
 
     @Test
     public void testGetAll() throws ApiException{
-        BrandCategoryForm brandCategoryForm = new BrandCategoryForm();
-        brandCategoryForm.setBrand("test brand 1");
-        brandCategoryForm.setCategory("test category 1");
-        brandCategoryDto.add(brandCategoryForm);
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("test brand 1");
+        brandForm.setCategory("test category 1");
+        brandDto.add(brandForm);
 
         ProductForm productForm = new ProductForm();
         productForm.setBarcode("testb1");
         productForm.setBrand("test brand 1");
         productForm.setCategory("test category 1");
-        productForm.setMrp(55.55);
+        productForm.setMrp("55.55");
         productForm.setName("test product 1");
         productDto.add(productForm);
 
@@ -103,7 +96,7 @@ public class InventoryDtoTest extends AbstractUnitTest{
         productForm.setBarcode("testb2");
         productForm.setBrand("test brand 1");
         productForm.setCategory("test category 1");
-        productForm.setMrp(65.55);
+        productForm.setMrp("65.55");
         productForm.setName("test product 2");
         productDto.add(productForm);
 
@@ -121,22 +114,22 @@ public class InventoryDtoTest extends AbstractUnitTest{
 
     @Test
     public void update() throws ApiException{
-        BrandCategoryForm brandCategoryForm = new BrandCategoryForm();
-        brandCategoryForm.setBrand("test brand 1");
-        brandCategoryForm.setCategory("test category 1");
-        brandCategoryDto.add(brandCategoryForm);
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("test brand 1");
+        brandForm.setCategory("test category 1");
+        brandDto.add(brandForm);
 
         ProductForm productForm = new ProductForm();
         productForm.setBarcode("testb1");
         productForm.setBrand("test brand 1");
         productForm.setCategory("test category 1");
-        productForm.setMrp(55.55);
+        productForm.setMrp("55.55");
         productForm.setName("test product 1");
         productDto.add(productForm);
 
         InventoryForm inventoryForm = new InventoryForm();
         inventoryForm.setBarcode("testb1");
-        inventoryForm.setQuantity(54);
+        inventoryForm.setQuantity("54");
 
         inventoryDto.update("testb1", inventoryForm);
 
@@ -145,7 +138,7 @@ public class InventoryDtoTest extends AbstractUnitTest{
 
         inventoryForm = new InventoryForm();
         inventoryForm.setBarcode("testb1");
-        inventoryForm.setQuantity(46);
+        inventoryForm.setQuantity("46");
 
         inventoryDto.update("testb1", inventoryForm);
 

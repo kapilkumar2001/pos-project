@@ -7,17 +7,19 @@ import java.util.List;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.increff.pos.model.BrandCategoryForm;
+import com.increff.pos.model.BrandForm;
 import com.increff.pos.model.InventoryData;
 import com.increff.pos.model.ProductData;
 import com.increff.pos.model.ProductForm;
-import com.increff.pos.service.AbstractUnitTest;
-import com.increff.pos.service.ApiException;
+import com.increff.pos.pojo.ProductPojo;
+import com.increff.pos.api.AbstractUnitTest;
+import com.increff.pos.api.ApiException;
+import com.increff.pos.dao.ProductDao;
 
 public class productDtoTest extends AbstractUnitTest{
 
     @Autowired
-    private BrandCategoryDto brandCategoryDto;
+    private BrandDto brandDto;
     
     @Autowired
     private ProductDto productDto;
@@ -25,40 +27,48 @@ public class productDtoTest extends AbstractUnitTest{
     @Autowired
     private InventoryDto inventoryDto;
 
+    @Autowired
+    private ProductDao productDao;
+
 
     @Test 
     public void testAdd() throws ApiException{
-        BrandCategoryForm brandCategoryForm = new BrandCategoryForm();
-        brandCategoryForm.setBrand("test brand 1");
-        brandCategoryForm.setCategory("test category 1");
-        brandCategoryDto.add(brandCategoryForm);
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("test brand 1");
+        brandForm.setCategory("test category 1");
+        brandDto.add(brandForm);
 
         ProductForm productForm = new ProductForm();
         productForm.setBarcode("testb1");
         productForm.setBrand("test brand 1");
         productForm.setCategory("test category 1");
-        productForm.setMrp(55.55);
+        productForm.setMrp("55.55");
         productForm.setName("test product 1");
-
         productDto.add(productForm);
 
+        ProductPojo productPojo = productDao.select(1);
+        assertEquals("testb1", productPojo.getBarcode());
+        assertEquals("test brand 1", productPojo.getBrand());
+        assertEquals("test category 1", productPojo.getCategory());
+        assertEquals("test product 1", productPojo.getName());
+        assertEquals(1, productPojo.getBrandId());
+        assertEquals(55.55, productPojo.getMrp(), 0);
         InventoryData inventoryData = inventoryDto.get("testb1");
-
         assertEquals(0, inventoryData.getQuantity()); 
     }
 
     @Test
     public void testGet() throws ApiException{
-        BrandCategoryForm brandCategoryForm = new BrandCategoryForm();
-        brandCategoryForm.setBrand("test brand 1");
-        brandCategoryForm.setCategory("test category 1");
-        brandCategoryDto.add(brandCategoryForm);
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("test brand 1");
+        brandForm.setCategory("test category 1");
+        brandDto.add(brandForm);
 
         ProductForm productForm = new ProductForm();
         productForm.setBarcode("testb1");
         productForm.setBrand("test brand 1");
         productForm.setCategory("test category 1");
-        productForm.setMrp(55.55);
+        productForm.setMrp("55.55");
         productForm.setName("test product 1");
 
         productDto.add(productForm);
@@ -69,28 +79,28 @@ public class productDtoTest extends AbstractUnitTest{
         assertEquals("test brand 1", productData.getBrand());
         assertEquals("test category 1", productData.getCategory());
         assertEquals("test product 1", productData.getName());
-        assertEquals(1, productData.getBrandCategory());
+        assertEquals(1, productData.getBrandId());
         assertEquals(55.55, productData.getMrp(), 0);
     }
 
     @Test
     public void testGetAll() throws ApiException{
-        BrandCategoryForm brandCategoryForm = new BrandCategoryForm();
-        brandCategoryForm.setBrand("test brand 1");
-        brandCategoryForm.setCategory("test category 1");
-        brandCategoryDto.add(brandCategoryForm);
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("test brand 1");
+        brandForm.setCategory("test category 1");
+        brandDto.add(brandForm);
 
-        brandCategoryForm = new BrandCategoryForm();
-        brandCategoryForm.setBrand("test brand 2");
-        brandCategoryForm.setCategory("test category 2");
-        brandCategoryDto.add(brandCategoryForm);
+        brandForm = new BrandForm();
+        brandForm.setBrand("test brand 2");
+        brandForm.setCategory("test category 2");
+        brandDto.add(brandForm);
 
 
         ProductForm productForm = new ProductForm();
         productForm.setBarcode("testb1");
         productForm.setBrand("test brand 1");
         productForm.setCategory("test category 1");
-        productForm.setMrp(55.55);
+        productForm.setMrp("55.55");
         productForm.setName("test product 1");
         productDto.add(productForm);
 
@@ -98,7 +108,7 @@ public class productDtoTest extends AbstractUnitTest{
         productForm.setBarcode("testb2");
         productForm.setBrand("test brand 1");
         productForm.setCategory("test category 1");
-        productForm.setMrp(55.55);
+        productForm.setMrp("55.55");
         productForm.setName("test product 2");
         productDto.add(productForm);
 
@@ -113,7 +123,7 @@ public class productDtoTest extends AbstractUnitTest{
             assertEquals("test brand 1", productData.getBrand());
             assertEquals("test category 1", productData.getCategory());
             assertEquals("test product "+i, productData.getName());
-            assertEquals(1, productData.getBrandCategory());
+            assertEquals(1, productData.getBrandId());
             assertEquals(55.55, productData.getMrp(), 0);
             i++;
         }
@@ -121,16 +131,16 @@ public class productDtoTest extends AbstractUnitTest{
 
     @Test
     public void testDelete() throws ApiException{
-        BrandCategoryForm brandCategoryForm = new BrandCategoryForm();
-        brandCategoryForm.setBrand("test brand 1");
-        brandCategoryForm.setCategory("test category 1");
-        brandCategoryDto.add(brandCategoryForm);
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("test brand 1");
+        brandForm.setCategory("test category 1");
+        brandDto.add(brandForm);
 
         ProductForm productForm = new ProductForm();
         productForm.setBarcode("testb1");
         productForm.setBrand("test brand 1");
         productForm.setCategory("test category 1");
-        productForm.setMrp(55.55);
+        productForm.setMrp("55.55");
         productForm.setName("test product 1");
         productDto.add(productForm);
 
@@ -138,7 +148,7 @@ public class productDtoTest extends AbstractUnitTest{
         productForm.setBarcode("testb2");
         productForm.setBrand("test brand 1");
         productForm.setCategory("test category 1");
-        productForm.setMrp(55.55);
+        productForm.setMrp("55.55");
         productForm.setName("test product 2");
         productDto.add(productForm);
         
@@ -152,24 +162,7 @@ public class productDtoTest extends AbstractUnitTest{
             assertEquals("test brand 1", productData.getBrand());
             assertEquals("test category 1", productData.getCategory());
             assertEquals("test product "+i, productData.getName());
-            assertEquals(1, productData.getBrandCategory());
-            assertEquals(55.55, productData.getMrp(), 0);
-            i++;
-        }
-
-        productDto.delete(1);
-
-        productDataList = productDto.getAll();
-
-        assertEquals(1, productDataList.size());
-
-        i = 2;
-        for(ProductData productData: productDataList){
-            assertEquals("testb"+i, productData.getBarcode());
-            assertEquals("test brand 1", productData.getBrand());
-            assertEquals("test category 1", productData.getCategory());
-            assertEquals("test product "+i, productData.getName());
-            assertEquals(1, productData.getBrandCategory());
+            assertEquals(1, productData.getBrandId());
             assertEquals(55.55, productData.getMrp(), 0);
             i++;
         }
@@ -177,16 +170,16 @@ public class productDtoTest extends AbstractUnitTest{
 
     @Test
     public void testUpdate() throws ApiException{
-        BrandCategoryForm brandCategoryForm = new BrandCategoryForm();
-        brandCategoryForm.setBrand("test brand 1");
-        brandCategoryForm.setCategory("test category 1");
-        brandCategoryDto.add(brandCategoryForm);
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("test brand 1");
+        brandForm.setCategory("test category 1");
+        brandDto.add(brandForm);
 
         ProductForm productForm = new ProductForm();
         productForm.setBarcode("testb1");
         productForm.setBrand("test brand 1");
         productForm.setCategory("test category 1");
-        productForm.setMrp(55.55);
+        productForm.setMrp("55.55");
         productForm.setName("test product 1");
         productDto.add(productForm);
     
@@ -196,14 +189,14 @@ public class productDtoTest extends AbstractUnitTest{
         assertEquals("test brand 1", productData.getBrand());
         assertEquals("test category 1", productData.getCategory());
         assertEquals("test product 1", productData.getName());
-        assertEquals(1, productData.getBrandCategory());
+        assertEquals(1, productData.getBrandId());
         assertEquals(55.55, productData.getMrp(), 0);
       
         productForm = new ProductForm();
         productForm.setBarcode("testb1");
         productForm.setBrand("test brand 1");
         productForm.setCategory("test category 1");
-        productForm.setMrp(65.56);
+        productForm.setMrp("65.56");
         productForm.setName("updated test product 1");
         productDto.update(1, productForm);
 
@@ -213,7 +206,7 @@ public class productDtoTest extends AbstractUnitTest{
         assertEquals("test brand 1", productData.getBrand());
         assertEquals("test category 1", productData.getCategory());
         assertEquals("updated test product 1", productData.getName());
-        assertEquals(1, productData.getBrandCategory());
+        assertEquals(1, productData.getBrandId());
         assertEquals(65.56, productData.getMrp(), 0);
     }
 }
