@@ -216,18 +216,19 @@ function displayOrderList(data) {
 }
 
 // Create Order - Add items to the order list 
+var tmpCreateOrderId = 0; 
+var mapQuantity = new Map();
+var maptmpCreateOrderId = new Map();
+
 function addItemInList() {
-	let barcode = document.getElementById("add-order-item-form").elements[0].value;
-	let quanity = document.getElementById("add-order-item-form").elements[1].value;
-	let sellingPrice = document.getElementById("add-order-item-form").elements[2].value;
-	console.log(barcode); 
-	console.log(quanity);
-	console.log(sellingPrice);
-	if(barcode=='' || quanity=='' || sellingPrice==''){
+	var barcode = document.getElementById("inputBarcode").value;
+	var quantity = document.getElementById("inputQuantity").value;
+	var sellingPrice = document.getElementById("inputSellingPrice").value;
+	if(barcode=='' || quantity=='' || sellingPrice==''){
 		showError("Please fill all the fields!");
 		return;
 	}
-	if(quanity>availableQuantity){
+	if(quantity>availableQuantity){
 		showError("Not enough quantity available");
 		return;
 	}
@@ -235,7 +236,21 @@ function addItemInList() {
 		showError("Selling Price should be less than or equal to MRP");
 		return;
 	}
-	displayOrderItemList(barcode, quanity, sellingPrice);
+
+	if(mapQuantity.has(barcode+sellingPrice)){
+        quantity = parseInt(quantity) + parseInt(mapQuantity.get(barcode+sellingPrice));
+        deleteItem(maptmpCreateOrderId.get(barcode+sellingPrice));
+        mapQuantity.set(barcode+sellingPrice, quantity);
+		maptmpCreateOrderId.set(barcode+sellingPrice, tmpCreateOrderId);
+        displayOrderItemList(barcode, quantity, sellingPrice, tmpCreateOrderId);
+		tmpCreateOrderId = tmpCreateOrderId + 1;
+    }
+    else{
+        mapQuantity.set(barcode+sellingPrice, quantity);
+        maptmpCreateOrderId.set(barcode+sellingPrice, tmpCreateOrderId);
+        displayOrderItemList(barcode, quantity, sellingPrice, tmpCreateOrderId);
+        tmpCreateOrderId = tmpCreateOrderId + 1;
+    }
 
 	$("#add-order-item-form input[name=sellingPrice]").val("");
 	$("#add-order-item-form input[name=quantity]").val("");
@@ -244,23 +259,21 @@ function addItemInList() {
 	document.getElementById("available-quantity-field-create-order").innerHTML = '';
 }
 
-var tmpCreateOrderId = 0;
-function displayOrderItemList(barcode, quanity, sellingPrice) {
-	if(tmpCreateOrderId==0){
+function displayOrderItemList(barcode, quantity, sellingPrice, tmpId) {
+	if(tmpId==0){
 		var $thead = $('#order-item-table').find('thead');
 		var row = '<tr> <th scope="col">Barcode</th><th scope="col">Quantity</th> <th scope="col">Selling Price</th> <th scope="col">Actions</th></tr>';
 	    $thead.prepend(row);
 	}
 	var $tbody = $('#order-item-table').find('tbody');
-	var buttonHtml = '<button onclick="deleteItem(' + tmpCreateOrderId + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
-	var row = '<tr id="row' + tmpCreateOrderId + '">'
-		+ '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="barcode' + tmpCreateOrderId + '" id="barcode' + tmpCreateOrderId + '" placeholder="Enter Barcode" value="'+ barcode + '" readonly="true"></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpCreateOrderId + '" id="quantity' + tmpCreateOrderId + '" placeholder="Enter Quantity" value="'+ quanity + '" required></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="sellingPrice' + tmpCreateOrderId + '" id="sellingPrice' + tmpCreateOrderId + '" placeholder="Enter Price" value="'+ sellingPrice + '" required></div> </td>'
+	var buttonHtml = '<button onclick="deleteItem(' + tmpId + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
+	var row = '<tr id="row' + tmpId + '">'
+		+ '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="barcode' + tmpId + '" id="barcode' + tmpId + '" placeholder="Enter Barcode" value="'+ barcode + '" readonly="true"></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpId + '" id="quantity' + tmpId + '" placeholder="Enter Quantity" value="'+ quantity + '" required></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="sellingPrice' + tmpId + '" id="sellingPrice' + tmpId + '" placeholder="Enter Price" value="'+ sellingPrice + '" required></div> </td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
 	$tbody.prepend(row);
-	tmpCreateOrderId = tmpCreateOrderId + 1;
 }
 
 function deleteItem(tmpId) {
@@ -322,7 +335,6 @@ function viewOrderItems(data) {
 
 
 // Edit Order
-var orderId;
 function editOrder(id) {
 	$('#edit-order-modal').modal('toggle');
 	getProductsList();
@@ -343,6 +355,8 @@ function editOrder(id) {
 }
 
 var tmpEditOrderId = 0;
+var mapQuantityEditOrder = new Map();
+var maptmpEditOrderId = new Map();
 function editOrderItems(data) {
 	getProductsList();
 	var $tbody = $('#edit-order-item-table').find('tbody');
@@ -361,6 +375,8 @@ function editOrderItems(data) {
 			+ '<td> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderId" id="orderId" value="' + orderId + '"></input>'
 			+ '</tr>';
 		$tbody.append(row);
+		mapQuantityEditOrder.set((e.barcode)+(e.sellingPrice), (e.quantity));
+		maptmpEditOrderId.set((e.barcode)+(e.sellingPrice), tmpEditOrderId);
 		tmpEditOrderId = tmpEditOrderId + 1;
 	}
 }
@@ -420,19 +436,19 @@ function convertToArrayOfObjectToUpdate(data) {
 	return JSON.stringify(arr);
 }
 
-
+// Edit Order- add item in form
 function addIteminEditForm() {
-	let barcode = document.getElementById("edit-add-order-item-form").elements[0].value;
-	let quanity = document.getElementById("edit-add-order-item-form").elements[1].value;
-	let sellingPrice = document.getElementById("edit-add-order-item-form").elements[2].value;
+	var barcode = document.getElementById("inputBarcodeEditOrder").value;
+	var quantity = document.getElementById("inputQuantityEditOrder").value;
+	var sellingPrice = document.getElementById("inputSellingPriceEditOrder").value;
 	console.log(barcode); 
-	console.log(quanity);
+	console.log(quantity);
 	console.log(sellingPrice);
-	if(barcode=='' || quanity=='' || sellingPrice==''){
+	if(barcode=='' || quantity=='' || sellingPrice==''){
 		showError("Please fill all the fields!");
 		return;
 	}
-	if(quanity>availableQuantity){
+	if(quantity>availableQuantity){
 		showError("Not enough quantity available");
 		return;
 	}
@@ -441,24 +457,40 @@ function addIteminEditForm() {
 		return;
 	}
 
-	var $tbody = $('#edit-order-item-table').find('tbody');
-	var buttonHtml = '<button onclick="deleteItem(' + tmpEditOrderId + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
-	var row = '<tr id="row' + tmpEditOrderId + '">'
-	    + '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="barcode' + tmpEditOrderId + '" id="barcode' + tmpEditOrderId + '" value="' + barcode + '" readonly="true"></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpEditOrderId + '" id="quantity' + tmpEditOrderId + '" value="' + quanity + '"></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="sellingPrice' + tmpEditOrderId + '" id="sellingPrice' + tmpEditOrderId + '" value="' + sellingPrice + '"></div> </td>'
-		+ '<td>' + buttonHtml + '</td>'
-		+ '<td> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderItemId' + tmpEditOrderId + '" id="orderItemId' + tmpEditOrderId + '" value="0"></input>'
-		+ '<td> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderId" id="orderId" value="' + orderId + '"></input>'
-		+ '</tr>';
-	$tbody.prepend(row);
-	tmpEditOrderId = tmpEditOrderId + 1;
+	if(mapQuantityEditOrder.has(barcode+sellingPrice)){
+        quantity = parseInt(quantity) + parseInt(mapQuantityEditOrder.get(barcode+sellingPrice));
+        deleteItem(maptmpEditOrderId.get(barcode+sellingPrice));
+        mapQuantityEditOrder.set(barcode+sellingPrice, quantity);
+		maptmpEditOrderId.set(barcode+sellingPrice, tmpEditOrderId);
+        displayEditItemForm(barcode, quantity, sellingPrice, tmpEditOrderId);
+		tmpEditOrderId = tmpEditOrderId + 1;
+    }
+    else{
+        mapQuantityEditOrder.set(barcode+sellingPrice, quantity);
+        maptmpEditOrderId.set(barcode+sellingPrice, tmpEditOrderId);
+        displayEditItemForm(barcode, quantity, sellingPrice, tmpEditOrderId);
+        tmpCreateOrderId = tmpEditOrderId + 1;
+    }
 
 	$("#edit-add-order-item-form input[name=sellingPrice]").val("");
 	$("#edit-add-order-item-form input[name=quantity]").val("");
 	document.getElementById("inputBarcodeEditOrder").selectedIndex = 0;
 	document.getElementById("mrp-field-edit-order").innerHTML = '';
 	document.getElementById("available-quantity-field-edit-order").innerHTML = '';
+}
+
+function displayEditItemForm(barcode, quantity, sellingPrice, tmpId){
+	var $tbody = $('#edit-order-item-table').find('tbody');
+	var buttonHtml = '<button onclick="deleteItem(' + tmpId + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
+	var row = '<tr id="row' + tmpId + '">'
+	    + '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="barcode' + tmpId + '" id="barcode' + tmpId + '" value="' + barcode + '" readonly="true"></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpId + '" id="quantity' + tmpId + '" value="' + quantity + '"></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="sellingPrice' + tmpId + '" id="sellingPrice' + tmpId + '" value="' + sellingPrice + '"></div> </td>'
+		+ '<td>' + buttonHtml + '</td>'
+		+ '<td> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderItemId' + tmpId + '" id="orderItemId' + tmpId + '" value="0"></input>'
+		+ '<td> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderId" id="orderId" value="' + orderId + '"></input>'
+		+ '</tr>';
+	$tbody.prepend(row);
 }
 
 function cancelCreate() {
