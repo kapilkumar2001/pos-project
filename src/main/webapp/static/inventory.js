@@ -1,13 +1,13 @@
 function getInventoryUrl() {
-	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	let baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/inventory";
 }
 
 function updateInventory() {
-	var barcode = $("#inventory-edit-form input[name=barcode]").val();
-	var url = getInventoryUrl() + "/" + barcode;
-	var $form = $("#inventory-edit-form");
-	var json = toJson($form);
+	let barcode = $("#inventory-edit-form input[name=barcode]").val();
+	let url = getInventoryUrl() + "/" + barcode;
+	let $form = $("#inventory-edit-form");
+	let json = toJson($form);
 	$.ajax({
 		url: url,
 		type: 'PUT',
@@ -26,7 +26,7 @@ function updateInventory() {
 }
 
 function getInventoryList() {
-	var url = getInventoryUrl();
+	let url = getInventoryUrl();
 	$.ajax({
 		url: url,
 		type: 'GET',
@@ -42,17 +42,17 @@ function getInventoryList() {
 
 function displayInventoryList(data) {
 	data = data.reverse();
-	var $tbody = $('#inventory-table').find('tbody');
+	let $tbody = $('#inventory-table').find('tbody');
 	$tbody.empty();
-	var userRole = $('.user-role').find('span').text();
+	let userRole = $('.user-role').find('span').text();
 	let serialNumber = 1;
-	for (var i in data) {
-		var e = data[i];
-		var buttonHtml = '';
+	for (let i in data) {
+		let e = data[i];
+		let buttonHtml = '';
 		if(userRole=="supervisor"){
 		    buttonHtml += '<button onclick="displayEditInventory(\'' + e.barcode + '\')\" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
 		}
-		var row = '<tr>'
+		let row = '<tr>'
 			+ '<td>' + serialNumber + '</td>'
 			+ '<td>' + e.barcode + '</td>'
 			+ '<td>' + e.productName + '</td>'
@@ -66,8 +66,7 @@ function displayInventoryList(data) {
 }
 
 function displayEditInventory(barcode) {
-	var url = getInventoryUrl() + "/" + barcode;
-	console.log(url)
+	let url = getInventoryUrl() + "/" + barcode;
 	$.ajax({
 		url: url,
 		type: 'GET',
@@ -81,9 +80,9 @@ function displayEditInventory(barcode) {
 
 // FILE UPLOAD METHODS
 
-var fileData = [];
-var errorData = [];
-var processCount = 0;
+let fileData = [];
+let errorData = [];
+let processCount = 0;
 
 function processData() {
 	processCount = 0;
@@ -91,7 +90,7 @@ function processData() {
 	errorData = [];
 	$('#download-errors').remove();
 
-	var file = $('#inventoryFile')[0].files[0];
+	let file = $('#inventoryFile')[0].files[0];
 	if($('#inventoryFile')[0].files.length==0){
 		showError("Please Choose File");
 		return;
@@ -107,8 +106,8 @@ function readFileDataCallback(results) {
 		return;
 	}
 	if($('#upload-modal-data-row').length==0){
-		var $modalbody = $('#upload-inventory-modal').find('.modal-body');
-		var row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
+		let $modalbody = $('#upload-inventory-modal').find('.modal-body');
+		let row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
 		$modalbody.append(row);
 	}
 	uploadRows();
@@ -123,18 +122,18 @@ function uploadRows() {
 		return;
 	}
 	else if(processCount == fileData.length) {
-		var $modalfooter = $('#upload-inventory-modal').find('.modal-footer');
-		var htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
+		let $modalfooter = $('#upload-inventory-modal').find('.modal-footer');
+		let htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
 		$modalfooter.prepend(htmlButton);
 		getInventoryList();
 		return;
 	}
 
-	var row = fileData[processCount];
+	let row = fileData[processCount];
 	processCount++;
 
-	var json = JSON.stringify(row);
-	var url = getInventoryUrl();
+	let json = JSON.stringify(row);
+	let url = getInventoryUrl();
 	$.ajax({
 		url: url,
 		type: 'POST',
@@ -158,7 +157,7 @@ function downloadErrors() {
 }
 
 function resetUploadDialog() {
-	var $file = $('#inventoryFile');
+	let $file = $('#inventoryFile');
 	$file.val('');
 	$('#inventoryFileName').html("Choose File");
 	
@@ -177,8 +176,8 @@ function updateUploadDialog() {
 }
 
 function updateFileName() {
-	var $file = $('#inventoryFile');
-	var fileName = $file.val().split("\\")[2];
+	let $file = $('#inventoryFile');
+	let fileName = $file.val().split("\\")[2];
 	$('#inventoryFileName').html(fileName);
 }
 

@@ -1,12 +1,12 @@
 function getLoginUrl(){
-	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	let baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/session/login";
 }
 
 function login(){
-	var $form = $("#login-form");
-	var data = $form.serialize();
-	var url = getLoginUrl();
+	let $form = $("#login-form");
+	let data = $form.serialize();
+	let url = getLoginUrl();
 	$.ajax({
 	    url: url,
 	    type: 'POST',
