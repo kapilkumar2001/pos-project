@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.pos.model.InventoryData;
 import com.increff.pos.model.InventoryForm;
+import com.increff.pos.model.InventoryReportData;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,4 +43,10 @@ public class InventoryApiController {
 	public void update(@PathVariable String barcode, @RequestBody InventoryForm inventoryForm) throws ApiException {
 		dto.update(barcode, inventoryForm);
 	}
+
+	@ApiOperation(value = "Gets inventory report")
+    @RequestMapping(path = "/api/inventory/report/", method = RequestMethod.GET)
+    public List<InventoryReportData> getReport() throws ApiException {
+        return dto.getReportData();
+    }
 }
