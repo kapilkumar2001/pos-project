@@ -49,7 +49,6 @@ public class orderDtoTest extends AbstractUnitTest{
         brandForm.setBrand("test brand 1");
         brandForm.setCategory("test category 1");
         brandDto.add(brandForm);
-
         ProductForm productForm = new ProductForm();
         productForm.setBarcode("testb1");
         productForm.setBrand("test brand 1");
@@ -57,7 +56,6 @@ public class orderDtoTest extends AbstractUnitTest{
         productForm.setMrp("55.55");
         productForm.setName("test product 1");
         productDto.add(productForm);
-
         InventoryForm inventoryForm = new InventoryForm();
         inventoryForm.setBarcode("testb1");
         inventoryForm.setQuantity("54");
@@ -70,12 +68,10 @@ public class orderDtoTest extends AbstractUnitTest{
         productForm.setMrp("55.55");
         productForm.setName("test product 2");
         productDto.add(productForm);
-
         inventoryForm = new InventoryForm();
         inventoryForm.setBarcode("testb2");
         inventoryForm.setQuantity("54");
         inventoryDto.add(inventoryForm);
-
 
         List<OrderItemForm> orderItemFormList = new ArrayList<>();
 
@@ -93,17 +89,15 @@ public class orderDtoTest extends AbstractUnitTest{
 
         orderDto.createOrder(orderItemFormList);
 
-        OrderPojo orderPojo = orderDao.select(1);
-        assertEquals(1, orderPojo.getId());
-        assertEquals(StatusEnum.created, orderPojo.getStatus());
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectByOrderId(1);
+        List<OrderPojo> orderPojos = orderDao.selectAll();
+        assertEquals(StatusEnum.created, orderPojos.get(0).getStatus());
+        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectByOrderId(orderPojos.get(0).getId());
 
         int i=1;
         for(OrderItemPojo orderItemPojo: orderItemPojoList){
             assertEquals("testb"+i,orderItemPojo.getBarcode());
             assertEquals(i, orderItemPojo.getSellingPrice(), 0);
             assertEquals(i, orderItemPojo.getQuantity(), 0);
-            assertEquals(i, orderItemPojo.getId());
             i++;
         }
     }
@@ -123,7 +117,6 @@ public class orderDtoTest extends AbstractUnitTest{
         productForm.setMrp("55.55");
         productForm.setName("test product 1");
         productDto.add(productForm);
-
         InventoryForm inventoryForm = new InventoryForm();
         inventoryForm.setBarcode("testb1");
         inventoryForm.setQuantity("54");
@@ -136,7 +129,6 @@ public class orderDtoTest extends AbstractUnitTest{
         productForm.setMrp("55.55");
         productForm.setName("test product 2");
         productDto.add(productForm);
-
         inventoryForm = new InventoryForm();
         inventoryForm.setBarcode("testb2");
         inventoryForm.setQuantity("54");
@@ -158,8 +150,8 @@ public class orderDtoTest extends AbstractUnitTest{
 
         orderDto.createOrder(orderItemFormList);
 
-        OrderData orderData = orderDto.getOrderItems(1);
-        assertEquals(1, orderData.getId());
+        List<OrderPojo> orderPojos = orderDao.selectAll();
+        OrderData orderData = orderDto.getOrderItems(orderPojos.get(0).getId());
         assertEquals("created", orderData.getStatus());
         List<OrderItemData> orderItemDataList = orderData.getOrders();
 
@@ -168,7 +160,6 @@ public class orderDtoTest extends AbstractUnitTest{
             assertEquals("testb"+i,orderItemData.getBarcode());
             assertEquals(i, orderItemData.getSellingPrice(), 0);
             assertEquals(i, orderItemData.getQuantity(), 0);
-            assertEquals(i, orderItemData.getOrderItemId());
             i++;
         }
     }
@@ -189,7 +180,6 @@ public class orderDtoTest extends AbstractUnitTest{
         productForm.setMrp("55.55");
         productForm.setName("test product 1");
         productDto.add(productForm);
-
         InventoryForm inventoryForm = new InventoryForm();
         inventoryForm.setBarcode("testb1");
         inventoryForm.setQuantity("54");
@@ -202,7 +192,6 @@ public class orderDtoTest extends AbstractUnitTest{
         productForm.setMrp("55.55");
         productForm.setName("test product 2");
         productDto.add(productForm);
-
         inventoryForm = new InventoryForm();
         inventoryForm.setBarcode("testb2");
         inventoryForm.setQuantity("20");
@@ -215,7 +204,6 @@ public class orderDtoTest extends AbstractUnitTest{
         productForm.setMrp("65.23");
         productForm.setName("test product 3");
         productDto.add(productForm);
-
         inventoryForm = new InventoryForm();
         inventoryForm.setBarcode("testb3");
         inventoryForm.setQuantity("33");
@@ -237,8 +225,9 @@ public class orderDtoTest extends AbstractUnitTest{
 
         orderDto.createOrder(orderItemFormList);
 
-        OrderData orderData = orderDto.getOrderItems(1);
-        assertEquals(1, orderData.getId());
+        List<OrderPojo> orderPojos = orderDao.selectAll();
+        OrderData orderData = orderDto.getOrderItems(orderPojos.get(0).getId());
+        assertEquals(orderPojos.get(0).getId(), orderData.getId());
         assertEquals("created", orderData.getStatus());
         List<OrderItemData> orderItemDataList = orderData.getOrders();
 
@@ -247,7 +236,6 @@ public class orderDtoTest extends AbstractUnitTest{
             assertEquals("testb"+i,orderItemData.getBarcode());
             assertEquals(i, orderItemData.getSellingPrice(), 0);
             assertEquals(i, orderItemData.getQuantity(), 0);
-            assertEquals(i, orderItemData.getOrderItemId());
             i++;
         }
 
@@ -256,7 +244,7 @@ public class orderDtoTest extends AbstractUnitTest{
         orderItemForm.setBarcode("testb2");
         orderItemForm.setQuantity(4);
         orderItemForm.setSellingPrice(8);
-        orderItemForm.setOrderItemId(2);
+        orderItemForm.setOrderItemId(orderItemDataList.get(1).getOrderItemId());
         orderItemFormList.add(orderItemForm);
 
         orderItemForm = new OrderItemForm();
@@ -265,10 +253,11 @@ public class orderDtoTest extends AbstractUnitTest{
         orderItemForm.setSellingPrice(12);
         orderItemForm.setOrderItemId(0);
         orderItemFormList.add(orderItemForm);
-        orderDto.update(1, orderItemFormList);
 
-        orderData = orderDto.getOrderItems(1);
-        assertEquals(1, orderData.getId());
+        orderPojos = orderDao.selectAll();
+        orderDto.update(orderPojos.get(0).getId(), orderItemFormList);
+
+        orderData = orderDto.getOrderItems(orderPojos.get(0).getId());
         assertEquals("created", orderData.getStatus());
         orderItemDataList = orderData.getOrders();
 
@@ -277,7 +266,6 @@ public class orderDtoTest extends AbstractUnitTest{
             assertEquals("testb"+i,orderItemData.getBarcode());
             assertEquals(i*4, orderItemData.getSellingPrice(), 0);
             assertEquals(i*2, orderItemData.getQuantity(), 0);
-            assertEquals(i, orderItemData.getOrderItemId());
             i++;
         }
 
@@ -301,7 +289,6 @@ public class orderDtoTest extends AbstractUnitTest{
         productForm.setMrp("55.55");
         productForm.setName("test product 1");
         productDto.add(productForm);
-
         InventoryForm inventoryForm = new InventoryForm();
         inventoryForm.setBarcode("testb1");
         inventoryForm.setQuantity("54");
@@ -314,7 +301,6 @@ public class orderDtoTest extends AbstractUnitTest{
         productForm.setMrp("55.55");
         productForm.setName("test product 2");
         productDto.add(productForm);
-
         inventoryForm = new InventoryForm();
         inventoryForm.setBarcode("testb2");
         inventoryForm.setQuantity("20");
@@ -327,7 +313,6 @@ public class orderDtoTest extends AbstractUnitTest{
         productForm.setMrp("65.23");
         productForm.setName("test product 3");
         productDto.add(productForm);
-
         inventoryForm = new InventoryForm();
         inventoryForm.setBarcode("testb3");
         inventoryForm.setQuantity("33");
@@ -350,8 +335,9 @@ public class orderDtoTest extends AbstractUnitTest{
 
         orderDto.createOrder(orderItemFormList);
 
-        OrderData orderData = orderDto.getOrderItems(1);
-        assertEquals(1, orderData.getId());
+        List<OrderPojo> orderPojos = orderDao.selectAll();
+        OrderData orderData = orderDto.getOrderItems(orderPojos.get(0).getId());
+        assertEquals(orderPojos.get(0).getId(), orderData.getId());
         assertEquals("created", orderData.getStatus());
         List<OrderItemData> orderItemDataList = orderData.getOrders();
 
@@ -360,13 +346,12 @@ public class orderDtoTest extends AbstractUnitTest{
             assertEquals("testb"+i,orderItemData.getBarcode());
             assertEquals(i, orderItemData.getSellingPrice(), 0);
             assertEquals(i, orderItemData.getQuantity(), 0);
-            assertEquals(i, orderItemData.getOrderItemId());
             i++;
         }
 
-        orderDto.cancelOrder(1);
-        orderData = orderDto.getOrderItems(1);
-        assertEquals(1, orderData.getId());
+        orderDto.cancelOrder(orderPojos.get(0).getId());
+        orderData = orderDto.getOrderItems(orderPojos.get(0).getId());
+        assertEquals(orderPojos.get(0).getId(), orderData.getId());
         assertEquals("cancelled", orderData.getStatus());
 
         assertEquals(54, inventoryDto.get("testb1").getQuantity());

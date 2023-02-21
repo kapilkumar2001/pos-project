@@ -30,9 +30,9 @@ public class brandDtoTest extends AbstractUnitTest{
         brandForm.setCategory("test category 1");
         dto.add(brandForm);
 
-        BrandPojo brandPojo = dao.selectById(1);
-        assertEquals("test brand 1", brandPojo.getBrand());
-        assertEquals("test category 1", brandPojo.getCategory());
+        List<BrandPojo> brandPojos = dao.selectAll();
+        assertEquals("test brand 1", brandPojos.get(0).getBrand());
+        assertEquals("test category 1", brandPojos.get(0).getCategory());
 	}
 
     @Test
@@ -42,7 +42,9 @@ public class brandDtoTest extends AbstractUnitTest{
         brandForm.setCategory("test category 1");
         dto.add(brandForm);
 
-        BrandData brandData = dto.get(1);
+        List<BrandPojo> brandPojos = dao.selectAll();
+
+        BrandData brandData = dto.get(brandPojos.get(0).getId());
         assertEquals("test brand 1", brandData.getBrand());
         assertEquals("test category 1", brandData.getCategory());
     }
@@ -82,12 +84,12 @@ public class brandDtoTest extends AbstractUnitTest{
         brandForm.setCategory("test category 2");
         dto.add(brandForm);
 
-        List<BrandData> brandDataList = dto.getAll();
+        List<BrandPojo> brandPojos = dao.selectAll();
 
+        List<BrandData> brandDataList = dto.getAll();
         assertEquals(2, brandDataList.size());
 
         int i = 1;
-
         for(BrandData brandData: brandDataList){
             assertEquals("test brand "+i, brandData.getBrand());
             assertEquals("test category "+i, brandData.getCategory());
@@ -96,9 +98,9 @@ public class brandDtoTest extends AbstractUnitTest{
 
         brandForm.setBrand("updated test brand 1");
         brandForm.setCategory("updated test category 1");
-        dto.update(1, brandForm);
+        dto.update(brandPojos.get(0).getId(), brandForm);
 
-        BrandData brandData = dto.get(1);
+        BrandData brandData = dto.get(brandPojos.get(0).getId());
 
         assertEquals("updated test brand 1", brandData.getBrand());
         assertEquals("updated test category 1", brandData.getCategory());
