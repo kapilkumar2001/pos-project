@@ -1,11 +1,10 @@
 function getBrandsUrl(){
-	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	let baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/brand";
 }
 
 function getBrands(){
-	var url = getBrandsUrl();
-	console.log(url);
+	let url = getBrandsUrl();
 	$.ajax({
 	   url: url,
 	   type: 'GET',
@@ -18,13 +17,13 @@ function getBrands(){
 
 
 function displayBrands(data){
-	var $tbody = $('#brand-report-table').find('tbody');
+	let $tbody = $('#brand-report-table').find('tbody');
 	$tbody.empty();
 	let serialNo = 1;
 	data = data.reverse();
-	for(var i in data){
-		var e = data[i];
-		var row = '<tr>'
+	for(let i in data){
+		let e = data[i];
+		let row = '<tr>'
 		+ '<td>' + serialNo + '</td>'
 		+ '<td>' + e.brand + '</td>'
 		+ '<td>'  + e.category + '</td>'
@@ -35,7 +34,7 @@ function displayBrands(data){
 }
 
 function getBrandsReport(){
-	var url = getBrandsUrl();
+	let url = getBrandsUrl();
 	$.ajax({
 	  url: url,
 	  type: 'GET',
@@ -48,7 +47,7 @@ function getBrandsReport(){
 			tsv+=(row.brand + '	' + row.category);
 			tsv+='\n';
 		  }  
-        var hiddenElement = document.createElement('a');  
+        let hiddenElement = document.createElement('a');  
         hiddenElement.href = 'data:text/tsv;charset=utf-8,' + encodeURI(tsv);  
         hiddenElement.target = '_blank';  
         hiddenElement.download = 'brands-report.tsv';  

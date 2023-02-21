@@ -1,5 +1,5 @@
 function getBrandsUrl(){
-	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	let baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/brand";
 }
 
@@ -8,10 +8,9 @@ function addBrand(){
 			showError("Please fill all the fields");
 			return;
 	}
-
-	var $form = $("#brand-form");
-	var json = toJson($form);
-	var url = getBrandsUrl();
+	let $form = $("#brand-form");
+	let json = toJson($form);
+	let url = getBrandsUrl();
 	$.ajax({
 	    url: url,
 	    type: 'POST',
@@ -36,11 +35,10 @@ function updateBrand(){
 		showError("Please fill all the fields");
 		return;
     }
-
-	var id = $("#brand-edit-form input[name=id]").val();	
-	var url = getBrandsUrl() + "/" + id;
-	var $form = $("#brand-edit-form");
-	var json = toJson($form);
+	let id = $("#brand-edit-form input[name=id]").val();	
+	let url = getBrandsUrl() + "/" + id;
+	let $form = $("#brand-edit-form");
+	let json = toJson($form);
 	$.ajax({
 	  url: url,
 	  type: 'PUT',
@@ -59,8 +57,7 @@ function updateBrand(){
 }
 
 function getBrandsList(){
-	var url = getBrandsUrl();
-	console.log(url);
+	let url = getBrandsUrl();
 	$.ajax({
 	  url: url,
 	  type: 'GET',
@@ -71,20 +68,19 @@ function getBrandsList(){
 	});
 }
 
-
 function displayBrandsList(data){
-	var $tbody = $('#brands-table').find('tbody');
+	let $tbody = $('#brands-table').find('tbody');
 	$tbody.empty();
-	var userRole = $('.user-role').find('span').text();
+	let userRole = $('.user-role').find('span').text();
 	data = data.reverse();
 	let serialNumber = 1;
-	for(var i in data){
-		var e = data[i];
-		var buttonHtml = '';
+	for(let i in data){
+		let e = data[i];
+		let buttonHtml = '';
 		if(userRole=="supervisor"){
 			buttonHtml += '<button onclick="displayEditBrand(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
 		} 
-		var row = '<tr>'
+		let row = '<tr>'
 		+ '<td>' + serialNumber + '</td>'
 		+ '<td>' + e.brand + '</td>'
 		+ '<td>'  + e.category + '</td>'
@@ -97,7 +93,7 @@ function displayBrandsList(data){
 }
 
 function displayEditBrand(id){
-	var url = getBrandsUrl() + "/" + id;
+	let url = getBrandsUrl() + "/" + id;
 	$.ajax({
 	   url: url,
 	   type: 'GET',
@@ -121,17 +117,16 @@ function openAddBrandModal(){
 
 
 // FILE UPLOAD METHODS
-
-var fileData = [];
-var errorData = [];
-var processCount = 0;
+let fileData = [];
+let errorData = [];
+let processCount = 0;
 
 function processData(){
 	processCount = 0;
 	fileData = [];
 	errorData = [];
 	$('#download-errors').remove();
-	var file = $('#brandsFile')[0].files[0];
+	let file = $('#brandsFile')[0].files[0];
     if($('#brandsFile')[0].files.length==0){
 		showError("Please Choose File");
 		return;
@@ -146,8 +141,8 @@ function readFileDataCallback(results){
 		return;
 	}
 	if($('#upload-modal-data-row').length==0){
-		var $modalbody = $('#upload-brands-modal').find('.modal-body');
-		var row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
+		let $modalbody = $('#upload-brands-modal').find('.modal-body');
+		let row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
 		$modalbody.append(row);
 	}
 	uploadRows();
@@ -162,18 +157,18 @@ function uploadRows(){
 		return;
 	}
 	else if(processCount==fileData.length){
-		var $modalfooter = $('#upload-brands-modal').find('.modal-footer');
-		var htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
+		let $modalfooter = $('#upload-brands-modal').find('.modal-footer');
+		let htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
 		$modalfooter.prepend(htmlButton);
 		getBrandsList();
 		return;
 	}
 
-	var row = fileData[processCount];
+	let row = fileData[processCount];
 	processCount++;
 
-	var json = JSON.stringify(row);
-	var url = getBrandsUrl();
+	let json = JSON.stringify(row);
+	let url = getBrandsUrl();
 	$.ajax({
 	   url: url,
 	   type: 'POST',
@@ -197,7 +192,7 @@ function downloadErrors(){
 }
 
 function resetUploadDialog(){
-	var $file = $('#brandsFile');
+	let $file = $('#brandsFile');
 	$file.val('');
 	$('#brandsFileName').html("Choose File");
 
@@ -216,8 +211,8 @@ function updateUploadDialog(){
 }
 
 function updateFileName(){
-	var $file = $('#brandsFile');
-	var fileName = $file.val().split("\\")[2];
+	let $file = $('#brandsFile');
+	let fileName = $file.val().split("\\")[2];
 	$('#brandsFileName').html(fileName);
 }
 

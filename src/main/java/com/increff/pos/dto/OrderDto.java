@@ -1,6 +1,7 @@
 package com.increff.pos.dto;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -38,7 +39,7 @@ public class OrderDto {
     @Transactional(rollbackOn = ApiException.class)
     public void createOrder(List<OrderItemForm> orderItemFormList) throws ApiException{
 		OrderHelper.validateOrderItems(orderItemFormList);
-		List<OrderItemPojo> orderItemPojoList = convertToOrderItemPojo(orderItemFormList);
+		List<OrderItemPojo> orderItemPojoList = convertToCreateOrderItemPojo(orderItemFormList);
 		OrderPojo orderPojo = new OrderPojo();
 		OrderHelper.normalize(orderPojo);
         orderApi.createOrder(orderPojo);
@@ -96,29 +97,25 @@ public class OrderDto {
 			existingOrderItemIds.add(orderItemPojo.getId());
 		}
 
+		HashMap<String, OrderItemForm> orderItemMap = convertUpdateOrderFormToHashMap(orderItemFormList);
+
 		List<Integer> newOrderItemIds = new ArrayList<>();
 		List <OrderItemPojo> orderItemPojoList = new ArrayList<>();
-		for(OrderItemForm orderItemForm: orderItemFormList)
-		{
-			newOrderItemIds.add(orderItemForm.getOrderItemId());
+		for (HashMap.Entry<String, OrderItemForm> orderItem : orderItemMap.entrySet()) {
+			String[] sellingPriceAndBarcode = orderItem.getKey().split("_", 2);
+			double sellingPrice = Double.parseDouble(sellingPriceAndBarcode[0]);
+			String barcode = sellingPriceAndBarcode[1];
 
-			OrderItemPojo orderItemPojo = OrderHelper.convert(orderItemForm);
-			orderItemPojo.setOrderId(orderId);
-			orderItemPojo.setId(orderItemForm.getOrderItemId());
-			ProductPojo productPojo = productApi.getProductByBarcode(orderItemForm.getBarcode());
-			orderItemPojo.setProductId(productPojo.getId());
-			// reduce quantity in inventory
-			if(orderItemForm.getOrderItemId()!=0){
-				OrderItemPojo orderItemPojoTemp = orderItemApi.getOrderItembyItemId(orderItemForm.getOrderItemId());
-				int prevQuantity =  orderItemPojoTemp.getQuantity();
-				inventoryApi.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(),  orderItemPojo.getQuantity(), prevQuantity);
-			} else{ 
-				inventoryApi.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(),  orderItemPojo.getQuantity(), 0);
-			}
-			productApi.checkSellingPrice(orderItemForm.getBarcode(), orderItemForm.getSellingPrice());
+			newOrderItemIds.add(orderItem.getValue().getOrderItemId());
+			OrderItemForm orderItemForm = new OrderItemForm();
+			orderItemForm.setBarcode(barcode);
+			orderItemForm.setQuantity(orderItem.getValue().getQuantity());
+			orderItemForm.setSellingPrice(sellingPrice);
+			orderItemForm.setOrderItemId(orderItem.getValue().getOrderItemId());
+			OrderItemPojo orderItemPojo = convertToUpdateOrderItemPojo(orderId, orderItemForm);
 			orderItemPojoList.add(orderItemPojo);
 		}
-
+		
 		// increase quantity in inventory for deleted items
 		existingOrderItemIds.removeAll(newOrderItemIds);
 		for(Integer orderItemId: existingOrderItemIds) {
@@ -132,9 +129,20 @@ public class OrderDto {
 		orderItemApi.update(orderId, orderItemPojoList, orderItemIdstoRemove);
     }
 
-	public List<OrderItemPojo> convertToOrderItemPojo(List<OrderItemForm> orderItemFormList) throws ApiException{
+	public List<OrderItemPojo> convertToCreateOrderItemPojo(List<OrderItemForm> orderItemFormList) throws ApiException{
 		List<OrderItemPojo> orderItemPojoList = new ArrayList<>();
-		for(OrderItemForm orderItemForm: orderItemFormList){
+		
+		HashMap<String, Double> map = convertCreateOrderFormToHashMap(orderItemFormList);
+		for (HashMap.Entry<String,Double> orderItem : map.entrySet()) {
+			String[] sellingPriceAndBarcode = orderItem.getKey().split("_", 2);
+			double sellingPrice = Double.parseDouble(sellingPriceAndBarcode[0]);
+			String barcode = sellingPriceAndBarcode[1];
+
+			OrderItemForm orderItemForm = new OrderItemForm();
+			orderItemForm.setBarcode(barcode);
+			orderItemForm.setQuantity(orderItem.getValue());
+			orderItemForm.setSellingPrice(sellingPrice);
+
 			OrderItemPojo orderItemPojo = OrderHelper.convert(orderItemForm);
 			ProductPojo productPojo = productApi.getProductByBarcode(orderItemForm.getBarcode());
 			orderItemPojo.setProductId(productPojo.getId());
@@ -142,8 +150,26 @@ public class OrderDto {
 		    inventoryApi.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(), orderItemPojo.getQuantity(), 0);
 			productApi.checkSellingPrice(orderItemForm.getBarcode(), orderItemForm.getSellingPrice());
 			orderItemPojoList.add(orderItemPojo);
-		}    
+		} 
 		return orderItemPojoList;
+	}
+
+	public OrderItemPojo convertToUpdateOrderItemPojo(int orderId, OrderItemForm orderItemForm) throws ApiException{
+		OrderItemPojo orderItemPojo = OrderHelper.convert(orderItemForm);
+		orderItemPojo.setOrderId(orderId);
+		orderItemPojo.setId(orderItemForm.getOrderItemId());
+		ProductPojo productPojo = productApi.getProductByBarcode(orderItemForm.getBarcode());
+		orderItemPojo.setProductId(productPojo.getId());
+		// reduce quantity in inventory
+		if(orderItemForm.getOrderItemId()!=0){
+			OrderItemPojo orderItemPojoTemp = orderItemApi.getOrderItembyItemId(orderItemForm.getOrderItemId());
+			int prevQuantity =  orderItemPojoTemp.getQuantity();
+			inventoryApi.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(),  orderItemPojo.getQuantity(), prevQuantity);
+		} else{ 
+			inventoryApi.updateInventoryWhileCreatingOrder(orderItemPojo.getProductId(), orderItemPojo.getBarcode(),  orderItemPojo.getQuantity(), 0);
+		}
+		productApi.checkSellingPrice(orderItemForm.getBarcode(), orderItemForm.getSellingPrice());
+		return orderItemPojo;
 	}
 
 	public List<OrderItemData> convertToOrderItemData(List<OrderItemPojo> orderItemPojoList) throws ApiException{
@@ -156,6 +182,34 @@ public class OrderDto {
 			orderItemDataList.add(orderItemData);
 		}
 		return orderItemDataList;
+	}
+
+	public HashMap<String, Double> convertCreateOrderFormToHashMap(List<OrderItemForm> orderItemFormList){
+		HashMap<String, Double> map = new HashMap<>();
+		for(OrderItemForm orderItemForm: orderItemFormList){
+			if(map.containsKey(orderItemForm.getSellingPrice()+"_"+orderItemForm.getBarcode())){
+				double quantity = map.get(orderItemForm.getSellingPrice()+"_"+orderItemForm.getBarcode());
+				map.put(orderItemForm.getSellingPrice()+"_"+orderItemForm.getBarcode(), orderItemForm.getQuantity()+quantity);
+			}else{
+				map.put(orderItemForm.getSellingPrice()+"_"+orderItemForm.getBarcode(), orderItemForm.getQuantity());
+			}
+		}
+		return map;
+	}
+
+	public HashMap<String, OrderItemForm> convertUpdateOrderFormToHashMap(List<OrderItemForm> orderItemFormList){
+		HashMap<String, OrderItemForm> map = new HashMap<>();
+		for(OrderItemForm orderItemForm: orderItemFormList){
+			if(map.containsKey(orderItemForm.getSellingPrice()+"_"+orderItemForm.getBarcode())){
+				double quantity = map.get(orderItemForm.getSellingPrice()+"_"+orderItemForm.getBarcode()).getQuantity()+orderItemForm.getQuantity();
+				OrderItemForm tmpOrderItemForm = orderItemForm;
+				tmpOrderItemForm.setQuantity(quantity);
+				map.put(orderItemForm.getSellingPrice()+"_"+orderItemForm.getBarcode(), tmpOrderItemForm);
+			}else{
+				map.put(orderItemForm.getSellingPrice()+"_"+orderItemForm.getBarcode(), orderItemForm);
+			}
+		}
+		return map;
 	}
 
 }

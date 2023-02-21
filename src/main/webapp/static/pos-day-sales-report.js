@@ -1,16 +1,16 @@
 function getPosDaySaleReportUrl() {
-	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	let baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/posdaysales-report/";
 }
 
 function displayPosDaySale(data) {
-	var $tbody = $('#posdaysales-report-table').find('tbody');
+	let $tbody = $('#posdaysales-report-table').find('tbody');
 	$tbody.empty();
-	for (var i in data) {
-		var e = data[i];
-		var date = e.date;
-		var dateShow = date.join("/");
-		var row = '<tr>'
+	for (let i in data) {
+		let e = data[i];
+		let date = e.date;
+		let dateShow = date.join("/");
+		let row = '<tr>'
 			+ '<td>' + dateShow + '</td>'
 			+ '<td>' + e.invoicedOrdersCount + '</td>'
 			+ '<td>' + e.invoicedItemsCount + '</td>'
@@ -21,15 +21,14 @@ function displayPosDaySale(data) {
 }
 
 function getPosDaySaleByFilter(){
-	var startDate = $("#posdaysales-report-form input[name=startDate]").val();
-	var endDate = $("#posdaysales-report-form input[name=endDate]").val();
+	let startDate = $("#posdaysales-report-form input[name=startDate]").val();
+	let endDate = $("#posdaysales-report-form input[name=endDate]").val();
 
-	var url = getPosDaySaleReportUrl() + '?startdate=' + startDate + '&enddate=' + endDate;
+	let url = getPosDaySaleReportUrl() + '?startdate=' + startDate + '&enddate=' + endDate;
 	$.ajax({
 		url: url,
 		type: 'GET',
 		success: function (data) {
-			console.log(data);
 			displayPosDaySale(data);
 		},
 		error: handleAjaxError
@@ -37,22 +36,20 @@ function getPosDaySaleByFilter(){
 }
 
 function downloadPosDaySalesReport() {
-	var startDate = $("#posdaysales-report-form input[name=startDate]").val();
-	var endDate = $("#posdaysales-report-form input[name=endDate]").val();
+	let startDate = $("#posdaysales-report-form input[name=startDate]").val();
+	let endDate = $("#posdaysales-report-form input[name=endDate]").val();
 
-	var url = getPosDaySaleReportUrl() + '?startdate=' + startDate + '&enddate=' + endDate;
+	let url = getPosDaySaleReportUrl() + '?startdate=' + startDate + '&enddate=' + endDate;
 	$.ajax({
 		url: url,
 		type: 'GET',
 		success: function (data) {
-			console.log(data);
-			var tsv = 'Date	Invoiced Orders Count	Invoiced Items Count	Total Revenue\n';  
+			let tsv = 'Date	Invoiced Orders Count	Invoiced Items Count	Total Revenue\n';  
 			for(row of data){
 				tsv += (row.date + '	' + row.invoicedOrdersCount + '	' + row.invoicedItemsCount + '	' + row.totalRevenue);
-				// tsv+=Object.values(row).join('	');
 				tsv+='\n';
 			}  
-			var hiddenElement = document.createElement('a');  
+			let hiddenElement = document.createElement('a');  
 			hiddenElement.href = 'data:text/tsv;charset=utf-8,' + encodeURI(tsv);  
 			hiddenElement.target = '_blank';  
 			hiddenElement.download = 'pos-day-sales-report-'+ startDate + '-to-' + endDate +'.tsv';  
@@ -64,7 +61,7 @@ function downloadPosDaySalesReport() {
 
 function getDefaultDate(){
 	// today
-	var date = new Date();
+	let date = new Date();
 	var day = date.getDate();
 	var month = date.getMonth() + 1;
 	var year = date.getFullYear();
@@ -72,26 +69,24 @@ function getDefaultDate(){
 	if (month < 10) month = "0" + month;
 	if (day < 10) day = "0" + day;
 
-	var today = year + "-" + month + "-" + day;  
-	// document.getElementById("inputPosEndDate").required = true;     
+	let today = year + "-" + month + "-" + day;      
 	document.getElementById("inputPosEndDate").setAttribute("max", today);
 	document.getElementById("inputPosEndDate").value = today;
 
 	// one month before today
-	var m = date.getMonth()+1;
+	let m = date.getMonth()+1;
 	date.setMonth(date.getMonth());
 
 	if (date.getMonth() == m) date.setDate(0);
 	date.setHours(0, 0, 0, 0);
-	var day = date.getDate();
-	var month = date.getMonth();
-	var year = date.getFullYear();
+	day = date.getDate();
+	month = date.getMonth();
+	year = date.getFullYear();
 
 	if (month < 10) month = "0" + month;
 	if (day < 10) day = "0" + day;
 
-	var monthAgo = year + "-" + month + "-" + day;
-	// document.getElementById("inputPosStartDate").required = true;       
+	let monthAgo = year + "-" + month + "-" + day;      
 	document.getElementById("inputPosStartDate").setAttribute("max", today);
 	document.getElementById("inputPosStartDate").value = monthAgo;
 }
