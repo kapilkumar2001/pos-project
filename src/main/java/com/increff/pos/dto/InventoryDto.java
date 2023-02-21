@@ -1,11 +1,14 @@
 package com.increff.pos.dto;
 
 import com.increff.pos.api.ApiException;
+import com.increff.pos.api.BrandApi;
 import com.increff.pos.api.InventoryApi;
 import com.increff.pos.api.ProductApi;
 import com.increff.pos.helper.InventoryHelper;
 import com.increff.pos.model.InventoryData;
 import com.increff.pos.model.InventoryForm;
+import com.increff.pos.model.InventoryReportData;
+import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.pojo.ProductPojo;
 
@@ -16,13 +19,19 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 @Component
+@Transactional
 public class InventoryDto {
 
     @Autowired
     private InventoryApi api;
     @Autowired
+    private BrandApi brandApi;
+    @Autowired
     private ProductApi productApi;
+    
 
     public void add(InventoryForm inventoryForm) throws ApiException {
         InventoryHelper.validate(inventoryForm);
@@ -66,5 +75,34 @@ public class InventoryDto {
             throw new ApiException("Quantity should be a integer value");
         }
         api.update(productPojo.getId(), barcode,  quantity);
+    }
+
+    @Transactional
+    public List<InventoryReportData> getReportData() throws ApiException {
+        List<InventoryReportData> inventoryReportDataList = new ArrayList<>();
+
+        List<BrandPojo> brandPojoList = brandApi.getAll(); 
+
+        for(BrandPojo brandPojo: brandPojoList){
+
+            InventoryReportData inventoryReportData = new InventoryReportData();
+            inventoryReportData.setBrand(brandPojo.getBrand());
+            inventoryReportData.setCategory(brandPojo.getCategory());
+
+            int brandId = brandPojo.getId();
+
+            int quantity=0;
+            List<ProductPojo> productPojoList = productApi.getProductsByBrandId(brandId);
+
+            for(ProductPojo productPojo: productPojoList) {
+                InventoryPojo inventoryPojo = api.get(productPojo.getId(), productPojo.getBarcode());
+                quantity = quantity + inventoryPojo.getQuantity();
+            }
+
+            inventoryReportData.setQuantity(quantity);
+            inventoryReportDataList.add(inventoryReportData);
+        }
+
+        return inventoryReportDataList;
     }
 }

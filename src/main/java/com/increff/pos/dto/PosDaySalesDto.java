@@ -42,17 +42,22 @@ public class PosDaySalesDto {
         LocalDateTime dayEndTime = formatDateTime(time);
         LocalDateTime dayStartTime = formatDateTime(time.minusHours(23).minusMinutes(59).minusSeconds(59));
      
+        System.out.println(dayStartTime);
+        System.out.println(dayEndTime);
         List<OrderPojo> orderPojoList = orderApi.getOrderByTime(dayStartTime, dayEndTime);
+        System.out.println(orderPojoList.size());
+
         int invoicedOrdersCount = 0;
         int invoicedItemsCount = 0;
         int totalRevenue = 0;
         for(OrderPojo orderPojo: orderPojoList){
+            System.out.println(orderPojo.getStatus());
             if((orderPojo.getStatus()).equals(StatusEnum.invoiced)){
                 invoicedOrdersCount+=1;
                 List<OrderItemPojo> orderItemPojoList =  orderItemApi.getOrderItemsbyOrderId(orderPojo.getId());  
-                invoicedItemsCount += orderItemPojoList.size();
                 for(OrderItemPojo orderItemPojo: orderItemPojoList){
-                    totalRevenue += orderItemPojo.getSellingPrice();
+                    invoicedItemsCount += orderItemPojo.getQuantity();
+                    totalRevenue += (orderItemPojo.getSellingPrice()*orderItemPojo.getQuantity());
                 }
             }
         }

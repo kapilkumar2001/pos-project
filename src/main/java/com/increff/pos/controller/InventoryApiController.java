@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.increff.pos.model.InventoryData;
 import com.increff.pos.model.InventoryForm;
+import com.increff.pos.model.InventoryReportData;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,8 +30,6 @@ public class InventoryApiController {
 		return dto.get(barcode);
 	}
 
-	//todo check path variables and url prams differnce
-	
 	@ApiOperation(value = "Gets list of all inventories")
 	@RequestMapping(path = "", method = RequestMethod.GET)
 	public List<InventoryData> getAll() throws ApiException {
@@ -42,4 +41,10 @@ public class InventoryApiController {
 	public void update(@PathVariable String barcode, @RequestBody InventoryForm inventoryForm) throws ApiException {
 		dto.update(barcode, inventoryForm);
 	}
+
+	@ApiOperation(value = "Gets inventory report")
+    @RequestMapping(path = "/report/", method = RequestMethod.GET)
+    public List<InventoryReportData> getReport() throws ApiException {
+        return dto.getReportData();
+    }
 }
