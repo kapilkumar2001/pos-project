@@ -1,20 +1,20 @@
 function getSalesReportUrl() {
-	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	let baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/sales-report";
 }
 function getBrandUrl(){
-	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	let baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/brand";
 }
 
 function getSalesReport() {
-	var brandField = document.querySelector("#inputBrand");
-    var brand = brandField.value;
-	var categoryField = document.querySelector("#inputCategory");
-    var category = categoryField.value;
-    var startDate = $("#sales-report-form input[name=startDate]").val();
-    var endDate = $("#sales-report-form input[name=endDate]").val();
-	var url = getSalesReportUrl() + '/?startdate=' + startDate + '&enddate=' + endDate + '&brand=' + brand + '&category=' + category;
+	let brandField = document.querySelector("#inputBrand");
+    let brand = brandField.value;
+	let categoryField = document.querySelector("#inputCategory");
+    let category = categoryField.value;
+    let startDate = $("#sales-report-form input[name=startDate]").val();
+    let endDate = $("#sales-report-form input[name=endDate]").val();
+	let url = getSalesReportUrl() + '/?startdate=' + startDate + '&enddate=' + endDate + '&brand=' + brand + '&category=' + category;
 	
 	$.ajax({
 		url: url,
@@ -27,15 +27,15 @@ function getSalesReport() {
 }
 
 function displaySalesReport(data) {
-	var $tbody = $('#sales-report-table').find('tbody');
+	let $tbody = $('#sales-report-table').find('tbody');
 	$tbody.empty();
-    var tmp = 1;
+    let tmp = 1;
 	data.sort(function(a, b) { 
 		return b.revenue - a.revenue;
 	})
-	for (var i in data) {
-		var e = data[i];
-		var row = '<tr>'
+	for (let i in data) {
+		let e = data[i];
+		let row = '<tr>'
 			+ '<td>' + tmp + '</td>'
 			+ '<td>' + e.brand + '</td>'
 			+ '<td>' + e.category + '</td>'
@@ -48,13 +48,13 @@ function displaySalesReport(data) {
 }
 
 function downloadSalesReport(){
-	var brandField = document.querySelector("#inputBrand");
-	var brand = brandField.value;
-	var categoryField = document.querySelector("#inputCategory");
-	var category = categoryField.value;
-	var startDate = $("#sales-report-form input[name=startDate]").val();
-	var endDate = $("#sales-report-form input[name=endDate]").val();
-	var url = getSalesReportUrl() + '/?startdate=' + startDate + '&enddate=' + endDate + '&brand=' + brand + '&category=' + category;
+	let brandField = document.querySelector("#inputBrand");
+	let brand = brandField.value;
+	let categoryField = document.querySelector("#inputCategory");
+	let category = categoryField.value;
+	let startDate = $("#sales-report-form input[name=startDate]").val();
+	let endDate = $("#sales-report-form input[name=endDate]").val();
+	let url = getSalesReportUrl() + '/?startdate=' + startDate + '&enddate=' + endDate + '&brand=' + brand + '&category=' + category;
 	
 	$.ajax({
 		url: url,
@@ -63,12 +63,12 @@ function downloadSalesReport(){
 			data.sort(function(a, b) { 
 				return b.revenue - a.revenue;
 			})
-			var tsv = 'Brand	Category	Quantity	Revenue\n';  
+			let tsv = 'Brand	Category	Quantity	Revenue\n';  
 			for(row of data){
 				tsv+=Object.values(row).join('	');
 				tsv+='\n';
 			}  
-			var hiddenElement = document.createElement('a');  
+			let hiddenElement = document.createElement('a');  
 			hiddenElement.href = 'data:text/tsv;charset=utf-8,' + encodeURI(tsv);  
 			hiddenElement.target = '_blank';  
 			hiddenElement.download = 'sales-report-' + startDate + '-to-' + endDate + '.tsv';  
@@ -79,7 +79,7 @@ function downloadSalesReport(){
 }
 
 function getBrandsList() {
-	var url = getBrandUrl()+ "/get-brands";
+	let url = getBrandUrl()+ "/get-brands";
 	$.ajax({
 		url: url,
 		type: 'GET',
@@ -91,20 +91,20 @@ function getBrandsList() {
 }
 
 function displayBrandList(data) {
-	var $select = $('#inputBrand');
+	let $select = $('#inputBrand');
 	$select.empty();
-	var row = "<option value='' selected>All</option>";
+	let row = "<option value='' selected>All</option>";
 	$select.append(row);
 	data = Array.from(new Set(data));
-	for (var i in data) {
-		var e = data[i];
+	for (let i in data) {
+		let e = data[i];
 		row = "<option value='" +e+ "'>" + e + "</option>";
 		$select.append(row);
 	}
 }
 
 function getCategories() {
-	var url = getBrandUrl()+ "/get-categories/";
+	let url = getBrandUrl()+ "/get-categories/";
 	$.ajax({
 		url: url,
 		type: 'GET',
@@ -116,68 +116,50 @@ function getCategories() {
 }
 
 function displayCategoryList(data) {
-	var $select1 = $('#inputCategory');
+	let $select1 = $('#inputCategory');
 	$select1.empty();
-	var row = "<option value='' selected>All</option>";
+	let row = "<option value='' selected>All</option>";
 	$select1.append(row);
 	data = Array.from(new Set(data));
-	for (var i in data) {
-		var e = data[i];
-		var row = "<option value='" +e+ "'>" + e + "</option>";
+	for (let i in data) {
+		let e = data[i];
+		let row = "<option value='" +e+ "'>" + e + "</option>";
 		$select1.append(row);
 	}
 }
 
 function getDefaultDate(){
 	// today
-	var date = new Date();
+	let date = new Date();
 	var day = date.getDate();
 	var month = date.getMonth() + 1;
 	var year = date.getFullYear();
 	if (month < 10) month = "0" + month;
 	if (day < 10) day = "0" + day;
-	var today = year + "-" + month + "-" + day;     
-	// document.getElementById("inputEndDate").required = true;  
+	let today = year + "-" + month + "-" + day;     
 	document.getElementById("inputEndDate").setAttribute("max", today);
 	document.getElementById("inputEndDate").value = today;
 
 	// one month before today
-	var m = date.getMonth()+1;
+	let m = date.getMonth()+1;
 	date.setMonth(date.getMonth());
 	if (date.getMonth() == m) date.setDate(0);
 	date.setHours(0, 0, 0, 0);
-	var day = date.getDate();
-	var month = date.getMonth();
-	var year = date.getFullYear();
+	day = date.getDate();
+	month = date.getMonth();
+	year = date.getFullYear();
 	if (month < 10) month = "0" + month;
 	if (day < 10) day = "0" + day;
-	var monthAgo = year + "-" + month + "-" + day;   
-	// document.getElementById("inputStartDate").required = true;    
+	let monthAgo = year + "-" + month + "-" + day;      
 	document.getElementById("inputStartDate").setAttribute("max", today);
 	document.getElementById("inputStartDate").value = monthAgo;
 }
-
-// function enableFilterandDownload(){
-// 	$('#apply-filter').click(getSalesReport);
-//     $('#download-tsv-sales-report').click(downloadSalesReport);
-// }
 
 function init() {
 	getDefaultDate();
     getSalesReport();
     getBrandsList();
     getCategories();
-	// document.getElementById("sales-report-form").addEventListener("submit", function(e){
-	// 	console.log("value= " + document.getElementById("inputStartDate").value);
-	// 	if(document.getElementById("inputStartDate").value=="" || document.getElementById("inputEndDate").value==""){
-	// 		console.log("this");
-	// 	    return false;
-	// 	}
-	// 	else{
-	// 		e.preventDefault();
-	// 		enableFilterandDownload();
-	// 	}
-	// });
 	$('#apply-filter').click(getSalesReport);
     $('#download-tsv-sales-report').click(downloadSalesReport);
 }

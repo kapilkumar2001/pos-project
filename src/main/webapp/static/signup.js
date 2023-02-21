@@ -1,5 +1,5 @@
 function getSignUpUrl(){
-	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	let baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/session/signup";
 }
 
@@ -8,9 +8,9 @@ function signUp(){
         return;
     }
 
-	var $form = $("#signup-form");
-	var data = $form.serialize();
-	var url = getSignUpUrl();
+	let $form = $("#signup-form");
+	let data = $form.serialize();
+	let url = getSignUpUrl();
 	$.ajax({
 	    url: url,
 	    type: 'POST',
@@ -31,11 +31,8 @@ function validateEmailandPassword(){
     let mail = $("#signup-form input[name=email]").val();
     let password = $("#signup-form input[name=password]").val();
 
-    console.log(mail + " : " + password);
-    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if(mail.match(mailformat)){
-        console.log("valid");
-    }
+    let mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if(mail.match(mailformat)){}
     else{
         showError("Invalid email address!");
         return false;

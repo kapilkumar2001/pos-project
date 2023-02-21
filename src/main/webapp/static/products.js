@@ -1,9 +1,9 @@
 function getProductUrl() {
-	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	let baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/product";
 }
 function getBrandsUrl() {
-	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	let baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/brand";
 }
 
@@ -16,10 +16,10 @@ function addProduct(event) {
 			return;
 	}
 
-	var $form = $("#product-form");
-	var json = toJson($form);
+	let $form = $("#product-form");
+	let json = toJson($form);
 
-	var url = getProductUrl();
+	let url = getProductUrl();
 	$.ajax({
 		url: url,
 		type: 'POST',
@@ -50,10 +50,10 @@ function updateProduct() {
 			return;
 	}
 
-	var $form = $("#product-edit-form");
-	var json = toJson($form);
-	var id = $("#product-edit-form input[name=id]").val();
-	var url = getProductUrl() + "/" + id;
+	let $form = $("#product-edit-form");
+	let json = toJson($form);
+	let id = $("#product-edit-form input[name=id]").val();
+	let url = getProductUrl() + "/" + id;
 	$.ajax({
 		url: url,
 		type: 'PUT',
@@ -72,7 +72,7 @@ function updateProduct() {
 }
 
 function getProductList() {
-	var url = getProductUrl();
+	let url = getProductUrl();
 	$.ajax({
 		url: url,
 		type: 'GET',
@@ -84,7 +84,7 @@ function getProductList() {
 }
 
 function getBrandsList() {
-	var url = getBrandsUrl() + "/get-brands";
+	let url = getBrandsUrl() + "/get-brands";
 	$.ajax({
 		url: url,
 		type: 'GET',
@@ -96,8 +96,8 @@ function getBrandsList() {
 }
 
 function getCategoriesList() {
-	var currSelectedBrand = $('#inputBrand').val();
-	var url = getBrandsUrl() + "/get-categories/" + currSelectedBrand;
+	let currSelectedBrand = $('#inputBrand').val();
+	let url = getBrandsUrl() + "/get-categories/" + currSelectedBrand;
 	$.ajax({
 		url: url,
 		type: 'GET',
@@ -112,18 +112,18 @@ function getCategoriesList() {
 // UI display methods
 
 function displayProductList(data) {
-	var $tbody = $('#product-table').find('tbody');
+	let $tbody = $('#product-table').find('tbody');
 	$tbody.empty();
-	var userRole = $('.user-role').find('span').text();
+	let userRole = $('.user-role').find('span').text();
 	data = data.reverse();
 	let serialNumber = 1;
-	for (var i in data) {
-		var e = data[i];
-		var buttonHtml = '';
+	for (let i in data) {
+		let e = data[i];
+		let buttonHtml = '';
 		if (userRole == "supervisor") {
 			buttonHtml += '<button onclick="displayEditProduct(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
 		}
-		var row = '<tr>'
+		let row = '<tr>'
 			+ '<td>' + serialNumber + '</td>'
 			+ '<td>' + e.barcode + '</td>'
 			+ '<td>' + e.name + '</td>'
@@ -139,32 +139,32 @@ function displayProductList(data) {
 }
 
 function displayBrandList(data) {
-	var $select = $('#inputBrand');
+	let $select = $('#inputBrand');
 	$select.empty();
-	var row = "<option value='' disabled selected style='display: none'>Please Choose Brand</option>";
+	let row = "<option value='' disabled selected style='display: none'>Please Choose Brand</option>";
 	$select.append(row);
 	data = Array.from(new Set(data));
-	for (var i in data) {
-		var e = data[i];
+	for (let i in data) {
+		let e = data[i];
 		row = "<option value='" + e + "'>" + e + "</option>";
 		$select.append(row);
 	}
 }
 
 function displayCategoryList(data) {
-	var $select1 = $('#inputCategory');
+	let $select1 = $('#inputCategory');
 	$select1.empty();
-	var row = "<option value='' disabled selected style='display: none'>Please Choose</option>";
+	let row = "<option value='' disabled selected style='display: none'>Please Choose</option>";
 	$select1.append(row);
-	for (var i in data) {
-		var e = data[i];
-		var row = "<option value='" + e + "'>" + e + "</option>";
+	for (let i in data) {
+		let e = data[i];
+		let row = "<option value='" + e + "'>" + e + "</option>";
 		$select1.append(row);
 	}
 }
 
 function displayEditProduct(id) {
-	var url = getProductUrl() + "/" + id;
+	let url = getProductUrl() + "/" + id;
 	$.ajax({
 		url: url,
 		type: 'GET',
@@ -195,9 +195,9 @@ function openAddProductModal() {
 
 // FILE UPLOAD METHODS
 
-var fileData = [];
-var errorData = [];
-var processCount = 0;
+let fileData = [];
+let errorData = [];
+let processCount = 0;
 
 function processData() {
 	processCount = 0;
@@ -205,7 +205,7 @@ function processData() {
 	errorData = [];
 	$('#download-errors').remove();
 
-	var file = $('#productFile')[0].files[0];
+	let file = $('#productFile')[0].files[0];
 	if($('#productFile')[0].files.length==0){
 		showError("Please Choose File");
 		return;
@@ -220,8 +220,8 @@ function readFileDataCallback(results) {
 		return;
 	}
 	if($('#upload-modal-data-row').length==0){
-		var $modalbody = $('#upload-product-modal').find('.modal-body');
-		var row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
+		let $modalbody = $('#upload-product-modal').find('.modal-body');
+		let row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
 		$modalbody.append(row);
 	}
 	uploadRows();
@@ -236,19 +236,19 @@ function uploadRows() {
 		return;
 	}
 	else if(processCount==fileData.length){
-		var $modalfooter = $('#upload-product-modal').find('.modal-footer');
-		var htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
+		let $modalfooter = $('#upload-product-modal').find('.modal-footer');
+		let htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
 		$modalfooter.prepend(htmlButton);
 	
 		getProductList();
 		return;
 	}
 
-	var row = fileData[processCount];
+	let row = fileData[processCount];
 	processCount++;
 
-	var json = JSON.stringify(row);
-	var url = getProductUrl();
+	let json = JSON.stringify(row);
+	let url = getProductUrl();
 	$.ajax({
 		url: url,
 		type: 'POST',
@@ -272,7 +272,7 @@ function downloadErrors() {
 }
 
 function resetUploadDialog() {
-	var $file = $('#productFile');
+	let $file = $('#productFile');
 	$file.val('');
 	$('#productFileName').html("Choose File");
 	
@@ -291,8 +291,8 @@ function updateUploadDialog() {
 }
 
 function updateFileName() {
-	var $file = $('#productFile');
-	var fileName = $file.val().split("\\")[2];
+	let $file = $('#productFile');
+	let fileName = $file.val().split("\\")[2];
 	$('#productFileName').html(fileName);
 }
 

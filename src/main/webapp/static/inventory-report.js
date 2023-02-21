@@ -1,16 +1,14 @@
 function getInventoryReportUrl() {
-	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	let baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/inventory-report/";
 }
 
 function getInventory() {
-	var url = getInventoryReportUrl();
-    console.log(url);
+	let url = getInventoryReportUrl();
 	$.ajax({
 		url: url,
 		type: 'GET',
 		success: function (data) {
-            console.log(data);
 			displayInventory(data);
 		},
 		error: handleAjaxError
@@ -18,13 +16,13 @@ function getInventory() {
 }
 
 function displayInventory(data) {
-	var $tbody = $('#inventory-report-table').find('tbody');
+	let $tbody = $('#inventory-report-table').find('tbody');
 	$tbody.empty();
-    var tmp = 1;
+    let tmp = 1;
 	data = data.reverse();
-	for (var i in data) {
-		var e = data[i];
-		var row = '<tr>'
+	for (let i in data) {
+		let e = data[i];
+		let row = '<tr>'
 			+ '<td>' + tmp + '</td>'
 			+ '<td>' + e.brand + '</td>'
 			+ '<td>' + e.category + '</td>'
@@ -36,18 +34,18 @@ function displayInventory(data) {
 }
 
 function getInventoryReport() {
-	var url = getInventoryReportUrl();
+	let url = getInventoryReportUrl();
 	$.ajax({
 		url: url,
 		type: 'GET',
 		success: function (data) {
 			data = data.reverse();
-			var tsv = 'Brand	Category	Quantity\n';  
+			let tsv = 'Brand	Category	Quantity\n';  
 			for(row of data){
 				tsv+=Object.values(row).join('	');
 				tsv+='\n';
 			}  
-			var hiddenElement = document.createElement('a');  
+			let hiddenElement = document.createElement('a');  
 			hiddenElement.href = 'data:text/tsv;charset=utf-8,' + encodeURI(tsv);  
 			hiddenElement.target = '_blank';  
 			hiddenElement.download = 'inventory-report.tsv';  
