@@ -11,13 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.increff.pos.api.AbstractUnitTest;
 import com.increff.pos.api.ApiException;
 import com.increff.pos.dao.OrderDao;
-import com.increff.pos.dao.PosDaySalesDao;
 import com.increff.pos.model.BrandForm;
 import com.increff.pos.model.InventoryForm;
 import com.increff.pos.model.OrderItemForm;
 import com.increff.pos.model.ProductForm;
 import com.increff.pos.pojo.OrderPojo;
-import com.increff.pos.pojo.PosDaySalesPojo;
 import com.increff.pos.util.StatusEnum;
 
 public class posDaySalesDtoTest extends AbstractUnitTest{
@@ -36,8 +34,6 @@ public class posDaySalesDtoTest extends AbstractUnitTest{
     private InvoiceDto invoiceDto;
     @Autowired
     private PosDaySalesDto dto;
-    @Autowired
-    private PosDaySalesDao dao;
     
     @Test
     public void testCreate() throws ApiException{
@@ -226,7 +222,7 @@ public class posDaySalesDtoTest extends AbstractUnitTest{
         dto.create();
 
         // TODO: check this 
-        
+
         // List<PosDaySalesPojo> posDaySalesPojos = dao.selectAll();
         // expected 37, 2, 7279.49
         // assertEquals(37, posDaySalesPojos.get(0).getInvoicedItemsCount());

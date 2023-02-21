@@ -7,7 +7,6 @@ function signUp(){
 	if(validateEmailandPassword()==false){
         return;
     }
-
 	let $form = $("#signup-form");
 	let data = $form.serialize();
 	let url = getSignUpUrl();
@@ -30,7 +29,6 @@ function signUp(){
 function validateEmailandPassword(){
     let mail = $("#signup-form input[name=email]").val();
     let password = $("#signup-form input[name=password]").val();
-
     let mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if(mail.match(mailformat)){}
     else{

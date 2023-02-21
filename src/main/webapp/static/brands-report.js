@@ -15,7 +15,6 @@ function getBrands(){
 	});
 }
 
-
 function displayBrands(data){
 	let $tbody = $('#brand-report-table').find('tbody');
 	$tbody.empty();

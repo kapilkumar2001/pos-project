@@ -22,7 +22,6 @@ function login(){
 	return false;
 }
 
-
 function init(){
 	$('#login-button').click(login);
 }

@@ -37,9 +37,7 @@ function getInventoryList() {
 	});
 }
 
-
 //UI display methods
-
 function displayInventoryList(data) {
 	data = data.reverse();
 	let $tbody = $('#inventory-table').find('tbody');
@@ -79,7 +77,6 @@ function displayEditInventory(barcode) {
 
 
 // FILE UPLOAD METHODS
-
 let fileData = [];
 let errorData = [];
 let processCount = 0;

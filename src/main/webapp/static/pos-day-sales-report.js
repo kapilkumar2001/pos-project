@@ -65,10 +65,8 @@ function getDefaultDate(){
 	var day = date.getDate();
 	var month = date.getMonth() + 1;
 	var year = date.getFullYear();
-
 	if (month < 10) month = "0" + month;
 	if (day < 10) day = "0" + day;
-
 	let today = year + "-" + month + "-" + day;      
 	document.getElementById("inputPosEndDate").setAttribute("max", today);
 	document.getElementById("inputPosEndDate").value = today;
@@ -76,16 +74,13 @@ function getDefaultDate(){
 	// one month before today
 	let m = date.getMonth()+1;
 	date.setMonth(date.getMonth());
-
 	if (date.getMonth() == m) date.setDate(0);
 	date.setHours(0, 0, 0, 0);
 	day = date.getDate();
 	month = date.getMonth();
 	year = date.getFullYear();
-
 	if (month < 10) month = "0" + month;
 	if (day < 10) day = "0" + day;
-
 	let monthAgo = year + "-" + month + "-" + day;      
 	document.getElementById("inputPosStartDate").setAttribute("max", today);
 	document.getElementById("inputPosStartDate").value = monthAgo;

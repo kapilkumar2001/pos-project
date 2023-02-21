@@ -7,7 +7,6 @@ function getBrandsUrl() {
 	return baseUrl + "/api/brand";
 }
 
-// API Calls
 function addProduct(event) {
 	if(($("#product-form input[name=name]").val()=="") || ($("#product-form input[name=mrp]").val()=="") || 
 	    ($("#product-form input[name=barcode]").val()=="") || (document.getElementById("inputBrand").selectedIndex == 0) || 
@@ -15,10 +14,8 @@ function addProduct(event) {
 			showError("Please fill all the fields");
 			return;
 	}
-
 	let $form = $("#product-form");
 	let json = toJson($form);
-
 	let url = getProductUrl();
 	$.ajax({
 		url: url,
@@ -49,7 +46,6 @@ function updateProduct() {
 			showError("Please fill all the fields");
 			return;
 	}
-
 	let $form = $("#product-edit-form");
 	let json = toJson($form);
 	let id = $("#product-edit-form input[name=id]").val();
@@ -108,9 +104,7 @@ function getCategoriesList() {
 	});
 }
 
-
 // UI display methods
-
 function displayProductList(data) {
 	let $tbody = $('#product-table').find('tbody');
 	$tbody.empty();
@@ -192,9 +186,7 @@ function openAddProductModal() {
 }
 
 
-
 // FILE UPLOAD METHODS
-
 let fileData = [];
 let errorData = [];
 let processCount = 0;
