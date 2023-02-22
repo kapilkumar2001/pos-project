@@ -22,11 +22,11 @@ body {
 .required:after {
     content:" *";
     color: red;
-  }
-
-input[type="date"]::-webkit-clear-button {
-    display: none !important;
 }
 
 
+.btn:focus, .btn.focus, button:focus {
+    outline: none;
+    box-shadow: none !important;
+}
 

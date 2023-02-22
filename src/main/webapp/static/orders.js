@@ -492,8 +492,8 @@ function cancelCreate() {
 	$("#add-order-item-form input[name=sellingPrice]").val("");
 	$("#add-order-item-form input[name=quantity]").val("");
 	document.getElementById("inputBarcode").selectedIndex = 0;
-	document.getElementById("mrp-field").innerHTML = '';
-	document.getElementById("available-quantity-field").innerHTML = '';
+	document.getElementById("mrp-field-create-order").innerHTML = '';
+	document.getElementById("available-quantity-field-create-order").innerHTML = '';
 	$('#create-order-modal').modal('hide');
 }
 
