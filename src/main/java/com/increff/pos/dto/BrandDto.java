@@ -68,8 +68,8 @@ public class BrandDto {
     public List<String> getCategoriesByBrand(String brand){
         List<BrandPojo> brandPojoList = api.getByBrand(brand);
         List<String> categoriesList = new ArrayList<String>();
-        for (BrandPojo p : brandPojoList) {
-            categoriesList.add(p.getCategory());
+        for (BrandPojo brandPojo : brandPojoList) {
+            categoriesList.add(brandPojo.getCategory());
         }
         return categoriesList;
     }

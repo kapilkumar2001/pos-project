@@ -42,18 +42,18 @@ public class UserController {
 	
 	@ApiOperation(value = "Logs in a user")
 	@RequestMapping(path = "/session/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public ModelAndView login(HttpServletRequest req, LoginForm f) throws ApiException {
-		UserPojo p = api.get(f.getEmail());
-		boolean authenticated = (Objects.nonNull(p) && Objects.equals(p.getPassword(), f.getPassword()));
+	public ModelAndView login(HttpServletRequest req, LoginForm loginForm) throws ApiException {
+		UserPojo userPojo = api.get(loginForm.getEmail());
+		boolean authenticated = (Objects.nonNull(userPojo) && Objects.equals(userPojo.getPassword(), loginForm.getPassword()));
 		if (!authenticated) {
 			throw new ApiException("Invalid username or password");
 		}
 		
-		Authentication authentication = convertUserPojo(p);
+		Authentication authentication = convertUserPojo(userPojo);
 		HttpSession session = req.getSession(true);
 		SecurityUtil.createContext(session);
 		SecurityUtil.setAuthentication(authentication);
-		info.setRole(p.getRole());
+		info.setRole(userPojo.getRole());
 		return new ModelAndView("redirect:/ui/brands");
 	}
 
@@ -67,8 +67,8 @@ public class UserController {
     @ApiOperation(value = "Adds a user")
 	@RequestMapping(path = "/session/signup", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ModelAndView addUser(HttpServletRequest req, UserForm form) throws ApiException {
-		UserPojo p = convertUserForm(form);
-		api.add(p);
+		UserPojo userPojo = convertUserForm(form);
+		api.add(userPojo);
 		return new ModelAndView("redirect:/site/login");
 	}
 
@@ -77,38 +77,38 @@ public class UserController {
 	public List<UserData> getAllUser() {
 		List<UserPojo> list = api.getAll();
 		List<UserData> list2 = new ArrayList<UserData>();
-		for (UserPojo p : list) {
-			list2.add(convert(p));
+		for (UserPojo userPojo : list) {
+			list2.add(convert(userPojo));
 		}
 		return list2;
 	}
 
-	private static UserData convert(UserPojo p) {
-		UserData d = new UserData();
-		d.setEmail(p.getEmail());
-		d.setRole(p.getRole());
-		d.setId(p.getId());
-		return d;
+	private static UserData convert(UserPojo userPojo) {
+		UserData userData = new UserData();
+		userData.setEmail(userPojo.getEmail());
+		userData.setRole(userPojo.getRole());
+		userData.setId(userPojo.getId());
+		return userData;
 	}
 
-	private UserPojo convertUserForm(UserForm f) {
-		UserPojo p = new UserPojo();
-		p.setEmail(f.getEmail());
-		if(f.getEmail().equals(email)){
-			p.setRole("supervisor");	
+	private UserPojo convertUserForm(UserForm userForm) {
+		UserPojo userPojo = new UserPojo();
+		userPojo.setEmail(userForm.getEmail());
+		if(userForm.getEmail().equals(email)){
+			userPojo.setRole("supervisor");	
 		} else{
-			p.setRole("operator");
+			userPojo.setRole("operator");
 		}
-		p.setPassword(f.getPassword());
-		return p;
+		userPojo.setPassword(userForm.getPassword());
+		return userPojo;
 	}
 
-	private static Authentication convertUserPojo(UserPojo p) {
+	private static Authentication convertUserPojo(UserPojo userPojo) {
 		UserPrincipal principal = new UserPrincipal();
-		principal.setEmail(p.getEmail());
-		principal.setId(p.getId());
+		principal.setEmail(userPojo.getEmail());
+		principal.setId(userPojo.getId());
 		ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-		authorities.add(new SimpleGrantedAuthority(p.getRole()));
+		authorities.add(new SimpleGrantedAuthority(userPojo.getRole()));
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, null,
 				authorities);
 		return token;
