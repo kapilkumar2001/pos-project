@@ -18,13 +18,13 @@ public class UserApi {
 	private UserDao dao;
 
 	@Transactional
-	public void add(UserPojo p) throws ApiException {
-		normalize(p);
-		UserPojo existing = dao.select(p.getEmail());
+	public void add(UserPojo userPojo) throws ApiException {
+		normalize(userPojo);
+		UserPojo existing = dao.select(userPojo.getEmail());
 		if (Objects.nonNull(existing)) {
 			throw new ApiException("User with given email already exists");
 		}
-		dao.insert(p);
+		dao.insert(userPojo);
 	}
 
 	@Transactional(rollbackOn = ApiException.class)
@@ -37,8 +37,8 @@ public class UserApi {
 		return dao.selectAll();
 	}
 
-	protected static void normalize(UserPojo p) {
-		p.setEmail(p.getEmail().toLowerCase().trim());
-		p.setRole(p.getRole().toLowerCase().trim());
+	protected static void normalize(UserPojo userPojo) {
+		userPojo.setEmail(userPojo.getEmail().toLowerCase().trim());
+		userPojo.setRole(userPojo.getRole().toLowerCase().trim());
 	}
 }

@@ -19,8 +19,8 @@ public class BrandApi{
 	
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(BrandPojo brandPojo) throws ApiException {
-		BrandPojo p = dao.getBrandByBrandAndCategory(brandPojo.getBrand(), brandPojo.getCategory());
-		if(Objects.nonNull(p)) {
+		BrandPojo tmpPojo = dao.getBrandByBrandAndCategory(brandPojo.getBrand(), brandPojo.getCategory());
+		if(Objects.nonNull(tmpPojo)) {
 			throw new ApiException("This brand-category combination already exists");
 		}
 		dao.insert(brandPojo);
@@ -48,8 +48,8 @@ public class BrandApi{
 	
 	@Transactional(rollbackOn  = ApiException.class)
 	public void update(int id, BrandPojo brandPojo) throws ApiException {
-		BrandPojo p = dao.getBrandByBrandAndCategory(brandPojo.getBrand(), brandPojo.getCategory());
-		if(Objects.nonNull(p) && (p.getId()!=id)) {
+		BrandPojo tmpPojo = dao.getBrandByBrandAndCategory(brandPojo.getBrand(), brandPojo.getCategory());
+		if(Objects.nonNull(tmpPojo) && (tmpPojo.getId()!=id)) {
 			throw new ApiException("This brand-category combination already exists");
 		}
 		BrandPojo newPojo = getCheck(id);
