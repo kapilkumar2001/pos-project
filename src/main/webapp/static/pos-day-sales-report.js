@@ -4,8 +4,8 @@ function getPosDaySaleReportUrl() {
 }
 
 function displayPosDaySale(data) {
-	let $tbody = $('#posdaysales-report-table').find('tbody');
-	$tbody.empty();
+	let tbody = $('#posdaysales-report-table').find('tbody');
+	tbody.empty();
 	for (let i in data) {
 		let e = data[i];
 		let date = e.date;
@@ -16,7 +16,7 @@ function displayPosDaySale(data) {
 			+ '<td>' + e.invoicedItemsCount + '</td>'
 			+ '<td>' + e.totalRevenue + '</td>'
 			+ '</tr>';
-		$tbody.append(row);
+		tbody.append(row);
 	}
 }
 
@@ -62,13 +62,11 @@ function downloadPosDaySalesReport() {
 function getDefaultDate(){
 	// today
 	let date = new Date();
-	var day = date.getDate();
-	var month = date.getMonth() + 1;
-	var year = date.getFullYear();
-
+	let day = date.getDate();
+	let month = date.getMonth() + 1;
+	let year = date.getFullYear();
 	if (month < 10) month = "0" + month;
 	if (day < 10) day = "0" + day;
-
 	let today = year + "-" + month + "-" + day;      
 	document.getElementById("inputPosEndDate").setAttribute("max", today);
 	document.getElementById("inputPosEndDate").value = today;
@@ -76,16 +74,13 @@ function getDefaultDate(){
 	// one month before today
 	let m = date.getMonth()+1;
 	date.setMonth(date.getMonth());
-
 	if (date.getMonth() == m) date.setDate(0);
 	date.setHours(0, 0, 0, 0);
 	day = date.getDate();
 	month = date.getMonth();
 	year = date.getFullYear();
-
 	if (month < 10) month = "0" + month;
 	if (day < 10) day = "0" + day;
-
 	let monthAgo = year + "-" + month + "-" + day;      
 	document.getElementById("inputPosStartDate").setAttribute("max", today);
 	document.getElementById("inputPosStartDate").value = monthAgo;

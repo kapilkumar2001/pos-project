@@ -31,10 +31,8 @@ public class ProductDto {
     public void add(ProductForm productForm) throws ApiException {
         ProductHelper.validate(productForm);
         ProductPojo productPojo = ProductHelper.convert(productForm);
-        int brandId = brandApi.getBrandByBrandAndCategory(productPojo.getBrand(), productPojo.getCategory()).getId();
-        productPojo.setBrandId(brandId);
-        ProductHelper.normalize(productPojo);
-
+        productPojo.setBrandId(brandApi.getBrandByBrandAndCategory(productPojo.getBrand(), productPojo.getCategory()).getId());
+        ProductHelper.normalize(productPojo);//todo think of edge case when brand and category's case is different from what is expected
         api.add(productPojo);
         addInventory(productPojo);
     }
@@ -58,6 +56,9 @@ public class ProductDto {
         }
         return productDataList;
     }
+
+    //todo check java streams, filter in gfg
+    //todo check genertionn type
 
     public ProductData getByBarcode(String barcode) throws ApiException {
         if(StringUtil.isEmpty(barcode)){

@@ -4,8 +4,8 @@ function getLoginUrl(){
 }
 
 function login(){
-	let $form = $("#login-form");
-	let data = $form.serialize();
+	let form = $("#login-form");
+	let data = form.serialize();
 	let url = getLoginUrl();
 	$.ajax({
 	    url: url,
@@ -19,9 +19,7 @@ function login(){
 	    },
 	    error: handleAjaxError
 	});
-	return false;
 }
-
 
 function init(){
 	$('#login-button').click(login);

@@ -1,5 +1,5 @@
-function toJson($form){
-    let serialized = $form.serializeArray();
+function toJson(form){
+    let serialized = form.serializeArray();
     let s = '';
     let data = {};
     for(s in serialized){

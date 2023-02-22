@@ -8,8 +8,8 @@ function addBrand(){
 			showError("Please fill all the fields");
 			return;
 	}
-	let $form = $("#brand-form");
-	let json = toJson($form);
+	let form = $("#brand-form");
+	let json = toJson(form);
 	let url = getBrandsUrl();
 	$.ajax({
 	    url: url,
@@ -27,7 +27,6 @@ function addBrand(){
 	    },
 	    error: handleAjaxError
 	});
-	return false;
 }
 
 function updateBrand(){
@@ -37,8 +36,8 @@ function updateBrand(){
     }
 	let id = $("#brand-edit-form input[name=id]").val();	
 	let url = getBrandsUrl() + "/" + id;
-	let $form = $("#brand-edit-form");
-	let json = toJson($form);
+	let form = $("#brand-edit-form");
+	let json = toJson(form);
 	$.ajax({
 	  url: url,
 	  type: 'PUT',
@@ -53,7 +52,6 @@ function updateBrand(){
 	  },
 	  error: handleAjaxError
 	});
-	return false;
 }
 
 function getBrandsList(){
@@ -69,8 +67,8 @@ function getBrandsList(){
 }
 
 function displayBrandsList(data){
-	let $tbody = $('#brands-table').find('tbody');
-	$tbody.empty();
+	let tbody = $('#brands-table').find('tbody');
+	tbody.empty();
 	let userRole = $('.user-role').find('span').text();
 	data = data.reverse();
 	let serialNumber = 1;
@@ -86,7 +84,7 @@ function displayBrandsList(data){
 		+ '<td>'  + e.category + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
-		$tbody.append(row);
+		tbody.append(row);
 		serialNumber+=1;
 	}
 	$('[data-toggle="tooltip"]').tooltip()
@@ -141,9 +139,9 @@ function readFileDataCallback(results){
 		return;
 	}
 	if($('#upload-modal-data-row').length==0){
-		let $modalbody = $('#upload-brands-modal').find('.modal-body');
+		let modalbody = $('#upload-brands-modal').find('.modal-body');
 		let row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
-		$modalbody.append(row);
+		modalbody.append(row);
 	}
 	uploadRows();
 }
@@ -157,9 +155,9 @@ function uploadRows(){
 		return;
 	}
 	else if(processCount==fileData.length){
-		let $modalfooter = $('#upload-brands-modal').find('.modal-footer');
+		let modalfooter = $('#upload-brands-modal').find('.modal-footer');
 		let htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
-		$modalfooter.prepend(htmlButton);
+		modalfooter.prepend(htmlButton);
 		getBrandsList();
 		return;
 	}
@@ -167,6 +165,10 @@ function uploadRows(){
 	let row = fileData[processCount];
 	processCount++;
 
+	if(row.brand==undefined || row.category==undefined){
+		showError("Invalid file");
+		return;
+	}
 	let json = JSON.stringify(row);
 	let url = getBrandsUrl();
 	$.ajax({
@@ -192,8 +194,8 @@ function downloadErrors(){
 }
 
 function resetUploadDialog(){
-	let $file = $('#brandsFile');
-	$file.val('');
+	let file = $('#brandsFile');
+	file.val('');
 	$('#brandsFileName').html("Choose File");
 
 	processCount = 0;
@@ -211,8 +213,8 @@ function updateUploadDialog(){
 }
 
 function updateFileName(){
-	let $file = $('#brandsFile');
-	let fileName = $file.val().split("\\")[2];
+	let file = $('#brandsFile');
+	let fileName = file.val().split("\\")[2];
 	$('#brandsFileName').html(fileName);
 }
 
@@ -220,7 +222,6 @@ function displayUploadData(){
  	resetUploadDialog(); 	
 	$('#upload-brands-modal').modal('toggle');
 }
-
 
 function init(){
 	getBrandsList()

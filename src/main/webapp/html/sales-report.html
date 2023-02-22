@@ -1,67 +1,67 @@
 <!doctype html>
 <html lang="en">
-    <head th:replace="snippets.html :: name_head"></head>
-    <body>
-        <nav th:replace="snippets.html :: name_app_navbar"></nav>
-        <div class="container">
-            <div>
-                <h4 class="my-4">Sales Report</h4>
-                <div class="row my-4">
-                  <div class="col-12 d-flex justify-content-between">
-                    <form class="form-inline" id="sales-report-form">
-                      <div class="form-group mr-3">
-                        <label for="inputStartDate" class="col-form-label required">Start Date</label>
-                        <input type="date" class="form-control form-control-sm ml-2" name="startDate" id="inputStartDate" required>
-                      </div>
-                      <div class="form-group mr-3">
-                        <label for="inputEndDate" class="col-form-label required">End Date</label>
-                        <input type="date" class="form-control form-control-sm ml-2" name="endDate" id="inputEndDate" required>
-                      </div>
-                      <div class="form-group mr-3">
-                          <label for="inputBrand" class="col-form-label">Brand</label>
-                          <select class="form-control form-control-sm ml-2" name="brand" id="inputBrand"></select>
-                      </div>
-                      <div class="form-group mr-3">
-                          <label for="inputCategory" class="col-form-label">Category</label>
-                          <select class="form-control form-control-sm ml-2" name="category" id="inputCategory">
-                              <option value='' selected>All</option>
-                          </select>
-                      </div>
-                      <button type="button" class="btn btn-primary btn-sm mr-3" id="apply-filter">
-                        <i class='fa fa-filter' style='font-size:16px;color:white;padding-right: 4px;'></i>
-                        Apply
-                      </button>
-                      <button type="button" class="btn btn-primary btn-sm" id="download-tsv-sales-report">
-                          <i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>
-                          Download
-                      </button>
-                    </form>
-                  </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="card shadow-4-strong rounded-5 overflow-hidden">
-                        <div class="card-body">
-                            <table class="table table-striped" id="sales-report-table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">S.No.</th>
-                                        <th scope="col">Brand</th>
-                                        <th scope="col">Category</th>
-                                        <th scope="col">Quantity</th>
-                                        <th scope="col">Revenue</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+  <head th:replace="snippets.html :: name_head"></head>
+  <body>
+    <nav th:replace="snippets.html :: name_app_navbar"></nav>
+    <div class="container">
+      <div>
+        <h4 class="my-4">Sales Report</h4>
+        <div class="row my-4">
+          <div class="col-12 d-flex justify-content-between">
+            <form class="form-inline" id="sales-report-form">
+              <div class="form-group mr-3">
+                <label for="inputStartDate" class="col-form-label required">Start Date</label>
+                <input type="date" class="form-control form-control-sm ml-2" name="startDate" id="inputStartDate" required>
+              </div>
+              <div class="form-group mr-3">
+                <label for="inputEndDate" class="col-form-label required">End Date</label>
+                <input type="date" class="form-control form-control-sm ml-2" name="endDate" id="inputEndDate" required>
+              </div>
+              <div class="form-group mr-3">
+                  <label for="inputBrand" class="col-form-label">Brand</label>
+                  <select class="form-control form-control-sm ml-2" name="brand" id="inputBrand"></select>
+              </div>
+              <div class="form-group mr-3">
+                  <label for="inputCategory" class="col-form-label">Category</label>
+                  <select class="form-control form-control-sm ml-2" name="category" id="inputCategory">
+                      <option value='' selected>All</option>
+                  </select>
+              </div>
+              <button type="button" class="btn btn-primary btn-sm mr-3" id="apply-filter">
+                <i class='fa fa-search' style='font-size:16px;color:white;padding-right: 4px;'></i>
+                Search
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" id="download-tsv-sales-report">
+                  <i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>
+                  Download
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+            <div class="card shadow-4-strong rounded-5 overflow-hidden">
+                <div class="card-body">
+                    <table class="table table-striped" id="sales-report-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">S.No.</th>
+                                <th scope="col">Brand</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Revenue</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        <footer th:replace="snippets.html :: name_footer"></footer>
-        <script th:src="@{/static/sales-report.js}"></script>
-    </body>
+      </div>
+    </div>
+    <footer th:replace="snippets.html :: name_footer"></footer>
+    <script th:src="@{/static/sales-report.js}"></script>
+  </body>
 </html>

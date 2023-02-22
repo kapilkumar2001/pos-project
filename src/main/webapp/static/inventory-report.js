@@ -16,8 +16,8 @@ function getInventory() {
 }
 
 function displayInventory(data) {
-	let $tbody = $('#inventory-report-table').find('tbody');
-	$tbody.empty();
+	let tbody = $('#inventory-report-table').find('tbody');
+	tbody.empty();
     let tmp = 1;
 	data = data.reverse();
 	for (let i in data) {
@@ -28,7 +28,7 @@ function displayInventory(data) {
 			+ '<td>' + e.category + '</td>'
 			+ '<td>' + e.quantity + '</td>'
 			+ '</tr>';
-		$tbody.append(row);
+		tbody.append(row);
         tmp=tmp+1;
 	}
 }

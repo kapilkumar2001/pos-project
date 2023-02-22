@@ -15,10 +15,9 @@ function getBrands(){
 	});
 }
 
-
 function displayBrands(data){
-	let $tbody = $('#brand-report-table').find('tbody');
-	$tbody.empty();
+	let tbody = $('#brand-report-table').find('tbody');
+	tbody.empty();
 	let serialNo = 1;
 	data = data.reverse();
 	for(let i in data){
@@ -28,7 +27,7 @@ function displayBrands(data){
 		+ '<td>' + e.brand + '</td>'
 		+ '<td>'  + e.category + '</td>'
 		+ '</tr>';
-        $tbody.append(row);
+        tbody.append(row);
 		serialNo+=1;
 	}
 }
