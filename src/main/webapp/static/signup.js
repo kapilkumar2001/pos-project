@@ -7,8 +7,8 @@ function signUp(){
 	if(validateEmailandPassword()==false){
         return;
     }
-	let $form = $("#signup-form");
-	let data = $form.serialize();
+	let form = $("#signup-form");
+	let data = form.serialize();
 	let url = getSignUpUrl();
 	$.ajax({
 	    url: url,
@@ -18,8 +18,12 @@ function signUp(){
             'Content-Type': 'application/x-www-form-urlencoded'
           },	  	   
 	    success: function(response) {
-            window.location.replace("http://localhost:9000/pos/site/login")
-            showSuccess("User registered successfully. Login now!");
+            Swal.fire({
+                icon: 'success',
+                text: "User registered successfully. Login now!",
+              }).then(function(){
+                window.location.replace("http://localhost:9000/pos/site/login")
+            });
 	    },
 	    error: handleAjaxError
 	});

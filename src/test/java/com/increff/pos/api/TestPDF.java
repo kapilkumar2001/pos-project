@@ -2,6 +2,8 @@ package com.increff.pos.api;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,10 @@ public class TestPDF {
         OrderFopObject orderFopObject = new OrderFopObject();
         
         orderFopObject.setOrderId(0);
-        orderFopObject.setTime("2023-01-17 06:03:23");
+        LocalDateTime dateTime = LocalDateTime.now();
+        String pattern = "dd MMM yyyy hh:mm a";
+
+        orderFopObject.setTime(dateTime.format(DateTimeFormatter.ofPattern(pattern)));
         
         DecimalFormat dec = new DecimalFormat("#.##");
         double totalAmount = 0;

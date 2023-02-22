@@ -2,6 +2,7 @@ function getSalesReportUrl() {
 	let baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/sales-report";
 }
+
 function getBrandUrl(){
 	let baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/brand";
@@ -15,7 +16,6 @@ function getSalesReport() {
     let startDate = $("#sales-report-form input[name=startDate]").val();
     let endDate = $("#sales-report-form input[name=endDate]").val();
 	let url = getSalesReportUrl() + '/?startdate=' + startDate + '&enddate=' + endDate + '&brand=' + brand + '&category=' + category;
-	
 	$.ajax({
 		url: url,
 		type: 'GET',
@@ -27,8 +27,8 @@ function getSalesReport() {
 }
 
 function displaySalesReport(data) {
-	let $tbody = $('#sales-report-table').find('tbody');
-	$tbody.empty();
+	let tbody = $('#sales-report-table').find('tbody');
+	tbody.empty();
     let tmp = 1;
 	data.sort(function(a, b) { 
 		return b.revenue - a.revenue;
@@ -42,7 +42,7 @@ function displaySalesReport(data) {
 			+ '<td>' + e.quantity + '</td>'
             + '<td>' + e.revenue + '</td>'
 			+ '</tr>';
-		$tbody.append(row);
+		tbody.append(row);
         tmp=tmp+1;
 	}
 }
@@ -91,15 +91,15 @@ function getBrandsList() {
 }
 
 function displayBrandList(data) {
-	let $select = $('#inputBrand');
-	$select.empty();
+	let select = $('#inputBrand');
+	select.empty();
 	let row = "<option value='' selected>All</option>";
-	$select.append(row);
+	select.append(row);
 	data = Array.from(new Set(data));
 	for (let i in data) {
 		let e = data[i];
 		row = "<option value='" +e+ "'>" + e + "</option>";
-		$select.append(row);
+		select.append(row);
 	}
 }
 
@@ -116,24 +116,24 @@ function getCategories() {
 }
 
 function displayCategoryList(data) {
-	let $select1 = $('#inputCategory');
-	$select1.empty();
+	let select1 = $('#inputCategory');
+	select1.empty();
 	let row = "<option value='' selected>All</option>";
-	$select1.append(row);
+	select1.append(row);
 	data = Array.from(new Set(data));
 	for (let i in data) {
 		let e = data[i];
 		let row = "<option value='" +e+ "'>" + e + "</option>";
-		$select1.append(row);
+		select1.append(row);
 	}
 }
 
 function getDefaultDate(){
 	// today
 	let date = new Date();
-	var day = date.getDate();
-	var month = date.getMonth() + 1;
-	var year = date.getFullYear();
+	let day = date.getDate();
+	let month = date.getMonth() + 1;
+	let year = date.getFullYear();
 	if (month < 10) month = "0" + month;
 	if (day < 10) day = "0" + day;
 	let today = year + "-" + month + "-" + day;     

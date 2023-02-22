@@ -6,8 +6,8 @@ function getInventoryUrl() {
 function updateInventory() {
 	let barcode = $("#inventory-edit-form input[name=barcode]").val();
 	let url = getInventoryUrl() + "/" + barcode;
-	let $form = $("#inventory-edit-form");
-	let json = toJson($form);
+	let form = $("#inventory-edit-form");
+	let json = toJson(form);
 	$.ajax({
 		url: url,
 		type: 'PUT',
@@ -22,7 +22,6 @@ function updateInventory() {
 		},
 		error: handleAjaxError
 	});
-	return false;
 }
 
 function getInventoryList() {
@@ -40,8 +39,8 @@ function getInventoryList() {
 //UI display methods
 function displayInventoryList(data) {
 	data = data.reverse();
-	let $tbody = $('#inventory-table').find('tbody');
-	$tbody.empty();
+	let tbody = $('#inventory-table').find('tbody');
+	tbody.empty();
 	let userRole = $('.user-role').find('span').text();
 	let serialNumber = 1;
 	for (let i in data) {
@@ -57,7 +56,7 @@ function displayInventoryList(data) {
 			+ '<td>' + e.quantity + '</td>'
 			+ '<td>' + buttonHtml + '</td>'
 			+ '</tr>';
-		$tbody.append(row);
+		tbody.append(row);
 		serialNumber+=1;
 	}
 	$('[data-toggle="tooltip"]').tooltip()
@@ -103,9 +102,9 @@ function readFileDataCallback(results) {
 		return;
 	}
 	if($('#upload-modal-data-row').length==0){
-		let $modalbody = $('#upload-inventory-modal').find('.modal-body');
+		let modalbody = $('#upload-inventory-modal').find('.modal-body');
 		let row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
-		$modalbody.append(row);
+		modalbody.append(row);
 	}
 	uploadRows();
 }
@@ -119,9 +118,9 @@ function uploadRows() {
 		return;
 	}
 	else if(processCount == fileData.length) {
-		let $modalfooter = $('#upload-inventory-modal').find('.modal-footer');
+		let modalfooter = $('#upload-inventory-modal').find('.modal-footer');
 		let htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
-		$modalfooter.prepend(htmlButton);
+		modalfooter.prepend(htmlButton);
 		getInventoryList();
 		return;
 	}
@@ -154,8 +153,8 @@ function downloadErrors() {
 }
 
 function resetUploadDialog() {
-	let $file = $('#inventoryFile');
-	$file.val('');
+	let file = $('#inventoryFile');
+	file.val('');
 	$('#inventoryFileName').html("Choose File");
 	
 	processCount = 0;
@@ -173,8 +172,8 @@ function updateUploadDialog() {
 }
 
 function updateFileName() {
-	let $file = $('#inventoryFile');
-	let fileName = $file.val().split("\\")[2];
+	let file = $('#inventoryFile');
+	let fileName = file.val().split("\\")[2];
 	$('#inventoryFileName').html(fileName);
 }
 
@@ -189,7 +188,6 @@ function displayInventory(data) {
 	document.getElementById("edit-inventory-modal-title").innerHTML = ("Edit Inventory : " + data.barcode);
 	$('#edit-inventory-modal').modal('toggle');
 }
-
 
 function init() {
 	getInventoryList();

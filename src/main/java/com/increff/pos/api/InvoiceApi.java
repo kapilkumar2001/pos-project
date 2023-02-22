@@ -21,9 +21,8 @@ public class InvoiceApi {
         OrderFopObject orderFopObject = new OrderFopObject();
         orderFopObject.setOrderId(orderPojo.getId());
         
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");  
-        String dateTime = orderPojo.getUpdatedAt().format(format);
-        orderFopObject.setTime(dateTime);
+        String pattern = "dd MMM yyyy hh:mm a";
+        orderFopObject.setTime(orderPojo.getUpdatedAt().format(DateTimeFormatter.ofPattern(pattern)));
        
         DecimalFormat dec = new DecimalFormat("#.##");
         
