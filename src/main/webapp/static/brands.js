@@ -71,6 +71,7 @@ function displayBrandsList(data){
 	tbody.empty();
 	let userRole = $('.user-role').find('span').text();
 	data = data.reverse();
+	let serialNumber = 1;
 	for(let i in data){
 		let e = data[i];
 		let buttonHtml = '';
@@ -78,12 +79,13 @@ function displayBrandsList(data){
 			buttonHtml += '<button onclick="displayEditBrand(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
 		} 
 		let row = '<tr>'
-		+ '<td>' + i+1 + '</td>'
+		+ '<td>' + serialNumber + '</td>'
 		+ '<td>' + e.brand + '</td>'
 		+ '<td>'  + e.category + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
 		tbody.append(row);
+		serialNumber+=1;
 	}
 	$('[data-toggle="tooltip"]').tooltip()
 }
@@ -163,6 +165,10 @@ function uploadRows(){
 	let row = fileData[processCount];
 	processCount++;
 
+	if(row.brand==undefined || row.category==undefined){
+		showError("Invalid file");
+		return;
+	}
 	let json = JSON.stringify(row);
 	let url = getBrandsUrl();
 	$.ajax({

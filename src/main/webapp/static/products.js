@@ -108,6 +108,7 @@ function displayProductList(data) {
 	tbody.empty();
 	let userRole = $('.user-role').find('span').text();
 	data = data.reverse();
+	let serialNumber = 1;
 	for (let i in data) {
 		let e = data[i];
 		let buttonHtml = '';
@@ -115,7 +116,7 @@ function displayProductList(data) {
 			buttonHtml += '<button onclick="displayEditProduct(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
 		}
 		let row = '<tr>'
-			+ '<td>' + i+1 + '</td>'
+			+ '<td>' + serialNumber + '</td>'
 			+ '<td>' + e.barcode + '</td>'
 			+ '<td>' + e.brand + '</td>'
 			+ '<td>' + e.category + '</td>'
@@ -124,6 +125,7 @@ function displayProductList(data) {
 			+ '<td>' + buttonHtml + '</td>'
 			+ '</tr>';
 		tbody.append(row);
+		serialNumber+=1;
 	}
 	$('[data-toggle="tooltip"]').tooltip()
 }
@@ -235,6 +237,10 @@ function uploadRows() {
 	let row = fileData[processCount];
 	processCount++;
 
+	if(row.barcode==undefined || row.brand==undefined || row.category==undefined || row.name==undefined || row.mrp==undefined){
+		showError("Invalid file");
+		return;
+	}
 	let json = JSON.stringify(row);
 	let url = getProductUrl();
 	$.ajax({

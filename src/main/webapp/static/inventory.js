@@ -128,6 +128,10 @@ function uploadRows() {
 	let row = fileData[processCount];
 	processCount++;
 
+	if(row.barcode==undefined || row.quantity==undefined){
+		showError("Invalid file");
+		return;
+	}
 	let json = JSON.stringify(row);
 	let url = getInventoryUrl();
 	$.ajax({
