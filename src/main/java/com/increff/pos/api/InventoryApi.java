@@ -16,7 +16,7 @@ import com.increff.pos.util.StringUtil;
 public class InventoryApi {
 
 	@Autowired
-	InventoryDao dao;
+	private InventoryDao dao;
 
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(InventoryPojo inventoryPojo) throws ApiException {

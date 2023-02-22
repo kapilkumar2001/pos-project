@@ -22,7 +22,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 @Component
-@Transactional
+@Transactional(rollbackOn = ApiException.class)
 public class InventoryDto {
 
     @Autowired
@@ -36,9 +36,9 @@ public class InventoryDto {
     public void add(InventoryForm inventoryForm) throws ApiException {
         InventoryHelper.validate(inventoryForm);
         InventoryPojo inventoryPojo = InventoryHelper.convert(inventoryForm);
+        inventoryPojo.setBarcode(InventoryHelper.normalize(inventoryForm.getBarcode()));
         int id = productApi.getProductByBarcode(inventoryPojo.getBarcode()).getId();
         inventoryPojo.setId(id);
-        InventoryHelper.normalize(inventoryForm.getBarcode());
         api.add(inventoryPojo);
     }
 

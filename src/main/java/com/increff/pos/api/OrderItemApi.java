@@ -15,7 +15,7 @@ import com.increff.pos.util.StringUtil;
 public class OrderItemApi {
 
     @Autowired
-    OrderItemDao dao;
+    private OrderItemDao dao;
     
     @Transactional(rollbackOn = ApiException.class) 
 	public void addItemstoOrder(int orderId, List<OrderItemPojo> orderItemPojoList) throws ApiException{

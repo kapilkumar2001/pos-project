@@ -23,9 +23,15 @@ public class InventoryApiController {
     @Autowired
 	private InventoryDto dto;
 	
+	@ApiOperation(value = "Adds inventory")
+	@RequestMapping(path = "", method= RequestMethod.POST)
+	public void add(@RequestBody InventoryForm inventoryForm) throws ApiException{
+		dto.add(inventoryForm);
+	}
+
 	@ApiOperation(value = "Gets inventory by barcode")
 	@RequestMapping(path = "{barcode}", method = RequestMethod.GET)
-//	@GetMapping(path = "{barcode}")
+    // todo check this @GetMapping(path = "{barcode}")
 	public InventoryData get(@PathVariable String barcode) throws ApiException{
 		return dto.get(barcode);
 	}

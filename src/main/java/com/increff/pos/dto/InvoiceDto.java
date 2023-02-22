@@ -33,16 +33,16 @@ import com.increff.pos.util.StatusEnum;
 @Component
 public class InvoiceDto {
     @Autowired
-    InvoiceApi api;
+    private InvoiceApi api;
     @Autowired
-    OrderApi orderApi;
+    private OrderApi orderApi;
     @Autowired
-    OrderItemApi orderItemApi;
+    private OrderItemApi orderItemApi;
     @Autowired
-    ProductApi productApi;
+    private ProductApi productApi;
 
 
-    @Transactional
+    @Transactional(rollbackOn = ApiException.class)
     public void generateInvoice(int orderId) throws ApiException {
         OrderPojo orderPojo =  orderApi.getOrder(orderId);
         

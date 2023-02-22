@@ -12,30 +12,29 @@ public class InventoryHelper {
         if(StringUtil.isEmpty(inventoryForm.getBarcode())) {
 			throw new ApiException("Barcode cannot be empty");
 		}
-    }
-
-    public static InventoryData convert(InventoryPojo p) throws ApiException{
-        InventoryData d = new InventoryData();
-        d.setQuantity(p.getQuantity());
-        d.setBarcode(p.getBarcode());
-        d.setId(p.getId());
-        return d;
-    }
-
-    public static InventoryPojo convert(InventoryForm f) throws ApiException {
-        InventoryPojo inventoryPojo = new InventoryPojo();
-        int quantity;
         try{
-            quantity = Integer.parseInt(f.getQuantity());
+            Integer.parseInt(inventoryForm.getQuantity());
         } catch(NumberFormatException e){
             throw new ApiException("Quantity should be a integer value");
         }
-        inventoryPojo.setQuantity(quantity);
-        inventoryPojo.setBarcode(f.getBarcode());
+    }
+
+    public static InventoryData convert(InventoryPojo inventoryPojo) throws ApiException{
+        InventoryData inventoryData = new InventoryData();
+        inventoryData.setQuantity(inventoryPojo.getQuantity());
+        inventoryData.setBarcode(inventoryPojo.getBarcode());
+        inventoryData.setId(inventoryPojo.getId());
+        return inventoryData;
+    }
+
+    public static InventoryPojo convert(InventoryForm inventoryForm) throws ApiException {
+        InventoryPojo inventoryPojo = new InventoryPojo();
+        inventoryPojo.setQuantity(Integer.parseInt(inventoryForm.getQuantity()));
+        inventoryPojo.setBarcode(inventoryForm.getBarcode());
         return inventoryPojo;
     }
 
-    public static void normalize(String barcode) {
-		barcode = StringUtil.toLowerCase(barcode);
+    public static String normalize(String barcode) {
+		return StringUtil.toLowerCase(barcode);
 	}
 }
