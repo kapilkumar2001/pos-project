@@ -16,6 +16,11 @@ function getBrands(){
 }
 
 function displayBrands(data){
+	let thead = $('#brand-report-table').find('thead');
+	thead.empty();
+	let header = '<tr> <th scope="col">S.No.</th> <th scope="col">Brand</th> <th scope="col">Category</th> </tr>';
+	thead.append(header);
+
 	let tbody = $('#brand-report-table').find('tbody');
 	tbody.empty();
 	let serialNo = 1;

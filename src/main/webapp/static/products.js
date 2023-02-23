@@ -104,9 +104,20 @@ function getCategoriesList() {
 
 // UI display methods
 function displayProductList(data) {
+	let userRole = $('.user-role').find('span').text();
+	
+	let thead = $('#product-table').find('thead');
+	thead.empty();
+	let header;
+	if(userRole=="supervisor"){
+		header = '<tr> <th scope="col">S.No.</th> <th scope="col">Barcode</th> <th scope="col">Brand</th> <th scope="col">Category</th> <th scope="col">Name</th> <th scope="col">MRP</th> <th scope="col" class="text-center">Action</th> </tr>';
+	} else{
+		header = '<tr> <th scope="col">S.No.</th> <th scope="col">Barcode</th> <th scope="col">Brand</th> <th scope="col">Category</th> <th scope="col">Name</th> <th scope="col">MRP</th> </tr>';
+	}
+	thead.append(header);
+
 	let tbody = $('#product-table').find('tbody');
 	tbody.empty();
-	let userRole = $('.user-role').find('span').text();
 	data = data.reverse();
 	let serialNumber = 1;
 	for (let i in data) {
@@ -122,7 +133,7 @@ function displayProductList(data) {
 			+ '<td>' + e.category + '</td>'
 			+ '<td>' + e.name + '</td>'
 			+ '<td>' + e.mrp + '</td>'
-			+ '<td>' + buttonHtml + '</td>'
+			+ '<td class="text-center">' + buttonHtml + '</td>'
 			+ '</tr>';
 		tbody.append(row);
 		serialNumber+=1;

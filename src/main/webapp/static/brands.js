@@ -67,9 +67,20 @@ function getBrandsList(){
 }
 
 function displayBrandsList(data){
+	let userRole = $('.user-role').find('span').text();
+	
+	let thead = $('#brands-table').find('thead');
+	thead.empty();
+	let header;
+	if(userRole=="supervisor"){
+		header = '<tr> <th scope="col">S.No.</th> <th scope="col">Brand</th> <th scope="col">Category</th> <th scope="col" class="text-center">Action</th> </tr>';
+	} else{
+		header = '<tr> <th scope="col">S.No.</th> <th scope="col">Brand</th> <th scope="col">Category</th> </tr>';
+	}
+	thead.append(header);
+
 	let tbody = $('#brands-table').find('tbody');
 	tbody.empty();
-	let userRole = $('.user-role').find('span').text();
 	data = data.reverse();
 	let serialNumber = 1;
 	for(let i in data){
@@ -82,7 +93,7 @@ function displayBrandsList(data){
 		+ '<td>' + serialNumber + '</td>'
 		+ '<td>' + e.brand + '</td>'
 		+ '<td>'  + e.category + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
+		+ '<td class="text-center">' + buttonHtml + '</td>'
 		+ '</tr>';
 		tbody.append(row);
 		serialNumber+=1;

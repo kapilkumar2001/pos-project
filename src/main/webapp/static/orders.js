@@ -173,17 +173,17 @@ function getInventory(barcode){
 
 
 function displayOrderList(data) {
+	let thead = $('#order-table').find('thead');
+	thead.empty();
+	let header = '<tr> <th scope="col">Order ID</th> <th scope="col">Created At</th> <th scope="col">Updated At</th> <th scope="col" class="text-center">Status</th> <th scope="col" class="text-center">Actions</th> </tr>';
+	thead.append(header);
+
 	let tbody = $('#order-table').find('tbody');
 	tbody.empty();
 	data = data.reverse();
 	for (let i in data) {
 		let e = data[i];
 		let buttonHtml = '';
-		let date = new Date((e.createdAt).replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
-		let options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true };
-		let createdAt = new Intl.DateTimeFormat('en-US', options).format(date);
-		date = new Date((e.updatedAt).replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
-		let updatedAt = new Intl.DateTimeFormat('en-US', options).format(date);
 		let status;
 		if (e.status == 'invoiced') {
 			status = '<span class="badge badge-pill badge-success">INVOICED</span>';
@@ -200,10 +200,10 @@ function displayOrderList(data) {
 		}
 		let row = '<tr>'
 			+ '<td>' + e.id + '</td>'
-			+ '<td>' + createdAt + '</td>'
-			+ '<td>' + updatedAt + '</td>'
-			+ '<td>' + status + '</td>'
-			+ '<td>' + buttonHtml + '</td>'
+			+ '<td>' + e.createdAt + '</td>'
+			+ '<td>' + e.updatedAt + '</td>'
+			+ '<td class="text-center">' + status + '</td>'
+			+ '<td class="text-center">' + buttonHtml + '</td>'
 			+ '</tr>';
 		tbody.append(row);
 	}
@@ -262,7 +262,7 @@ function displayOrderItemList(barcode, quantity, sellingPrice, tmpId) {
 	    thead.prepend(row);
 	}
 	let tbody = $('#order-item-table').find('tbody');
-	let buttonHtml = '<button onclick="deleteItem(' + tmpId + ',\'' + barcode + '\',' + sellingPrice + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
+	let buttonHtml = '<button onclick="deleteItem(' + tmpId + ',\'' + barcode + '\',' + sellingPrice + ')" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Remove"><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
 	row = '<tr id="row' + tmpId + '">'
 		+ '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="barcode' + tmpId + '" id="barcode' + tmpId + '" placeholder="Enter Barcode" value="'+ barcode + '" readonly="true"></div> </td>'
 		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpId + '" id="quantity' + tmpId + '" placeholder="Enter Quantity" value="'+ quantity + '" required></div> </td>'
@@ -319,6 +319,11 @@ function viewOrder(id) {
 }
 
 function viewOrderItems(data) {
+	let thead = $('#view-order-table').find('thead');
+	thead.empty();
+	let header = '<tr> <th scope="col">Barcode</th> <th scope="col">Product Name</th> <th scope="col">Quantity</th> <th scope="col">Selling Price</th> </tr>';
+	thead.append(header);
+
 	let tbody = $('#view-order-table').find('tbody');
 	tbody.empty();
 	let totalAmount = 0;
@@ -362,20 +367,24 @@ let tmpEditOrderId = 0;
 let mapQuantityEditOrder = new Map();
 let maptmpEditOrderId = new Map();
 function editOrderItems(data) {
-	getProductsList();
+	let thead = $('#edit-order-item-table').find('thead');
+	thead.empty();
+	let header = '<tr> <th scope="col">Barcode</th> <th scope="col">Quantity</th> <th scope="col">Selling Price</th> <th scope="col" class="text-center">Actions</th> </tr>';
+	thead.append(header);
+
 	let tbody = $('#edit-order-item-table').find('tbody');
 	tbody.empty();
 	for (let i in data['orders']) {
 		let e = data['orders'][i];
 		let orderId = data['id'];
-		let buttonHtml = '<button onclick="deleteItem(' + tmpEditOrderId + ',\'' + e.barcode + '\',' + e.sellingPrice + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>';
+		let buttonHtml = '<button onclick="deleteItem(' + tmpEditOrderId + ',\'' + e.barcode + '\',' + e.sellingPrice + ')" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Remove"><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>';
 		let row = '<tr id="row' + tmpEditOrderId + '">'
 			+ '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="editbarcode' + tmpEditOrderId + '" id="editbarcode' + tmpEditOrderId + '" value="' + e.barcode + '" readonly="true"></div> </td>'
 			+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpEditOrderId + '" id="quantity' + tmpEditOrderId + '" value="' + e.quantity + '" required></div> </td>'
 			+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="sellingPrice' + tmpEditOrderId + '" id="sellingPrice' + tmpEditOrderId + '" value="' + e.sellingPrice + '" required></div> </td>'
-			+ '<td>' + buttonHtml + '</td>'
-			+ '<td> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderItemId' + tmpEditOrderId + '" id="orderItemId' + tmpEditOrderId + '" value="' + e.orderItemId + '"></input>'
-			+ '<td> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderId" id="orderId" value="' + orderId + '"></input>'
+			+ '<td class="text-center">' + buttonHtml + '</td>'
+			+ '<div class="form-group d-none"><input type="hidden" class="form-control form-control-sm" name="orderItemId' + tmpEditOrderId + '" id="orderItemId' + tmpEditOrderId + '" value="' + e.orderItemId + '"></input>'
+			+ '<div class="form-group d-none"><input type="hidden" class="form-control form-control-sm" name="orderId" id="orderId" value="' + orderId + '"></input>'
 			+ '</tr>';
 		tbody.append(row);
 		mapQuantityEditOrder.set((e.barcode)+(e.sellingPrice), (e.quantity));
@@ -471,7 +480,7 @@ function addIteminEditForm() {
 
 function displayEditItemForm(barcode, quantity, sellingPrice, tmpId){
 	let tbody = $('#edit-order-item-table').find('tbody');
-	let buttonHtml = '<button onclick="deleteItem(' + tmpId + ',\'' + barcode + '\',' + sellingPrice + ')" style=\'border: none;margin-right:8px; background-color:transparent\'><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
+	let buttonHtml = '<button onclick="deleteItem(' + tmpId + ',\'' + barcode + '\',' + sellingPrice + ')" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Remove"><i class=\'fa fa-trash-o\' style=\'font-size:18px;color:red;\'></i></button>'
 	let row = '<tr id="row' + tmpId + '">'
 	    + '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="barcode' + tmpId + '" id="barcode' + tmpId + '" value="' + barcode + '" readonly="true"></div> </td>'
 		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpId + '" id="quantity' + tmpId + '" value="' + quantity + '"></div> </td>'

@@ -5,41 +5,23 @@
 		<nav th:replace="snippets.html :: name_app_navbar"></nav>
 		<div class="container">
 			<div class="row my-4">
-				<h4 class="leftAlign">Brands</h4>
+				<h4>Brands</h4>
 				<th:block th:switch="${info.getRole()}">
-					<div th:case="supervisor" style="margin-left: auto;margin-right: 0;">	
-            <div class="col-12">
-              <button type="button" class="btn btn-primary btn-sm" id="add-brand-button" style="padding: 4px">
-                <i class='fa fa-plus align-middle' style='font-size:16px;color:white; padding-right: 4px;'></i>
-                <span class="align-middle">Add Brand</span>
-              </button>
-              <button type="button" class="btn btn-primary btn-sm ml-3" id="upload-data">
-                <i class='fa fa-upload align-middle' style='font-size:16px;color:white;padding-right: 4px;'></i>
-                <span class="align-middle">Upload Brands</span>
-              </button>
-            </div>
+					<div th:case="supervisor" class="ml-auto">	
+						<button type="button" class="btn btn-primary btn-sm" id="add-brand-button">
+							<i class='fa fa-plus mr-1'></i>Add Brand
+						</button>
+						<button type="button" class="btn btn-primary btn-sm ml-3" id="upload-data">
+							<i class='fa fa-upload mr-1'></i>Upload Brands
+						</button>
 					</div>
 				</th:block>
 			</div>
-			<div class="card shadow-4-strong rounded-5 overflow-hidden p-0">
-				<div class="card-body p-0">
-					<table class="table table-striped" id="brands-table">
-						<thead>
-							<tr>
-								<th scope="col">S.No.</th>
-								<th scope="col">Brand</th>
-								<th scope="col">Category</th>
-								<th:block th:switch="${info.getRole()}">
-									<div th:case="supervisor">
-										<th scope="col">Action</th>
-									</div>
-								</th:block>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-				</div>
+			<div class="card">
+				<table class="table table-striped" id="brands-table">
+					<thead></thead>
+					<tbody></tbody>
+				</table>
 			</div>			
 
 			<!-- Add Brand Modal -->
@@ -72,7 +54,7 @@
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-primary btn-sm" id="add-brand">
-								<i class='fa fa-check' style='font-size:16px;color:white; padding-right: 4px;'></i>Add
+								<i class='fa fa-check mr-1'></i>Add
 							</button>
 						</div>
 					</div>
@@ -109,8 +91,9 @@
 							</form>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-primary btn-sm" id="update-brand"><i class='fa fa-check'
-									style='font-size:16px;color:white; padding-right: 4px;'></i>Update</button>
+							<button type="button" class="btn btn-primary btn-sm" id="update-brand">
+								<i class='fa fa-check mr-1'></i>Update
+							</button>
 						</div>
 					</div>
 				</div>
@@ -134,7 +117,9 @@
 							<a th:href="@{/sample/brands-sample.tsv}" target="_blank">Download Sample File</a>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-primary btn-sm" id="process-data"><i class='fa fa-upload' style='font-size:16px;color:white;padding-right: 4px;'></i>Upload</button>
+							<button type="button" class="btn btn-primary btn-sm" id="process-data">
+								<i class='fa fa-upload mr-1'></i>Upload
+							</button>
 						</div>
 					</div>
 				</div>

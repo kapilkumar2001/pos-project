@@ -38,10 +38,21 @@ function getInventoryList() {
 
 //UI display methods
 function displayInventoryList(data) {
+	let userRole = $('.user-role').find('span').text();
+	
+	let thead = $('#inventory-table').find('thead');
+	thead.empty();
+	let header;
+	if(userRole=="supervisor"){
+		header = '<tr> <th scope="col">S.No.</th> <th scope="col">Barcode</th> <th scope="col">Product Name</th> <th scope="col">Quantity</th> <th scope="col" class="text-center">Action</th> </tr>';
+	} else{
+		header = '<tr> <th scope="col">S.No.</th> <th scope="col">Barcode</th> <th scope="col">Product Name</th> <th scope="col">Quantity</th> </tr>';
+	}
+	thead.append(header);
+
 	data = data.reverse();
 	let tbody = $('#inventory-table').find('tbody');
 	tbody.empty();
-	let userRole = $('.user-role').find('span').text();
 	let serialNumber = 1;
 	for (let i in data) {
 		let e = data[i];
@@ -54,7 +65,7 @@ function displayInventoryList(data) {
 			+ '<td>' + e.barcode + '</td>'
 			+ '<td>' + e.productName + '</td>'
 			+ '<td>' + e.quantity + '</td>'
-			+ '<td>' + buttonHtml + '</td>'
+			+ '<td class="text-center">' + buttonHtml + '</td>'
 			+ '</tr>';
 		tbody.append(row);
 		serialNumber+=1;

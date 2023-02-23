@@ -33,7 +33,7 @@ public class OrderHelper {
     public static OrderData convert(OrderPojo orderPojo) throws ApiException {
 		OrderData orderData = new OrderData();
 
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"); 
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd MMM yyyy hh:mm a"); 
         String dateTime = orderPojo.getCreatedAt().format(format);
         orderData.setCreatedAt(dateTime);
 		dateTime = orderPojo.getUpdatedAt().format(format);

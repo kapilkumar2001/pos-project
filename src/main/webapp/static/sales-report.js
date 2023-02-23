@@ -27,6 +27,11 @@ function getSalesReport() {
 }
 
 function displaySalesReport(data) {
+	let thead = $('#sales-report-table').find('thead');
+	thead.empty();
+	let header = '<tr> <th scope="col">S.No.</th> <th scope="col">Brand</th> <th scope="col">Category</th> <th scope="col">Quantity</th> <th scope="col">Revenue</th> </tr>';
+	thead.append(header);
+
 	let tbody = $('#sales-report-table').find('tbody');
 	tbody.empty();
     let tmp = 1;
