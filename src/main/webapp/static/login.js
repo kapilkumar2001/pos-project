@@ -4,6 +4,10 @@ function getLoginUrl(){
 }
 
 function login(){
+	if(($("#login-form input[name=email]").val()=="") || ($("#login-form input[name=password]").val()=="")){
+		showError("Please fill all the fields");
+		return;
+    }
 	let form = $("#login-form");
 	let data = form.serialize();
 	let url = getLoginUrl();

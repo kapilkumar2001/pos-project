@@ -4,14 +4,18 @@ function getPosDaySaleReportUrl() {
 }
 
 function displayPosDaySale(data) {
+	let thead = $('#posdaysales-report-table').find('thead');
+	thead.empty();
+	let header = '<tr> <th scope="col">Date</th> <th scope="col">Total Invoiced Orders</th> <th scope="col">Total Invoiced Items</th> <th scope="col">Total Revenue</th> </tr>';
+	thead.append(header);
+
 	let tbody = $('#posdaysales-report-table').find('tbody');
 	tbody.empty();
 	for (let i in data) {
 		let e = data[i];
 		let date = e.date;
-		let dateShow = date.join("/");
 		let row = '<tr>'
-			+ '<td>' + dateShow + '</td>'
+			+ '<td>' + date + '</td>'
 			+ '<td>' + e.invoicedOrdersCount + '</td>'
 			+ '<td>' + e.invoicedItemsCount + '</td>'
 			+ '<td>' + e.totalRevenue + '</td>'
@@ -52,7 +56,7 @@ function downloadPosDaySalesReport() {
 			let hiddenElement = document.createElement('a');  
 			hiddenElement.href = 'data:text/tsv;charset=utf-8,' + encodeURI(tsv);  
 			hiddenElement.target = '_blank';  
-			hiddenElement.download = 'pos-day-sales-report-'+ startDate + '-to-' + endDate +'.tsv';  
+			hiddenElement.download = 'daily-sales-report-'+ startDate + '-to-' + endDate +'.tsv';  
 			hiddenElement.click();
 		},
 		error: handleAjaxError

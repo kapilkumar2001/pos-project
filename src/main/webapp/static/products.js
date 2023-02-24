@@ -31,9 +31,9 @@ function addProduct(event) {
 			$("#product-form input[name=mrp]").val("");
 			$("#product-form input[name=barcode]").val("");
 			document.getElementById("inputBrand").selectedIndex = 0;
-			document.getElementById("inputBrand").innerHTML = "<option value='' disabled selected style='display: none'>Please Choose Brand</option>";
+			document.getElementById("inputBrand").innerHTML = "<option value='' disabled selected class='d-none'>Please Choose Brand</option>";
 			document.getElementById("inputCategory").selectedIndex = 0;
-			document.getElementById("inputCategory").innerHTML = "<option value='' disabled selected style='display: none'>Select Brand First</option>";
+			document.getElementById("inputCategory").innerHTML = "<option value='' disabled selected class='d-none'>Select Brand First</option>";
 			$('#add-product-modal').modal('hide');
 		},
 		error: handleAjaxError
@@ -104,16 +104,27 @@ function getCategoriesList() {
 
 // UI display methods
 function displayProductList(data) {
+	let userRole = $('.user-role').find('span').text();
+	
+	let thead = $('#product-table').find('thead');
+	thead.empty();
+	let header;
+	if(userRole=="supervisor"){
+		header = '<tr> <th scope="col">S.No.</th> <th scope="col">Barcode</th> <th scope="col">Brand</th> <th scope="col">Category</th> <th scope="col">Name</th> <th scope="col">MRP</th> <th scope="col" class="text-center">Action</th> </tr>';
+	} else{
+		header = '<tr> <th scope="col">S.No.</th> <th scope="col">Barcode</th> <th scope="col">Brand</th> <th scope="col">Category</th> <th scope="col">Name</th> <th scope="col">MRP</th> </tr>';
+	}
+	thead.append(header);
+
 	let tbody = $('#product-table').find('tbody');
 	tbody.empty();
-	let userRole = $('.user-role').find('span').text();
 	data = data.reverse();
 	let serialNumber = 1;
 	for (let i in data) {
 		let e = data[i];
 		let buttonHtml = '';
 		if (userRole == "supervisor") {
-			buttonHtml += '<button onclick="displayEditProduct(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
+			buttonHtml += '<button onclick="displayEditProduct(' + e.id + ')" class="border-0 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit text-success\'></i></button>'
 		}
 		let row = '<tr>'
 			+ '<td>' + serialNumber + '</td>'
@@ -122,7 +133,7 @@ function displayProductList(data) {
 			+ '<td>' + e.category + '</td>'
 			+ '<td>' + e.name + '</td>'
 			+ '<td>' + e.mrp + '</td>'
-			+ '<td>' + buttonHtml + '</td>'
+			+ '<td class="text-center">' + buttonHtml + '</td>'
 			+ '</tr>';
 		tbody.append(row);
 		serialNumber+=1;
@@ -133,7 +144,7 @@ function displayProductList(data) {
 function displayBrandList(data) {
 	let select = $('#inputBrand');
 	select.empty();
-	let row = "<option value='' disabled selected style='display: none'>Please Choose Brand</option>";
+	let row = "<option value='' disabled selected class='d-none'>Please Choose Brand</option>";
 	select.append(row);
 	data = Array.from(new Set(data));
 	for (let i in data) {
@@ -146,7 +157,7 @@ function displayBrandList(data) {
 function displayCategoryList(data) {
 	let select1 = $('#inputCategory');
 	select1.empty();
-	let row = "<option value='' disabled selected style='display: none'>Please Choose</option>";
+	let row = "<option value='' disabled selected class='d-none'>Please Choose</option>";
 	select1.append(row);
 	for (let i in data) {
 		let e = data[i];
@@ -174,7 +185,7 @@ function displayProduct(data) {
 	$("#product-edit-form input[name=category]").val(data.category);
 	$("#product-edit-form input[name=brand]").val(data.brand);
 	$("#product-edit-form input[name=id]").val(data.id);
-	document.getElementById("edit-product-modal-title").innerHTML = ("Edit Product: " + data.barcode);
+	document.getElementById("edit-product-modal-title").innerHTML = ("Edit Product <span class=\"badge badge-pill badge-secondary p-2 ml-2\">" + data.barcode + "</span>");
 	$('#edit-product-modal').modal('toggle');
 }
 
@@ -205,6 +216,10 @@ function processData() {
 
 function readFileDataCallback(results) {
 	fileData = results.data;
+	if(fileData[0].barcode==undefined || fileData[0].brand==undefined || fileData[0].category==undefined || fileData[0].name==undefined || fileData[0].mrp==undefined){
+		showError("Invalid file");
+		return;
+	}
 	if(fileData.length>5000){
 		showError("Data limit exceeded. Max data limit: 5000 rows");
 		return;
@@ -227,7 +242,7 @@ function uploadRows() {
 	}
 	else if(processCount==fileData.length){
 		let modalfooter = $('#upload-product-modal').find('.modal-footer');
-		let htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
+		let htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download text-white mr-1'></i>Download Errors</button>";
 		modalfooter.prepend(htmlButton);
 	
 		getProductList();
@@ -237,10 +252,6 @@ function uploadRows() {
 	let row = fileData[processCount];
 	processCount++;
 
-	if(row.barcode==undefined || row.brand==undefined || row.category==undefined || row.name==undefined || row.mrp==undefined){
-		showError("Invalid file");
-		return;
-	}
 	let json = JSON.stringify(row);
 	let url = getProductUrl();
 	$.ajax({

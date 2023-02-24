@@ -16,6 +16,11 @@ function getInventory() {
 }
 
 function displayInventory(data) {
+	let thead = $('#inventory-report-table').find('thead');
+	thead.empty();
+	let header = '<tr> <th scope="col">S.No.</th> <th scope="col">Brand</th> <th scope="col">Category</th> <th scope="col">Quantity</th> </tr>';
+	thead.append(header);
+
 	let tbody = $('#inventory-report-table').find('tbody');
 	tbody.empty();
     let tmp = 1;
