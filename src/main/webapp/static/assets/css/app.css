@@ -29,3 +29,15 @@ body {
     box-shadow: none !important;
 }
 
+.custom-yellow {
+    background-color: #FDFCC6; 
+}
+
+.custom-green {
+    background-color: #C2FDAD; 
+}
+
+.custom-red {
+	background-color: #F9CDC3;
+}
+

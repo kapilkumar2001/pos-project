@@ -58,7 +58,7 @@ function displayInventoryList(data) {
 		let e = data[i];
 		let buttonHtml = '';
 		if(userRole=="supervisor"){
-		    buttonHtml += '<button onclick="displayEditInventory(\'' + e.barcode + '\')\" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
+		    buttonHtml += '<button onclick="displayEditInventory(\'' + e.barcode + '\')\" class="border-0 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'color:blue;\'></i></button>'
 		}
 		let row = '<tr>'
 			+ '<td>' + serialNumber + '</td>'
@@ -108,8 +108,12 @@ function processData() {
 
 function readFileDataCallback(results) {
 	fileData = results.data;
+	if(fileData[0].barcode==undefined || fileData[0].quantity==undefined){
+		showError("Invalid file");
+		return;
+	}
 	if(fileData.length>5000){
-	showError("Data limit exceeded. Max data limit - 5000 rows");
+	    showError("Data limit exceeded. Max data limit - 5000 rows");
 		return;
 	}
 	if($('#upload-modal-data-row').length==0){
@@ -130,7 +134,7 @@ function uploadRows() {
 	}
 	else if(processCount == fileData.length) {
 		let modalfooter = $('#upload-inventory-modal').find('.modal-footer');
-		let htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
+		let htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download text-white mr-1'></i>Download Errors</button>";
 		modalfooter.prepend(htmlButton);
 		getInventoryList();
 		return;
@@ -139,10 +143,6 @@ function uploadRows() {
 	let row = fileData[processCount];
 	processCount++;
 
-	if(row.barcode==undefined || row.quantity==undefined){
-		showError("Invalid file");
-		return;
-	}
 	let json = JSON.stringify(row);
 	let url = getInventoryUrl();
 	$.ajax({
@@ -200,7 +200,7 @@ function displayUploadData() {
 function displayInventory(data) {
 	$("#inventory-edit-form input[name=barcode]").val(data.barcode);
     $("#inventory-edit-form input[name=quantity]").val(data.quantity);
-	document.getElementById("edit-inventory-modal-title").innerHTML = ("Edit Inventory : " + data.barcode);
+	document.getElementById("edit-inventory-modal-title").innerHTML = ("Edit Inventory <span class=\"badge badge-pill badge-secondary p-2 ml-2\">" + data.barcode + "</span>");
 	$('#edit-inventory-modal').modal('toggle');
 }
 

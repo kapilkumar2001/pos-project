@@ -18,12 +18,13 @@ function signUp(){
             'Content-Type': 'application/x-www-form-urlencoded'
           },	  	   
 	    success: function(response) {
-            Swal.fire({
-                icon: 'success',
-                text: "User registered successfully. Login now!",
-              }).then(function(){
-                window.location.replace("http://localhost:9000/pos/site/login")
-            });
+            window.location.replace("http://localhost:9000/pos/site/login");
+            // Swal.fire({
+            //     icon: 'success',
+            //     text: "User registered successfully. Login now!",
+            //   }).then(function(){
+            //     window.location.replace("http://localhost:9000/pos/site/login");
+            // });
 	    },
 	    error: handleAjaxError
 	});
@@ -33,6 +34,10 @@ function signUp(){
 function validateEmailandPassword(){
     let mail = $("#signup-form input[name=email]").val();
     let password = $("#signup-form input[name=password]").val();
+    if(mail=="" || password==""){
+        showError("Please fill all the fields!");
+        return false;
+    }
     let mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if(mail.match(mailformat)){}
     else{

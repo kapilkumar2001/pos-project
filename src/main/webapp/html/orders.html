@@ -13,13 +13,12 @@
         </div>
       </div>
       <div class="card">
-          <table class="table table-striped" id="order-table">
-            <thead></thead>
-            <tbody></tbody>
-          </table>
+        <table class="table table-striped" id="order-table">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
       </div>
       
-
       <!-- create order Modal -->
       <div class="modal" tabindex="-1" role="dialog" id="create-order-modal">
         <div class="modal-dialog modal-xl" role="document">
@@ -32,42 +31,30 @@
             </div>
             <div class="modal-body">
               <div class="row my-4">
-                <div class="col-12">
                   <form class="align-items-baseline form-inline" id="add-order-item-form">
-                    <div class="form-group col-4">
+                    <div class="form-group mx-4">
                       <label for="inputBarcode" class="col-form-label required">Barcode</label>
-                      <select class="form-control form-control-sm ml-2" name="barcode" id="inputBarcode">
-                        <option value='' disabled selected style='display: none'>Select Barcode</option>
-                      </select>
+                      <select class="form-control form-control-sm ml-2" name="barcode" id="inputBarcode"></select>
                     </div>
-                    <div class="form-group col-4">
+                    <div class="form-group mr-4">
                       <label for="inputQuantity" class="col-form-label required">Quantity</label>
                       <input type="number" class="form-control form-control-sm ml-2" name="quantity" id="inputQuantity">
-                      <div id="available-quantity-field-create-order"></div>
                     </div>
-                    <div class="form-group col-4">
+                    <div class="form-group mr-4">
                       <label for="inputSellingPrice" class="col-form-label required">Selling Price</label>
                       <input type="number" class="form-control form-control-sm ml-2" name="sellingPrice" id="inputSellingPrice">
-                      <div id="mrp-field-create-order"></div>
                     </div>
+                    <button type="button" class="btn btn-sm btn-primary" id="add-item">
+                      <i class='fa fa-plus mr-1'></i>Add Item
+                    </button>
                   </form>
-                </div>
               </div>
-              <div class="row mb-4">
-                <button type="button" class="btn btn-sm btn-primary" id="add-item" style="margin-left: auto;margin-right: 40px">
-                  <i class='fa fa-plus mr-1'></i>Add Item
-                </button>
-              </div>
-              <div class="row mx-2">
-                <div class="col-12">
-                  <form class="form-inline" id="order-list-form">
-                    <table class="table table-striped" id="order-item-table">
-                      <thead></thead>
-                      <tbody></tbody>
-                    </table>
-                  </form>
-                </div>
-              </div>
+              <form class="form-inline" id="order-list-form">
+                <table class="table table-striped mt-4" id="order-item-table">
+                  <thead></thead>
+                  <tbody></tbody>
+                </table>
+              </form>  
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-danger btn-sm" id="cancel-create">
@@ -102,7 +89,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <b><div class="row my-2 mx-4" id="view-order-total-amount" style="text-align: right">Total Amount</div></b>
+              <b><div class="row my-2 mx-4 ml-auto" id="view-order-total-amount">Total Amount</div></b>
             </div>
           </div>
         </div>
@@ -122,29 +109,23 @@
               <div class="row my-4">
                 <div class="col-12">
                   <form class="align-items-baseline form-inline" id="edit-add-order-item-form">
-                    <div class="form-group col-4">
+                    <div class="form-group mx-4">
                       <label for="inputBarcodeEditOrder" class="col-form-label required">Barcode</label>
-                      <select class="form-control form-control-sm ml-2" name="barcode" id="inputBarcodeEditOrder">
-                        <option value='' disabled selected style='display: none'>Select Barcode</option>
-                      </select>
+                      <select class="form-control form-control-sm ml-2" name="barcode" id="inputBarcodeEditOrder"></select>
                     </div>
-                    <div class="form-group col-4">
+                    <div class="form-group mr-4">
                       <label for="inputQuantityEditOrder" class="col-form-label required">Quantity</label>
                       <input type="number" class="form-control form-control-sm ml-2" name="quantity" id="inputQuantityEditOrder">
-                      <div id="available-quantity-field-edit-order"></div>
                     </div>
-                    <div class="form-group col-4">
+                    <div class="form-group mr-4">
                       <label for="inputSellingPriceEditOrder" class="col-form-label required">Selling Price</label>
                       <input type="number" class="form-control form-control-sm ml-2" name="sellingPrice" id="inputSellingPriceEditOrder">
-                      <div id="mrp-field-edit-order"></div>
                     </div>
+                    <button type="button" class="btn btn-sm btn-primary" id="edit-add-item">
+                      <i class='fa fa-plus mr-1'></i>Add Item
+                    </button>
                   </form>
                 </div>
-              </div>
-              <div class="row mb-4">
-                <button type="button" class="btn btn-sm btn-primary" id="edit-add-item" style="margin-left: auto;margin-right: 40px">
-                  <i class='fa fa-plus mr-1'></i>Add Item
-                </button>
               </div>
               <div class="col-12">
                 <form class="form-inline" id="edit-order-list-form">
@@ -160,7 +141,7 @@
                 <i class='fa fa-close mr-1'></i>Cancel Order
               </button>
               <button type="button" class="btn btn-primary btn-sm" id="update-order">
-                <i class='fa fa-check mr-1'></i>Update
+                <i class='fa fa-check mr-1'></i>Update Order
               </button>
             </div>
           </div>

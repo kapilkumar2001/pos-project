@@ -87,7 +87,7 @@ function displayBrandsList(data){
 		let e = data[i];
 		let buttonHtml = '';
 		if(userRole=="supervisor"){
-			buttonHtml += '<button onclick="displayEditBrand(' + e.id + ')" style=\'border: none;margin-right:8px; background-color:transparent\' data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'font-size:18px;color:blue;\'></i></button>'
+			buttonHtml += '<button onclick="displayEditBrand(' + e.id + ')" class="border-0 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit text-dark\'></i></button>'
 		} 
 		let row = '<tr>'
 		+ '<td>' + serialNumber + '</td>'
@@ -145,6 +145,10 @@ function processData(){
 
 function readFileDataCallback(results){
 	fileData = results.data;
+	if(fileData[0].brand==undefined || fileData[0].category==undefined){
+		showError("Invalid file");
+		return;
+	}
 	if(fileData.length>5000){
 		showError("Data limit exceeded. Max data limit - 5000 rows");
 		return;
@@ -167,7 +171,7 @@ function uploadRows(){
 	}
 	else if(processCount==fileData.length){
 		let modalfooter = $('#upload-brands-modal').find('.modal-footer');
-		let htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download' style='font-size:16px;color:white;padding-right: 4px;'></i>Download Errors</button>";
+		let htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download text-white mr-1'></i>Download Errors</button>";
 		modalfooter.prepend(htmlButton);
 		getBrandsList();
 		return;
@@ -176,10 +180,6 @@ function uploadRows(){
 	let row = fileData[processCount];
 	processCount++;
 
-	if(row.brand==undefined || row.category==undefined){
-		showError("Invalid file");
-		return;
-	}
 	let json = JSON.stringify(row);
 	let url = getBrandsUrl();
 	$.ajax({

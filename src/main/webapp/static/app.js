@@ -11,24 +11,48 @@ function toJson(form){
 
 function handleAjaxError(response){
 	response = JSON.parse(response.responseText);
-  Swal.fire({
-    icon: 'error',
+  Toastify({
     text: response.message,
-  })
+    duration: 5000,
+    gravity: "top",
+    position: "right", 
+    close: true,
+    color: "black",
+    stopOnFocus: true, 
+    style: {
+      color: "black",
+      background: "red",
+    },
+  }).showToast();
 }
 
-function showError(error){
-  Swal.fire({
-    icon: 'error',
-    text: error,
-  })
+function showError(message){
+  Toastify({
+    text: message,
+    duration: 5000,
+    gravity: "top",
+    position: "right", 
+    close: true,
+    color: "black",
+    stopOnFocus: true, 
+    style: {
+      color: "black",
+      background: "red",
+    },
+  }).showToast();
 }
 
 function showSuccess(message){
-  Swal.fire({
-    icon: 'success',
+  Toastify({
     text: message,
-  })
+    duration: 3000,
+    gravity: "top",
+    position: "right", 
+    stopOnFocus: true, 
+    style: {
+      background: "green",
+    },
+  }).showToast();
 }
 
 function readFileData(file, callback){
