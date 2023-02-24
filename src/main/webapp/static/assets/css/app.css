@@ -29,8 +29,8 @@ body {
     box-shadow: none !important;
 }
 
-.custom-yellow {
-    background-color: #FDFCC6; 
+.custom-gray {
+    background-color: #CBCBC9; 
 }
 
 .custom-green {
@@ -39,5 +39,9 @@ body {
 
 .custom-red {
 	background-color: #F9CDC3;
+}
+
+.toggle-password {
+	margin-top: -27px;
 }
 

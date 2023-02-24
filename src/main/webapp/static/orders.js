@@ -159,7 +159,7 @@ function displayOrderList(data) {
 			status = '<span class="badge badge-pill custom-red">CANCELLED</span>';
 		}
 		else {
-			status = '<span class="badge badge-pill custom-yellow">CREATED</span>';
+			status = '<span class="badge badge-pill custom-gray">CREATED</span>';
 			buttonHtml += '<button onclick="editOrder(' + e.id + ')" class="border-0 mr-4 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit text-dark\'></i></button>'
 			buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" class="border-0 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="Generate Invoice"><i class=\'fa fa-file-text text-dark\'></i></button>'
 		}
@@ -237,8 +237,8 @@ function displayOrderItemList(barcode, quantity, sellingPrice, tmpId) {
 
 
 function deleteItem(tmpId, barcode, sellingPrice) {
-	let rowtmp = "row" + tmpId;
-	document.getElementById(`${rowtmp}`).remove();
+	let rowTmpId = "row" + tmpId;
+	document.getElementById(`${rowTmpId}`).remove();
 	if(mapQuantity.has(barcode+sellingPrice))
 	mapQuantity.delete(barcode+sellingPrice);
 	if(mapQuantityEditOrder.has(barcode+sellingPrice))

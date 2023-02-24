@@ -19,12 +19,6 @@ function signUp(){
           },	  	   
 	    success: function(response) {
             window.location.replace("http://localhost:9000/pos/site/login");
-            // Swal.fire({
-            //     icon: 'success',
-            //     text: "User registered successfully. Login now!",
-            //   }).then(function(){
-            //     window.location.replace("http://localhost:9000/pos/site/login");
-            // });
 	    },
 	    error: handleAjaxError
 	});
