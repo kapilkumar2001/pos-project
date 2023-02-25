@@ -2,14 +2,17 @@ function getOrderUrl() {
 	let baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/order";
 }
+
 function getInvoiceUrl() {
 	let baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/invoice";
 }
+
 function getProductUrl() {
 	let baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/product";
 }
+
 function getInventoryUrl() {
 	let baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/inventory";
@@ -21,11 +24,9 @@ let editOrderModelOrderId;
 function createOrder() {
 	let form = $("#order-list-form");
 	let json = createConvert(form);
-	if(json==false){
-		return;
-	}
+	if(json===false){ return; }
 	let url = getOrderUrl();
-	if(json.length==2){
+	if(json.length===2){
 		showError("Order can't be created without item");
 		return;
 	}
@@ -55,10 +56,10 @@ function updateOrder() {
 	let url = getOrderUrl() + "/" + orderId;
 	let form = $("#edit-order-list-form");
 	let json = updateConvert(form);
-	if(json==false){
+	if(json===false){
 		return;
 	}
-	if(json.length==2){
+	if(json.length===2){
 		showError("Order can't be updated without any item");
 		return;
 	}
@@ -150,16 +151,16 @@ function displayOrderList(data) {
 		let e = data[i];
 		let buttonHtml = '';
 		let status;
-		if (e.status == 'invoiced') {
-			status = '<span class="badge badge-pill custom-green">INVOICED</span>';
+		if (e.status === 'invoiced') {
+			status = '<span class="badge badge-success">INVOICED</span>';
 			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" class="border-0 mr-4 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="View"><i class=\'fa fa-eye text-dark\'></i></button>'
 			buttonHtml += '<button onclick="getInvoice(' + e.id + ')" class="border-0 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="Download Invoice"><i class=\'fa fa-download text-dark\'></i></button>'
 		}
-		else if(e.status== 'cancelled'){
-			status = '<span class="badge badge-pill custom-red">CANCELLED</span>';
+		else if(e.status === 'cancelled'){
+			status = '<span class="badge badge-danger">CANCELLED</span>';
 		}
 		else {
-			status = '<span class="badge badge-pill custom-gray">CREATED</span>';
+			status = '<span class="badge badge-warning">CREATED</span>';
 			buttonHtml += '<button onclick="editOrder(' + e.id + ')" class="border-0 mr-4 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit text-dark\'></i></button>'
 			buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" class="border-0 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="Generate Invoice"><i class=\'fa fa-file-text text-dark\'></i></button>'
 		}
@@ -184,7 +185,7 @@ function addItemInList() {
 	let barcode = document.getElementById("inputBarcode").value;
 	let quantity = document.getElementById("inputQuantity").value;
 	let sellingPrice = document.getElementById("inputSellingPrice").value;
-	if(barcode=='' || quantity=='' || sellingPrice==''){
+	if(barcode === '' || quantity === '' || sellingPrice === ''){
 		showError("Please fill all the fields!");
 		return;
 	}
@@ -205,7 +206,7 @@ function addItemInList() {
         displayOrderItemList(barcode, quantity, sellingPrice, tmpCreateOrderId);
 		tmpCreateOrderId = tmpCreateOrderId + 1;
     }
-    else{
+    else {
         mapQuantity.set(barcode+sellingPrice, quantity);
         maptmpCreateOrderId.set(barcode+sellingPrice, tmpCreateOrderId);
         displayOrderItemList(barcode, quantity, sellingPrice, tmpCreateOrderId);
@@ -219,7 +220,7 @@ function addItemInList() {
 
 function displayOrderItemList(barcode, quantity, sellingPrice, tmpId) {
 	let row='';
-	if(tmpId==0){
+	if(tmpId===0){
 		let thead = $('#order-item-table').find('thead');
 		row = '<tr> <th scope="col">Barcode</th><th scope="col">Quantity</th> <th scope="col">Selling Price</th> <th scope="col">Action</th></tr>';
 	    thead.prepend(row);
@@ -239,14 +240,18 @@ function displayOrderItemList(barcode, quantity, sellingPrice, tmpId) {
 function deleteItem(tmpId, barcode, sellingPrice) {
 	let rowTmpId = "row" + tmpId;
 	document.getElementById(`${rowTmpId}`).remove();
-	if(mapQuantity.has(barcode+sellingPrice))
-	mapQuantity.delete(barcode+sellingPrice);
-	if(mapQuantityEditOrder.has(barcode+sellingPrice))
-	mapQuantityEditOrder.delete(barcode+sellingPrice);
-	if(maptmpCreateOrderId.has(barcode+sellingPrice))
-	maptmpCreateOrderId.delete(barcode+sellingPrice);
-	if(maptmpEditOrderId.has(barcode+sellingPrice))
-	maptmpEditOrderId.delete(barcode+sellingPrice);
+
+	if(mapQuantity.has(barcode + sellingPrice))
+		mapQuantity.delete(barcode+sellingPrice);
+
+	if(mapQuantityEditOrder.has(barcode + sellingPrice))
+		mapQuantityEditOrder.delete(barcode + sellingPrice);
+
+	if(maptmpCreateOrderId.has(barcode + sellingPrice))
+		maptmpCreateOrderId.delete(barcode + sellingPrice);
+	
+	if(maptmpEditOrderId.has(barcode + sellingPrice))
+		maptmpEditOrderId.delete(barcode + sellingPrice);
 }
 
 function displayBarcodesList(data) {
@@ -364,10 +369,10 @@ function createConvert(data) {
 	let arr = []
 	for (let i = 0; i < serialized.length; i += 3) {
 		let obj = {};
-		if(serialized[i].value=="" && serialized[i+1].value=="" && serialized[i+2].value==""){
+		if(serialized[i].value === "" && serialized[i+1].value === "" && serialized[i+2].value === ""){
 			continue;
 		}
-		if(serialized[i].value=="" || serialized[i+1].value=="" || serialized[i+2].value==""){
+		if(serialized[i].value === "" || serialized[i+1].value === "" || serialized[i+2].value === ""){
 			showError("Please fill all the fields!");
 			return false;
 		}
@@ -384,14 +389,10 @@ function updateConvert(data) {
 	let arr = []
 	for (let i = 0; i < serialized.length; i += 5) {
 		let obj = {};
-		console.log(serialized[i].value);
-		console.log(serialized[i+1].value);
-		console.log(serialized[i+2].value);
-		console.log(serialized[i+3].value);
-		if(serialized[i].value=="" && serialized[i+1].value=="" && serialized[i+2].value==""){
+		if(serialized[i].value === "" && serialized[i+1].value === "" && serialized[i+2].value === ""){
 			continue;
 		}
-		if(serialized[i].value=="" || serialized[i+1].value=="" || serialized[i+2].value==""){
+		if(serialized[i].value === "" || serialized[i+1].value === "" || serialized[i+2].value === ""){
 			showError("Please fill all the fields!");
 			return false;
 		}
@@ -409,7 +410,7 @@ function addIteminEditForm() {
 	let barcode = document.getElementById("inputBarcodeEditOrder").value;
 	let quantity = document.getElementById("inputQuantityEditOrder").value;
 	let sellingPrice = document.getElementById("inputSellingPriceEditOrder").value;
-	if(barcode=='' || quantity=='' || sellingPrice==''){
+	if(barcode === '' || quantity === '' || sellingPrice === ''){
 		showError("Please fill all the fields!");
 		return;
 	}

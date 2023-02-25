@@ -8,9 +8,9 @@ function getBrandsUrl() {
 }
 
 function addProduct(event) {
-	if(($("#product-form input[name=name]").val()=="") || ($("#product-form input[name=mrp]").val()=="") || 
-	    ($("#product-form input[name=barcode]").val()=="") || (document.getElementById("inputBrand").selectedIndex == 0) || 
-		(document.getElementById("inputCategory").selectedIndex == 0)){
+	if(($("#product-form input[name=name]").val()==="") || ($("#product-form input[name=mrp]").val()==="") || 
+	    ($("#product-form input[name=barcode]").val()==="") || (document.getElementById("inputBrand").selectedIndex === 0) || 
+		(document.getElementById("inputCategory").selectedIndex === 0)){
 			showError("Please fill all the fields");
 			return;
 	}
@@ -41,7 +41,7 @@ function addProduct(event) {
 }
 
 function updateProduct() {
-	if(($("#product-edit-form input[name=name]").val()=="") || ($("#product-edit-form input[name=mrp]").val()=="")){
+	if(($("#product-edit-form input[name=name]").val()==="") || ($("#product-edit-form input[name=mrp]").val()==="")){
 			showError("Please fill all the fields");
 			return;
 	}
@@ -109,7 +109,7 @@ function displayProductList(data) {
 	let thead = $('#product-table').find('thead');
 	thead.empty();
 	let header;
-	if(userRole=="supervisor"){
+	if(userRole==="supervisor"){
 		header = '<tr> <th scope="col">S.No.</th> <th scope="col">Barcode</th> <th scope="col">Brand</th> <th scope="col">Category</th> <th scope="col">Name</th> <th scope="col">MRP</th> <th scope="col" class="text-center">Action</th> </tr>';
 	} else{
 		header = '<tr> <th scope="col">S.No.</th> <th scope="col">Barcode</th> <th scope="col">Brand</th> <th scope="col">Category</th> <th scope="col">Name</th> <th scope="col">MRP</th> </tr>';
@@ -123,8 +123,8 @@ function displayProductList(data) {
 	for (let i in data) {
 		let e = data[i];
 		let buttonHtml = '';
-		if (userRole == "supervisor") {
-			buttonHtml += '<button onclick="displayEditProduct(' + e.id + ')" class="border-0 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit text-success\'></i></button>'
+		if (userRole === "supervisor") {
+			buttonHtml += '<button onclick="displayEditProduct(' + e.id + ')" class="border-0 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit text-dark\'></i></button>'
 		}
 		let row = '<tr>'
 			+ '<td>' + serialNumber + '</td>'
@@ -185,7 +185,7 @@ function displayProduct(data) {
 	$("#product-edit-form input[name=category]").val(data.category);
 	$("#product-edit-form input[name=brand]").val(data.brand);
 	$("#product-edit-form input[name=id]").val(data.id);
-	document.getElementById("edit-product-modal-title").innerHTML = ("Edit Product <span class=\"badge badge-pill badge-secondary p-2 ml-2\">" + data.barcode + "</span>");
+	document.getElementById("edit-product-modal-title").innerHTML = ("Edit Product <span class=\"badge badge-pill custom-gray p-2 ml-2\">" + data.barcode + "</span>");
 	$('#edit-product-modal').modal('toggle');
 }
 
@@ -207,7 +207,7 @@ function processData() {
 	$('#download-errors').remove();
 
 	let file = $('#productFile')[0].files[0];
-	if($('#productFile')[0].files.length==0){
+	if($('#productFile')[0].files.length===0){
 		showError("Please Choose File");
 		return;
 	}
@@ -216,7 +216,7 @@ function processData() {
 
 function readFileDataCallback(results) {
 	fileData = results.data;
-	if(fileData[0].barcode==undefined || fileData[0].brand==undefined || fileData[0].category==undefined || fileData[0].name==undefined || fileData[0].mrp==undefined){
+	if(fileData[0].barcode===undefined || fileData[0].brand===undefined || fileData[0].category===undefined || fileData[0].name===undefined || fileData[0].mrp===undefined){
 		showError("Invalid file");
 		return;
 	}
@@ -224,7 +224,7 @@ function readFileDataCallback(results) {
 		showError("Data limit exceeded. Max data limit: 5000 rows");
 		return;
 	}
-	if($('#upload-modal-data-row').length==0){
+	if($('#upload-modal-data-row').length===0){
 		let modalbody = $('#upload-product-modal').find('.modal-body');
 		let row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
 		modalbody.append(row);
@@ -234,13 +234,13 @@ function readFileDataCallback(results) {
 
 function uploadRows() {
 	updateUploadDialog();
-	if(processCount==fileData.length && errorData.length==0){
+	if(processCount===fileData.length && errorData.length===0){
 		$('#upload-product-modal').modal('hide');
 		getProductList();
 		showSuccess("Products uploaded succesfully!");
 		return;
 	}
-	else if(processCount==fileData.length){
+	else if(processCount===fileData.length){
 		let modalfooter = $('#upload-product-modal').find('.modal-footer');
 		let htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download text-white mr-1'></i>Download Errors</button>";
 		modalfooter.prepend(htmlButton);

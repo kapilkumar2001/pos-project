@@ -78,7 +78,7 @@ function getDefaultDate(){
 	// one month before today
 	let m = date.getMonth()+1;
 	date.setMonth(date.getMonth());
-	if (date.getMonth() == m) date.setDate(0);
+	if (date.getMonth() === m) date.setDate(0);
 	date.setHours(0, 0, 0, 0);
 	day = date.getDate();
 	month = date.getMonth();

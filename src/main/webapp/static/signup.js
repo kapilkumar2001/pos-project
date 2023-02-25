@@ -4,7 +4,7 @@ function getSignUpUrl(){
 }
 
 function signUp(){
-	if(validateEmailandPassword()==false){
+	if(validateEmailandPassword()===false){
         return;
     }
 	let form = $("#signup-form");
@@ -28,7 +28,7 @@ function signUp(){
 function validateEmailandPassword(){
     let mail = $("#signup-form input[name=email]").val();
     let password = $("#signup-form input[name=password]").val();
-    if(mail=="" || password==""){
+    if(mail==="" || password===""){
         showError("Please fill all the fields!");
         return false;
     }
