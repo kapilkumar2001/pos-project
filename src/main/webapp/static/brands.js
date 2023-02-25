@@ -4,7 +4,7 @@ function getBrandsUrl(){
 }
 
 function addBrand(){
-	if(($("#brand-form input[name=brand]").val()=="") || ($("#brand-form input[name=category]").val()=="")){
+	if(($("#brand-form input[name=brand]").val()==="") || ($("#brand-form input[name=category]").val()==="")){
 			showError("Please fill all the fields");
 			return;
 	}
@@ -30,7 +30,7 @@ function addBrand(){
 }
 
 function updateBrand(){
-	if(($("#brand-edit-form input[name=brand]").val()=="") || ($("#brand-edit-form input[name=category]").val()=="")){
+	if(($("#brand-edit-form input[name=brand]").val()==="") || ($("#brand-edit-form input[name=category]").val()==="")){
 		showError("Please fill all the fields");
 		return;
     }
@@ -72,7 +72,7 @@ function displayBrandsList(data){
 	let thead = $('#brands-table').find('thead');
 	thead.empty();
 	let header;
-	if(userRole=="supervisor"){
+	if(userRole==="supervisor"){
 		header = '<tr> <th scope="col">S.No.</th> <th scope="col">Brand</th> <th scope="col">Category</th> <th scope="col" class="text-center">Action</th> </tr>';
 	} else{
 		header = '<tr> <th scope="col">S.No.</th> <th scope="col">Brand</th> <th scope="col">Category</th> </tr>';
@@ -86,7 +86,7 @@ function displayBrandsList(data){
 	for(let i in data){
 		let e = data[i];
 		let buttonHtml = '';
-		if(userRole=="supervisor"){
+		if(userRole==="supervisor"){
 			buttonHtml += '<button onclick="displayEditBrand(' + e.id + ')" class="border-0 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit text-dark\'></i></button>'
 		} 
 		let row = '<tr>'
@@ -136,7 +136,7 @@ function processData(){
 	errorData = [];
 	$('#download-errors').remove();
 	let file = $('#brandsFile')[0].files[0];
-    if($('#brandsFile')[0].files.length==0){
+    if($('#brandsFile')[0].files.length===0){
 		showError("Please Choose File");
 		return;
 	}
@@ -145,7 +145,7 @@ function processData(){
 
 function readFileDataCallback(results){
 	fileData = results.data;
-	if(fileData[0].brand==undefined || fileData[0].category==undefined){
+	if(fileData[0].brand===undefined || fileData[0].category===undefined){
 		showError("Invalid file");
 		return;
 	}
@@ -163,13 +163,13 @@ function readFileDataCallback(results){
 
 function uploadRows(){
 	updateUploadDialog();
-	if(processCount==fileData.length && errorData.length==0){
+	if(processCount===fileData.length && errorData.length===0){
 		$('#upload-brands-modal').modal('hide');
 		showSuccess("Brands uploaded succesfully!");
 		getBrandsList();
 		return;
 	}
-	else if(processCount==fileData.length){
+	else if(processCount===fileData.length){
 		let modalfooter = $('#upload-brands-modal').find('.modal-footer');
 		let htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download text-white mr-1'></i>Download Errors</button>";
 		modalfooter.prepend(htmlButton);

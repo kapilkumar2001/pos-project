@@ -11,19 +11,7 @@ function toJson(form){
 
 function handleAjaxError(response){
 	response = JSON.parse(response.responseText);
-  Toastify({
-    text: response.message,
-    duration: 5000,
-    gravity: "top",
-    position: "right", 
-    close: true,
-    color: "black",
-    stopOnFocus: true, 
-    style: {
-      color: "black",
-      background: "red",
-    },
-  }).showToast();
+  showError(response.message);
 }
 
 function showError(message){
@@ -32,11 +20,8 @@ function showError(message){
     duration: 5000,
     gravity: "top",
     position: "right", 
-    close: true,
-    color: "black",
     stopOnFocus: true, 
     style: {
-      color: "black",
       background: "red",
     },
   }).showToast();

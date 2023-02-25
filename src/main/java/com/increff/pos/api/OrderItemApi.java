@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.increff.pos.dao.OrderItemDao;
 import com.increff.pos.pojo.OrderItemPojo;
-import com.increff.pos.util.StringUtil;
 
 @Service
 public class OrderItemApi {
@@ -28,9 +27,6 @@ public class OrderItemApi {
     
     @Transactional(rollbackOn = ApiException.class) 
 	public void addOrderItem(OrderItemPojo orderItemPojo) throws ApiException {
-		if(StringUtil.isEmpty(String.valueOf(orderItemPojo.getOrderId()))) {
-			throw new ApiException("something went wrong. please try again!");
-		}
 		dao.insert(orderItemPojo);	
 	} 
 

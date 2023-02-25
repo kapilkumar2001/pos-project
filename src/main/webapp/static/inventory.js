@@ -43,7 +43,7 @@ function displayInventoryList(data) {
 	let thead = $('#inventory-table').find('thead');
 	thead.empty();
 	let header;
-	if(userRole=="supervisor"){
+	if(userRole==="supervisor"){
 		header = '<tr> <th scope="col">S.No.</th> <th scope="col">Barcode</th> <th scope="col">Product Name</th> <th scope="col">Quantity</th> <th scope="col" class="text-center">Action</th> </tr>';
 	} else{
 		header = '<tr> <th scope="col">S.No.</th> <th scope="col">Barcode</th> <th scope="col">Product Name</th> <th scope="col">Quantity</th> </tr>';
@@ -57,8 +57,8 @@ function displayInventoryList(data) {
 	for (let i in data) {
 		let e = data[i];
 		let buttonHtml = '';
-		if(userRole=="supervisor"){
-		    buttonHtml += '<button onclick="displayEditInventory(\'' + e.barcode + '\')\" class="border-0 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit\' style=\'color:blue;\'></i></button>'
+		if(userRole==="supervisor"){
+		    buttonHtml += '<button onclick="displayEditInventory(\'' + e.barcode + '\')\" class="border-0 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit text-dark\'></i></button>'
 		}
 		let row = '<tr>'
 			+ '<td>' + serialNumber + '</td>'
@@ -98,7 +98,7 @@ function processData() {
 	$('#download-errors').remove();
 
 	let file = $('#inventoryFile')[0].files[0];
-	if($('#inventoryFile')[0].files.length==0){
+	if($('#inventoryFile')[0].files.length===0){
 		showError("Please Choose File");
 		return;
 	}
@@ -108,7 +108,7 @@ function processData() {
 
 function readFileDataCallback(results) {
 	fileData = results.data;
-	if(fileData[0].barcode==undefined || fileData[0].quantity==undefined){
+	if(fileData[0].barcode===undefined || fileData[0].quantity===undefined){
 		showError("Invalid file");
 		return;
 	}
@@ -116,7 +116,7 @@ function readFileDataCallback(results) {
 	    showError("Data limit exceeded. Max data limit - 5000 rows");
 		return;
 	}
-	if($('#upload-modal-data-row').length==0){
+	if($('#upload-modal-data-row').length===0){
 		let modalbody = $('#upload-inventory-modal').find('.modal-body');
 		let row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
 		modalbody.append(row);
@@ -126,13 +126,13 @@ function readFileDataCallback(results) {
 
 function uploadRows() {
 	updateUploadDialog();
-	if(processCount==fileData.length && errorData.length==0){
+	if(processCount===fileData.length && errorData.length===0){
 		$('#upload-inventory-modal').modal('hide');
 		showSuccess("Inventory data uploaded succesfully!");
 		getInventoryList();
 		return;
 	}
-	else if(processCount == fileData.length) {
+	else if(processCount === fileData.length) {
 		let modalfooter = $('#upload-inventory-modal').find('.modal-footer');
 		let htmlButton = "<button type=\'button\' class=\'btn btn-danger btn-sm mr-auto\' id=\'download-errors\' onclick=\"downloadErrors()\"><i class='fa fa-download text-white mr-1'></i>Download Errors</button>";
 		modalfooter.prepend(htmlButton);
@@ -200,7 +200,7 @@ function displayUploadData() {
 function displayInventory(data) {
 	$("#inventory-edit-form input[name=barcode]").val(data.barcode);
     $("#inventory-edit-form input[name=quantity]").val(data.quantity);
-	document.getElementById("edit-inventory-modal-title").innerHTML = ("Edit Inventory <span class=\"badge badge-pill badge-secondary p-2 ml-2\">" + data.barcode + "</span>");
+	document.getElementById("edit-inventory-modal-title").innerHTML = ("Edit Inventory <span class=\"badge badge-pill custom-gray p-2 ml-2\">" + data.barcode + "</span>");
 	$('#edit-inventory-modal').modal('toggle');
 }
 
