@@ -20,13 +20,13 @@ body {
 }
 
 .required:after {
-    content:" *";
-    color: red;
+  content:" *";
+  color: red;
 }
 
 .btn:focus, .btn.focus, button:focus {
-    outline: none;
-    box-shadow: none !important;
+  outline: none;
+  box-shadow: none !important;
 }
 
 .badge-success {

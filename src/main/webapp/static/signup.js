@@ -13,16 +13,16 @@ function signUp(){
 	let url = getSignUpUrl();
 
 	$.ajax({
-	    url: url,
-	    type: "POST",
- 	    data: data,
- 	    headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },	  	   
-	    success: function(response) {
-            window.location.replace("http://localhost:9000/pos/site/login");
-	    },
-	    error: handleAjaxError
+    url: url,
+    type: "POST",
+    data: data,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },	  	   
+    success: function(response) {
+      window.location.replace("http://localhost:9000/pos/site/login");
+    },
+    error: handleAjaxError
 	});
 }
 

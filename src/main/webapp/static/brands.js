@@ -5,8 +5,8 @@ function getBrandsUrl(){
 
 function addBrand(){
 	if(($("#brand-form input[name=brand]").val()==="") || ($("#brand-form input[name=category]").val()==="")){
-			showError("Please fill all the fields");
-			return;
+    showError("Please fill all the fields");
+    return;
 	}
 
 	let form = $("#brand-form");
@@ -14,20 +14,20 @@ function addBrand(){
 	let url = getBrandsUrl();
 
 	$.ajax({
-	    url: url,
-	    type: "POST",
- 	    data: json,
- 	    headers: {
-         	"Content-Type": "application/json"
-        },	   
-	    success: function(response) {
-			showSuccess("Brand added succesfully!");
-	   	 	getBrandsList();  
-			$("#brand-form input[name=brand]").val("");
-			$("#brand-form input[name=category]").val("");
-			$("#add-brand-modal").modal("hide");
-	    },
-	    error: handleAjaxError
+    url: url,
+    type: "POST",
+    data: json,
+    headers: {
+        "Content-Type": "application/json"
+      },	   
+    success: function(response) {
+    showSuccess("Brand added succesfully!");
+      getBrandsList();  
+    $("#brand-form input[name=brand]").val("");
+    $("#brand-form input[name=category]").val("");
+    $("#add-brand-modal").modal("hide");
+    },
+    error: handleAjaxError
 	});
 }
 
@@ -35,7 +35,7 @@ function updateBrand(){
 	if(($("#brand-edit-form input[name=brand]").val()==="") || ($("#brand-edit-form input[name=category]").val()==="")){
 		showError("Please fill all the fields");
 		return;
-    }
+  }
 
 	let id = $("#brand-edit-form input[name=id]").val();	
 	let url = getBrandsUrl() + "/" + id;
@@ -48,9 +48,9 @@ function updateBrand(){
 	  data: json,
 	  headers: {
       "Content-Type": "application/json"
-      },	   
+    },	   
 	  success: function(response) {
-		showSuccess("Brand updated succesfully!");
+		  showSuccess("Brand updated succesfully!");
 	   	getBrandsList();  
 			$("#edit-brand-modal").modal("hide");
 	  },
@@ -111,12 +111,12 @@ function displayEditBrand(id){
 	let url = getBrandsUrl() + "/" + id;
 
 	$.ajax({
-	   url: url,
-	   type: "GET",
-	   success: function(data) {
-	   		displayBrand(data);   
-	   },
-	   error: handleAjaxError
+    url: url,
+    type: "GET",
+    success: function(data) {
+      displayBrand(data);   
+    },
+    error: handleAjaxError
 	});	
 }
 
@@ -144,9 +144,9 @@ function processData(){
 	$("#download-errors").remove();
 	let file = $("#brands-file")[0].files[0];
 
-    if($("#brands-file")[0].files.length===0){
-		showError("Please Choose File");
-		return;
+  if($("#brands-file")[0].files.length===0){
+    showError("Please Choose File");
+    return;
 	}
 
 	readFileData(file, readFileDataCallback);
@@ -196,22 +196,22 @@ function uploadRows(){
 
 	let json = JSON.stringify(row);
 	let url = getBrandsUrl();
-	
+
 	$.ajax({
-	   url: url,
-	   type: "POST",
-	   data: json,
-	   headers: {
-       	"Content-Type": "application/json"
-       },	   
-	   success: function(response) {
-	   		uploadRows();  
-	   },
-	   error: function(response){
-	   		row.error=response.responseJSON["message"];
-	   		errorData.push(row);
-	   		uploadRows();
-	   }
+    url: url,
+    type: "POST",
+    data: json,
+    headers: {
+      "Content-Type": "application/json"
+      },	   
+    success: function(response) {
+      uploadRows();  
+    },
+    error: function(response){
+      row.error=response.responseJSON["message"];
+      errorData.push(row);
+      uploadRows();
+    }
 	});
 }
 
