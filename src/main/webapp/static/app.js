@@ -1,10 +1,12 @@
 function toJson(form){
     let serialized = form.serializeArray();
-    let s = '';
+    let s = "";
     let data = {};
+
     for(s in serialized){
-        data[serialized[s]['name']] = serialized[s]['value']
+        data[serialized[s]["name"]] = serialized[s]["value"]
     }
+
     let json = JSON.stringify(data);
     return json;
 }
@@ -54,21 +56,31 @@ function readFileData(file, callback){
 
 function writeFileData(arr){
 	let config = {
-		quoteChar: '',
-		escapeChar: '',
+		quoteChar: "",
+		escapeChar: "",
 		delimiter: "\t"
 	};
 	let data = Papa.unparse(arr, config);
-  let blob = new Blob([data], {type: 'text/tsv;charset=utf-8;'});
+  let blob = new Blob([data], {type: "text/tsv;charset=utf-8;"});
   let fileUrl =  null;
 
   if (navigator.msSaveBlob) {
-      fileUrl = navigator.msSaveBlob(blob, 'errors.tsv');
+      fileUrl = navigator.msSaveBlob(blob, "errors.tsv");
   } else {
       fileUrl = window.URL.createObjectURL(blob);
   }
-  let tempLink = document.createElement('a');
+  
+  let tempLink = document.createElement("a");
   tempLink.href = fileUrl;
-  tempLink.setAttribute('download', 'errors.tsv');
+  tempLink.setAttribute("download", "errors.tsv");
   tempLink.click(); 
+  tempLink.remove();
+}
+
+function showNavbarDropdownMenu() {
+  document.getElementById("navbarDropdownMenu").style.display = "block";
+}
+
+function hideNavbarDropdownMenu() {
+  document.getElementById("navbarDropdownMenu").style.display = "none";
 }

@@ -29,16 +29,16 @@ body {
     box-shadow: none !important;
 }
 
-.custom-gray {
-    background-color: #CBCBC9; 
+.badge-success {
+	background-color: #c2fca9;
 }
 
-.custom-green {
-    background-color: #C2FDAD; 
+.badge-warning {
+	background-color: #fce8a9;
 }
 
-.custom-red {
-	background-color: #F9CDC3;
+.badge-danger {
+	background-color: #ffbbc2;
 }
 
 .toggle-password {

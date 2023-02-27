@@ -9,10 +9,10 @@
         <th:block th:switch="${info.getRole()}">
           <div th:case="supervisor" class="ml-auto">
             <button type="button" class="btn btn-primary btn-sm" id="add-product-button">
-              <i class='fa fa-plus mr-1'></i>Add Product
+              <i class="fa fa-plus mr-1"></i>Add Product
             </button>
             <button type="button" class="btn btn-primary btn-sm ml-3" id="upload-data">
-              <i class='fa fa-upload mr-1'></i>Upload Products
+              <i class="fa fa-upload mr-1"></i>Upload Products
             </button>
           </div>
         </th:block>
@@ -37,33 +37,33 @@
             <div class="modal-body">
               <form id="product-form">
                 <div class="form-group row">
-                  <label for="inputBrand" class="col-sm-3 col-form-label required">Brand</label>
+                  <label for="input-brand" class="col-sm-3 col-form-label required">Brand</label>
                   <div class="col-sm-9" id="brands-dropdown">
-                    <select class="form-control form-control-sm" name="brand" id="inputBrand"></select>
+                    <select class="form-control form-control-sm" name="brand" id="input-brand"></select>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="inputCategory" class="col-sm-3 col-form-label required">Category</label>
+                  <label for="input-category" class="col-sm-3 col-form-label required">Category</label>
                   <div class="col-sm-9">
-                    <select class="form-control form-control-sm" name="category" id="inputCategory">
-                      <option value='' disabled selected class='d-none'>Select Brand First</option>
+                    <select class="form-control form-control-sm" name="category" id="input-category">
+                      <option value="" disabled selected class="d-none">Select Brand First</option>
                     </select>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="inputBarcode" class="col-sm-3 col-form-label required">Barcode</label>
+                  <label class="col-sm-3 col-form-label required">Barcode</label>
                   <div class="col-sm-9">
                     <input type="text" class="form-control form-control-sm" name="barcode" placeholder="Enter Barcode">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="inputName" class="col-sm-3 col-form-label required">Name</label>
+                  <label class="col-sm-3 col-form-label required">Name</label>
                   <div class="col-sm-9">
                     <input type="text" class="form-control form-control-sm" name="name" placeholder="Enter Product Name">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="inputMrp" class="col-sm-3 col-form-label required">MRP</label>
+                  <label class="col-sm-3 col-form-label required">MRP</label>
                   <div class="col-sm-9">
                     <input type="number" class="form-control form-control-sm" name="mrp" placeholder="Enter MRP">
                   </div>
@@ -72,7 +72,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary btn-sm" id="add-product">
-                <i class='fa fa-check mr-1'></i>Add
+                <i class="fa fa-check mr-1"></i>Add
               </button>
             </div>
           </div>
@@ -92,31 +92,31 @@
             <div class="modal-body">
               <form id="product-edit-form">
                 <div class="form-group row">
-                  <label for="editInputName" class="col-sm-3 col-form-label required">Name</label>
+                  <label class="col-sm-3 col-form-label required">Name</label>
                   <div class="col-sm-9">
                     <input type="text" class="form-control form-control-sm" name="name" placeholder="Enter Product Name">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="editInputMrp" class="col-sm-3 col-form-label required">MRP</label>
+                  <label class="col-sm-3 col-form-label required">MRP</label>
                   <div class="col-sm-9">
                     <input type="number" class="form-control form-control-sm" name="mrp" placeholder="Enter MRP">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="editInputBarcode" class="col-sm-3 col-form-label required">Barcode</label>
+                  <label class="col-sm-3 col-form-label required">Barcode</label>
                   <div class="col-sm-9">
                     <input type="text" class="form-control form-control-sm" name="barcode" placeholder="Enter Barcode" readonly="true">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="editInputBrand" class="col-sm-3 col-form-label required">Brand</label>
+                  <label class="col-sm-3 col-form-label required">Brand</label>
                   <div class="col-sm-9">
                     <input type="text" class="form-control form-control-sm" name="brand" placeholder="Enter Brand" readonly="true">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="editInputCategory" class="col-sm-3 col-form-label required">Category</label>
+                  <label class="col-sm-3 col-form-label required">Category</label>
                   <div class="col-sm-9">
                     <input type="text" class="form-control form-control-sm" name="category" placeholder="Enter Category" readonly="true">
                   </div>
@@ -126,7 +126,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary btn-sm" id="update-product">
-                <i class='fa fa-check mr-1'></i>Update
+                <i class="fa fa-check mr-1"></i>Update
               </button>
             </div>
           </div>
@@ -145,14 +145,14 @@
             </div>
             <div class="modal-body">
               <div class="product-file p-2 col-12">
-                <input type="file" accept=".tsv" class="custom-file-input p-2" id="productFile">
-                <label class="custom-file-label p-2" for="productFile" id="productFileName">Choose File</label>
+                <input type="file" accept=".tsv" class="custom-file-input p-2" id="product-file">
+                <label class="custom-file-label p-2" for="productFile" id="product-file-name">Choose File</label>
               </div>
               <a th:href="@{/sample/products-sample.tsv}" target="_blank">Download Sample File</a>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary btn-sm" id="process-data">
-                <i class='fa fa-upload mr-1'></i>Upload
+                <i class="fa fa-upload mr-1"></i>Upload
               </button>
             </div>
           </div>
