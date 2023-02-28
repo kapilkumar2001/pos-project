@@ -74,7 +74,7 @@ function getInventoryReport() {
 
 function init() {
 	getInventory();
-  $("#download-tsv-inventory-report").click(getInventoryReport);
+    $("#download-tsv-inventory-report").click(getInventoryReport);
 }
 
 $(document).ready(init);

@@ -7,12 +7,12 @@ function getBrands(){
 	let url = getBrandsUrl();
 
 	$.ajax({
-    url: url,
-    type: "GET",
-    success: function(data) {
-      displayBrands(data);  
-    },
-    error: handleAjaxError
+		url: url,
+		type: "GET",
+		success: function(data) {
+			displayBrands(data);  
+		},
+		error: handleAjaxError
 	});
 }
 
@@ -43,39 +43,39 @@ function getBrandsReport(){
 	let url = getBrandsUrl();
 
 	$.ajax({
-	  url: url,
-	  type: "GET",
-	  success: function(data) { 
-		  data = data.reverse();
-      let headers = "Brand	Category\n"; 
-      let tsv = "";
-      tsv += headers
+		url: url,
+		type: "GET",
+		success: function(data) { 
+			data = data.reverse();
+			let headers = "Brand	Category\n"; 
+			let tsv = "";
+			tsv += headers
 
-      for(row of data){
-        tsv+=(row.brand + "	" + row.category);
-        tsv+="\n";
-      }  
+			for(row of data){
+				tsv+=(row.brand + "	" + row.category);
+				tsv+="\n";
+			}  
 
-      const date = new Date();
-      let day = date.getDate();
-      let month = date.getMonth() + 1;
-      let year = date.getFullYear();
-      let currentDate = `${day}-${month}-${year}`;
+			const date = new Date();
+			let day = date.getDate();
+			let month = date.getMonth() + 1;
+			let year = date.getFullYear();
+			let currentDate = `${day}-${month}-${year}`;
 
-      let hiddenElement = document.createElement("a");  
-      hiddenElement.href = "data:text/tsv;charset=utf-8," + encodeURI(tsv);  
-      hiddenElement.target = "_blank";  
-      hiddenElement.download = "brands-report-" + currentDate + ".tsv";  
-      hiddenElement.click();  
-		  hiddenElement.remove();
-	  },
-	  error: handleAjaxError
+			let hiddenElement = document.createElement("a");  
+			hiddenElement.href = "data:text/tsv;charset=utf-8," + encodeURI(tsv);  
+			hiddenElement.target = "_blank";  
+			hiddenElement.download = "brands-report-" + currentDate + ".tsv";  
+			hiddenElement.click();  
+			hiddenElement.remove();
+		},
+		error: handleAjaxError
 	});
 }
 
 function init(){
-  getBrands()
-  $("#download-tsv-brands-report").click(getBrandsReport);
+	getBrands()
+	$("#download-tsv-brands-report").click(getBrandsReport);
 }
 
 $(document).ready(init);

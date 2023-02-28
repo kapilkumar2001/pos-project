@@ -210,7 +210,7 @@ function displayUploadData() {
 
 function displayInventory(data) {
 	$("#inventory-edit-form input[name=barcode]").val(data.barcode);
-  $("#inventory-edit-form input[name=quantity]").val(data.quantity);
+    $("#inventory-edit-form input[name=quantity]").val(data.quantity);
 	document.getElementById("edit-inventory-modal-title").innerHTML = ("Edit Inventory <span class=\"badge badge-secondary custom-gray p-2 ml-2\">" + data.barcode + "</span>");
 	$("#edit-inventory-modal").modal("toggle");
 }

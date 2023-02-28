@@ -10,11 +10,11 @@ function getBrandUrl(){
 
 function getSalesReport() {
 	let brandField = document.querySelector("#input-brand");
-  let brand = brandField.value;
+	let brand = brandField.value;
 	let categoryField = document.querySelector("#input-category");
-  let category = categoryField.value;
-  let startDate = $("#sales-report-form input[name=startDate]").val();
-  let endDate = $("#sales-report-form input[name=endDate]").val();
+	let category = categoryField.value;
+	let startDate = $("#sales-report-form input[name=startDate]").val();
+	let endDate = $("#sales-report-form input[name=endDate]").val();
 	let url = getSalesReportUrl() + "/?startdate=" + startDate + "&enddate=" + endDate + "&brand=" + brand + "&category=" + category;
 
 	$.ajax({
@@ -35,7 +35,7 @@ function displaySalesReport(data) {
 
 	let tbody = $("#sales-report-table").find("tbody");
 	tbody.empty();
-  let tmp = 1;
+    let tmp = 1;
 	data.sort(function(a, b) { 
 		return b.revenue - a.revenue;
 	})
@@ -47,10 +47,10 @@ function displaySalesReport(data) {
 			+ "<td>" + e.brand + "</td>"
 			+ "<td>" + e.category + "</td>"
 			+ "<td>" + e.quantity + "</td>"
-      + "<td>" + e.revenue + "</td>"
+            + "<td>" + e.revenue + "</td>"
 			+ "</tr>";
 		tbody.append(row);
-    tmp=tmp+1;
+        tmp=tmp+1;
 	}
 }
 
@@ -184,11 +184,11 @@ function getDefaultDate(){
 
 function init() {
 	getDefaultDate();
-  getSalesReport();
-  getBrandsList();
-  getCategories();
+	getSalesReport();
+	getBrandsList();
+	getCategories();
 	$("#apply-filter").click(getSalesReport);
-  $("#download-tsv-sales-report").click(downloadSalesReport);
+    $("#download-tsv-sales-report").click(downloadSalesReport);
 }
 
 $(document).ready(init);

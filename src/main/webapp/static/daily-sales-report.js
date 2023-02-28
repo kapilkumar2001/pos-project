@@ -76,10 +76,10 @@ function getDefaultDate(){
 	let year = date.getFullYear();
 
 	if (month < 10)  
-    month = "0" + month;
+    	month = "0" + month;
 
 	if (day < 10) 
-    day = "0" + day;
+    	day = "0" + day;
 
 	let today = year + "-" + month + "-" + day;      
 	document.getElementById("input-pos-end-date").setAttribute("max", today);
@@ -90,7 +90,7 @@ function getDefaultDate(){
 	date.setMonth(date.getMonth());
 
 	if (date.getMonth() === m) 
-    date.setDate(0);
+   		date.setDate(0);
 
 	date.setHours(0, 0, 0, 0);
 	day = date.getDate();
@@ -98,10 +98,10 @@ function getDefaultDate(){
 	year = date.getFullYear();
 
 	if (month < 10) 
-    month = "0" + month;
+    	month = "0" + month;
 
 	if (day < 10) 
-    day = "0" + day;
+    	day = "0" + day;
 
 	let monthAgo = year + "-" + month + "-" + day;      
 	document.getElementById("input-pos-start-date").setAttribute("max", today);
@@ -110,9 +110,9 @@ function getDefaultDate(){
 
 function init() {
 	getDefaultDate();
-  getPosDaySaleByFilter();
+  	getPosDaySaleByFilter();
 	$("#apply-filter").click(getPosDaySaleByFilter);
-  $("#download-tsv-posdaysales-report").click(downloadPosDaySalesReport);
+ 	$("#download-tsv-posdaysales-report").click(downloadPosDaySalesReport);
 }
 
 $(document).ready(init);

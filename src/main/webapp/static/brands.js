@@ -14,20 +14,20 @@ function addBrand(){
 	let url = getBrandsUrl();
 
 	$.ajax({
-    url: url,
-    type: "POST",
-    data: json,
-    headers: {
-        "Content-Type": "application/json"
-      },	   
-    success: function(response) {
-    showSuccess("Brand added succesfully!");
-      getBrandsList();  
-    $("#brand-form input[name=brand]").val("");
-    $("#brand-form input[name=category]").val("");
-    $("#add-brand-modal").modal("hide");
-    },
-    error: handleAjaxError
+		url: url,
+		type: "POST",
+		data: json,
+		headers: {
+			"Content-Type": "application/json"
+		},	   
+		success: function(response) {
+			showSuccess("Brand added succesfully!");
+			getBrandsList();  
+			$("#brand-form input[name=brand]").val("");
+			$("#brand-form input[name=category]").val("");
+			$("#add-brand-modal").modal("hide");
+		},
+		error: handleAjaxError
 	});
 }
 
@@ -35,7 +35,7 @@ function updateBrand(){
 	if(($("#brand-edit-form input[name=brand]").val()==="") || ($("#brand-edit-form input[name=category]").val()==="")){
 		showError("Please fill all the fields");
 		return;
-  }
+    }
 
 	let id = $("#brand-edit-form input[name=id]").val();	
 	let url = getBrandsUrl() + "/" + id;
@@ -43,18 +43,18 @@ function updateBrand(){
 	let json = toJson(form);
 
 	$.ajax({
-	  url: url,
-	  type: "PUT",
-	  data: json,
-	  headers: {
-      "Content-Type": "application/json"
-    },	   
-	  success: function(response) {
-		  showSuccess("Brand updated succesfully!");
-	   	getBrandsList();  
+		url: url,
+		type: "PUT",
+		data: json,
+		headers: {
+			"Content-Type": "application/json"
+        },	   
+	    success: function(response) {
+		  	showSuccess("Brand updated succesfully!");
+	   		getBrandsList();  
 			$("#edit-brand-modal").modal("hide");
-	  },
-	  error: handleAjaxError
+	 	},
+	    error: handleAjaxError
 	});
 }
 
@@ -62,12 +62,12 @@ function getBrandsList(){
 	let url = getBrandsUrl();
 
 	$.ajax({
-	  url: url,
-	  type: "GET",
-	  success: function(data) {
-	  	displayBrandsList(data);  
-	  },
-	  error: handleAjaxError
+		url: url,
+		type: "GET",
+		success: function(data) {
+			displayBrandsList(data);  
+		},
+		error: handleAjaxError
 	});
 }
 
@@ -92,15 +92,18 @@ function displayBrandsList(data){
 	for(let i in data){
 		let e = data[i];
 		let buttonHtml = "";
+
 		if(userRole==="supervisor"){
 			buttonHtml += "<button onclick='displayEditBrand(" + e.id + ")' class='border-0 bg-transparent' data-toggle='tooltip' data-placement='bottom' title='Edit'><i class='far fa-edit text-dark'></i></button>"
 		} 
+
 		let row = "<tr>"
 		+ "<td>" + serialNumber + "</td>"
 		+ "<td>" + e.brand + "</td>"
 		+ "<td>"  + e.category + "</td>"
 		+ "<td class='text-center'>" + buttonHtml + "</td>"
 		+ "</tr>";
+
 		tbody.append(row);
 		serialNumber+=1;
 	}
@@ -111,12 +114,12 @@ function displayEditBrand(id){
 	let url = getBrandsUrl() + "/" + id;
 
 	$.ajax({
-    url: url,
-    type: "GET",
-    success: function(data) {
-      displayBrand(data);   
-    },
-    error: handleAjaxError
+		url: url,
+		type: "GET",
+		success: function(data) {
+		displayBrand(data);   
+		},
+		error: handleAjaxError
 	});	
 }
 
@@ -144,9 +147,9 @@ function processData(){
 	$("#download-errors").remove();
 	let file = $("#brands-file")[0].files[0];
 
-  if($("#brands-file")[0].files.length===0){
-    showError("Please Choose File");
-    return;
+    if($("#brands-file")[0].files.length===0){
+		showError("Please Choose File");
+		return;
 	}
 
 	readFileData(file, readFileDataCallback);
@@ -198,20 +201,20 @@ function uploadRows(){
 	let url = getBrandsUrl();
 
 	$.ajax({
-    url: url,
-    type: "POST",
-    data: json,
-    headers: {
-      "Content-Type": "application/json"
-      },	   
-    success: function(response) {
-      uploadRows();  
-    },
-    error: function(response){
-      row.error=response.responseJSON["message"];
-      errorData.push(row);
-      uploadRows();
-    }
+		url: url,
+		type: "POST",
+		data: json,
+		headers: {
+			"Content-Type": "application/json"
+		},	   
+		success: function(response) {
+			uploadRows();  
+		},
+		error: function(response){
+			row.error=response.responseJSON["message"];
+			errorData.push(row);
+			uploadRows();
+		}
 	});
 }
 
