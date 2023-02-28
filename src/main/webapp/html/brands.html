@@ -9,10 +9,10 @@
 				<th:block th:switch="${info.getRole()}">
 					<div th:case="supervisor" class="ml-auto">	
 						<button type="button" class="btn btn-primary btn-sm" id="add-brand-button">
-							<i class='fa fa-plus mr-1'></i>Add Brand
+							<i class="fa fa-plus mr-1"></i>Add Brand
 						</button>
 						<button type="button" class="btn btn-primary btn-sm ml-3" id="upload-data">
-							<i class='fa fa-upload mr-1'></i>Upload Brands
+							<i class="fa fa-upload mr-1"></i>Upload Brands
 						</button>
 					</div>
 				</th:block>
@@ -37,24 +37,22 @@
 						<div class="modal-body">
 							<form id="brand-form">
 								<div class="form-group row">
-									<label for="inputBrand" class="col-3 col-form-label required">Brand</label>
+									<label class="col-3 col-form-label required">Brand</label>
 									<div class="col-9">
-										<input type="text" class="form-control form-control-sm" name="brand"
-											placeholder="Enter Brand" required>
+										<input type="text" class="form-control form-control-sm" name="brand" placeholder="Enter Brand" required>
 									</div>
 								</div>
 								<div class="form-group row">
-									<label for="inputCategory" class="col-3 col-form-label required">Category</label>
+									<label class="col-3 col-form-label required">Category</label>
 									<div class="col-9">
-										<input type="text" class="form-control form-control-sm" name="category"
-											placeholder="Enter Category" required>
+										<input type="text" class="form-control form-control-sm" name="category" placeholder="Enter Category" required>
 									</div>
 								</div>
 							</form>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-primary btn-sm" id="add-brand">
-								<i class='fa fa-check mr-1'></i>Add
+								<i class="fa fa-check mr-1"></i>Add
 							</button>
 						</div>
 					</div>
@@ -74,17 +72,15 @@
 						<div class="modal-body">
 							<form id="brand-edit-form">
 								<div class="form-group row">
-									<label for="editInputBrand" class="col-sm-3 col-form-label required">Brand</label>
+									<label class="col-sm-3 col-form-label required">Brand</label>
 									<div class="col-sm-9">
-										<input type="text" class="form-control form-control-sm" name="brand"
-											placeholder="Enter Brand" required>
+										<input type="text" class="form-control form-control-sm" name="brand" placeholder="Enter Brand" required>
 									</div>
 								</div>
 								<div class="form-group row">
-									<label for="editInputCategory" class="col-sm-3 col-form-label required">Category</label>
+									<label class="col-sm-3 col-form-label required">Category</label>
 									<div class="col-sm-9">
-										<input type="text" class="form-control form-control-sm" name="category"
-											placeholder="Enter Category" required>
+										<input type="text" class="form-control form-control-sm" name="category"	placeholder="Enter Category" required>
 									</div>
 								</div>
 								<input type="hidden" name="id">
@@ -92,7 +88,7 @@
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-primary btn-sm" id="update-brand">
-								<i class='fa fa-check mr-1'></i>Update
+								<i class="fa fa-check mr-1"></i>Update
 							</button>
 						</div>
 					</div>
@@ -111,14 +107,14 @@
 						</div>
 						<div class="modal-body">
 							<div class="brands-file p-2 col-12">
-								<input type="file" accept=".tsv" class="custom-file-input" id="brandsFile">
-								<label class="custom-file-label p-2" for="brandsFile" id="brandsFileName">Choose File</label>
+								<input type="file" accept=".tsv" class="custom-file-input" id="brands-file">
+								<label class="custom-file-label p-2" for="brands-file" id="brands-file-name">Choose File</label>
 							</div>
 							<a th:href="@{/sample/brands-sample.tsv}" target="_blank">Download Sample File</a>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-primary btn-sm" id="process-data">
-								<i class='fa fa-upload mr-1'></i>Upload
+								<i class="fa fa-upload mr-1"></i>Upload
 							</button>
 						</div>
 					</div>

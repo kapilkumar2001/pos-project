@@ -9,16 +9,17 @@ function getBrandUrl(){
 }
 
 function getSalesReport() {
-	let brandField = document.querySelector("#inputBrand");
-    let brand = brandField.value;
-	let categoryField = document.querySelector("#inputCategory");
-    let category = categoryField.value;
-    let startDate = $("#sales-report-form input[name=startDate]").val();
-    let endDate = $("#sales-report-form input[name=endDate]").val();
-	let url = getSalesReportUrl() + '/?startdate=' + startDate + '&enddate=' + endDate + '&brand=' + brand + '&category=' + category;
+	let brandField = document.querySelector("#input-brand");
+  let brand = brandField.value;
+	let categoryField = document.querySelector("#input-category");
+  let category = categoryField.value;
+  let startDate = $("#sales-report-form input[name=startDate]").val();
+  let endDate = $("#sales-report-form input[name=endDate]").val();
+	let url = getSalesReportUrl() + "/?startdate=" + startDate + "&enddate=" + endDate + "&brand=" + brand + "&category=" + category;
+
 	$.ajax({
 		url: url,
-		type: 'GET',
+		type: "GET",
 		success: function (data) {
 			displaySalesReport(data);
 		},
@@ -27,67 +28,72 @@ function getSalesReport() {
 }
 
 function displaySalesReport(data) {
-	let thead = $('#sales-report-table').find('thead');
+	let thead = $("#sales-report-table").find("thead");
 	thead.empty();
-	let header = '<tr> <th scope="col">S.No.</th> <th scope="col">Brand</th> <th scope="col">Category</th> <th scope="col">Quantity</th> <th scope="col">Revenue</th> </tr>';
+	let header = "<tr> <th scope='col'>S.No.</th> <th scope='col'>Brand</th> <th scope='col'>Category</th> <th scope='col'>Quantity</th> <th scope='col'>Revenue</th> </tr>";
 	thead.append(header);
 
-	let tbody = $('#sales-report-table').find('tbody');
+	let tbody = $("#sales-report-table").find("tbody");
 	tbody.empty();
-    let tmp = 1;
+  let tmp = 1;
 	data.sort(function(a, b) { 
 		return b.revenue - a.revenue;
 	})
+
 	for (let i in data) {
 		let e = data[i];
-		let row = '<tr>'
-			+ '<td>' + tmp + '</td>'
-			+ '<td>' + e.brand + '</td>'
-			+ '<td>' + e.category + '</td>'
-			+ '<td>' + e.quantity + '</td>'
-            + '<td>' + e.revenue + '</td>'
-			+ '</tr>';
+		let row = "<tr>"
+			+ "<td>" + tmp + "</td>"
+			+ "<td>" + e.brand + "</td>"
+			+ "<td>" + e.category + "</td>"
+			+ "<td>" + e.quantity + "</td>"
+      + "<td>" + e.revenue + "</td>"
+			+ "</tr>";
 		tbody.append(row);
-        tmp=tmp+1;
+    tmp=tmp+1;
 	}
 }
 
 function downloadSalesReport(){
-	let brandField = document.querySelector("#inputBrand");
+	let brandField = document.querySelector("#input-brand");
 	let brand = brandField.value;
-	let categoryField = document.querySelector("#inputCategory");
+	let categoryField = document.querySelector("#input-category");
 	let category = categoryField.value;
 	let startDate = $("#sales-report-form input[name=startDate]").val();
 	let endDate = $("#sales-report-form input[name=endDate]").val();
-	let url = getSalesReportUrl() + '/?startdate=' + startDate + '&enddate=' + endDate + '&brand=' + brand + '&category=' + category;
+	let url = getSalesReportUrl() + "/?startdate=" + startDate + "&enddate=" + endDate + "&brand=" + brand + "&category=" + category;
 	
 	$.ajax({
 		url: url,
-		type: 'GET',
+		type: "GET",
 		success: function (data) {
 			data.sort(function(a, b) { 
 				return b.revenue - a.revenue;
 			})
-			let tsv = 'Brand	Category	Quantity	Revenue\n';  
+			let tsv = "Brand	Category	Quantity	Revenue\n"; 
+
 			for(row of data){
-				tsv+=Object.values(row).join('	');
-				tsv+='\n';
+				tsv+=Object.values(row).join("	");
+				tsv+="\n";
 			}  
-			let hiddenElement = document.createElement('a');  
-			hiddenElement.href = 'data:text/tsv;charset=utf-8,' + encodeURI(tsv);  
-			hiddenElement.target = '_blank';  
-			hiddenElement.download = 'sales-report-' + startDate + '-to-' + endDate + '.tsv';  
+
+			let hiddenElement = document.createElement("a");  
+			hiddenElement.href = "data:text/tsv;charset=utf-8," + encodeURI(tsv);  
+			hiddenElement.target = "_blank";  
+			hiddenElement.download = "sales-report-" + startDate + "-to-" + endDate + ".tsv";  
 			hiddenElement.click();
-				},
+			hiddenElement.remove();
+		},
 		error: handleAjaxError
 	});
 }
 
 function getBrandsList() {
 	let url = getBrandUrl()+ "/get-brands";
+
 	$.ajax({
 		url: url,
-		type: 'GET',
+		type: "GET",
 		success: function (data) {
 			displayBrandList(data);
 		},
@@ -96,11 +102,12 @@ function getBrandsList() {
 }
 
 function displayBrandList(data) {
-	let select = $('#inputBrand');
+	let select = $("#input-brand");
 	select.empty();
 	let row = "<option value='' selected>All</option>";
 	select.append(row);
 	data = Array.from(new Set(data));
+
 	for (let i in data) {
 		let e = data[i];
 		row = "<option value='" +e+ "'>" + e + "</option>";
@@ -110,9 +117,10 @@ function displayBrandList(data) {
 
 function getCategories() {
 	let url = getBrandUrl()+ "/get-categories/";
+
 	$.ajax({
 		url: url,
-		type: 'GET',
+		type: "GET",
 		success: function (data) {
 			displayCategoryList(data);
 		},
@@ -121,11 +129,12 @@ function getCategories() {
 }
 
 function displayCategoryList(data) {
-	let select1 = $('#inputCategory');
+	let select1 = $("#input-category");
 	select1.empty();
 	let row = "<option value='' selected>All</option>";
 	select1.append(row);
 	data = Array.from(new Set(data));
+
 	for (let i in data) {
 		let e = data[i];
 		let row = "<option value='" +e+ "'>" + e + "</option>";
@@ -139,34 +148,47 @@ function getDefaultDate(){
 	let day = date.getDate();
 	let month = date.getMonth() + 1;
 	let year = date.getFullYear();
-	if (month < 10) month = "0" + month;
-	if (day < 10) day = "0" + day;
+
+	if (month < 10) 
+		month = "0" + month;
+
+	if (day < 10) 
+		day = "0" + day;
+
 	let today = year + "-" + month + "-" + day;     
-	document.getElementById("inputEndDate").setAttribute("max", today);
-	document.getElementById("inputEndDate").value = today;
+	document.getElementById("input-end-date").setAttribute("max", today);
+	document.getElementById("input-end-date").value = today;
 
 	// one month before today
 	let m = date.getMonth()+1;
 	date.setMonth(date.getMonth());
-	if (date.getMonth() === m) date.setDate(0);
+
+	if (date.getMonth() === m) 
+		date.setDate(0);
+
 	date.setHours(0, 0, 0, 0);
 	day = date.getDate();
 	month = date.getMonth();
 	year = date.getFullYear();
-	if (month < 10) month = "0" + month;
-	if (day < 10) day = "0" + day;
+
+	if (month < 10) 
+		month = "0" + month;
+
+	if (day < 10) 
+		day = "0" + day;
+		
 	let monthAgo = year + "-" + month + "-" + day;      
-	document.getElementById("inputStartDate").setAttribute("max", today);
-	document.getElementById("inputStartDate").value = monthAgo;
+	document.getElementById("input-start-date").setAttribute("max", today);
+	document.getElementById("input-start-date").value = monthAgo;
 }
 
 function init() {
 	getDefaultDate();
-    getSalesReport();
-    getBrandsList();
-    getCategories();
-	$('#apply-filter').click(getSalesReport);
-    $('#download-tsv-sales-report').click(downloadSalesReport);
+  getSalesReport();
+  getBrandsList();
+  getCategories();
+	$("#apply-filter").click(getSalesReport);
+  $("#download-tsv-sales-report").click(downloadSalesReport);
 }
 
 $(document).ready(init);

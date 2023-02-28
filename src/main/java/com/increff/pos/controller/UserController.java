@@ -1,7 +1,6 @@
 package com.increff.pos.controller;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +22,6 @@ import com.increff.pos.api.ApiException;
 import com.increff.pos.api.UserApi;
 import com.increff.pos.model.InfoData;
 import com.increff.pos.model.LoginForm;
-import com.increff.pos.model.UserData;
 import com.increff.pos.model.UserForm;
 import com.increff.pos.pojo.UserPojo;
 import com.increff.pos.util.SecurityUtil;
@@ -70,25 +68,6 @@ public class UserController {
 		UserPojo userPojo = convertUserForm(form);
 		api.add(userPojo);
 		return new ModelAndView("redirect:/site/login");
-	}
-
-	@ApiOperation(value = "Gets list of all users")
-	@RequestMapping(path = "/session/signup", method = RequestMethod.GET)
-	public List<UserData> getAllUser() {
-		List<UserPojo> list = api.getAll();
-		List<UserData> list2 = new ArrayList<UserData>();
-		for (UserPojo userPojo : list) {
-			list2.add(convert(userPojo));
-		}
-		return list2;
-	}
-
-	private static UserData convert(UserPojo userPojo) {
-		UserData userData = new UserData();
-		userData.setEmail(userPojo.getEmail());
-		userData.setRole(userPojo.getRole());
-		userData.setId(userPojo.getId());
-		return userData;
 	}
 
 	private UserPojo convertUserForm(UserForm userForm) {

@@ -5,9 +5,10 @@ function getInventoryReportUrl() {
 
 function getInventory() {
 	let url = getInventoryReportUrl();
+
 	$.ajax({
 		url: url,
-		type: 'GET',
+		type: "GET",
 		success: function (data) {
 			displayInventory(data);
 		},
@@ -16,23 +17,24 @@ function getInventory() {
 }
 
 function displayInventory(data) {
-	let thead = $('#inventory-report-table').find('thead');
+	let thead = $("#inventory-report-table").find("thead");
 	thead.empty();
-	let header = '<tr> <th scope="col">S.No.</th> <th scope="col">Brand</th> <th scope="col">Category</th> <th scope="col">Quantity</th> </tr>';
+	let header = "<tr> <th scope='col'>S.No.</th> <th scope='col'>Brand</th> <th scope='col'>Category</th> <th scope='col'>Quantity</th> </tr>";
 	thead.append(header);
 
-	let tbody = $('#inventory-report-table').find('tbody');
+	let tbody = $("#inventory-report-table").find("tbody");
 	tbody.empty();
     let tmp = 1;
 	data = data.reverse();
+
 	for (let i in data) {
 		let e = data[i];
-		let row = '<tr>'
-			+ '<td>' + tmp + '</td>'
-			+ '<td>' + e.brand + '</td>'
-			+ '<td>' + e.category + '</td>'
-			+ '<td>' + e.quantity + '</td>'
-			+ '</tr>';
+		let row = "<tr>"
+			+ "<td>" + tmp + "</td>"
+			+ "<td>" + e.brand + "</td>"
+			+ "<td>" + e.category + "</td>"
+			+ "<td>" + e.quantity + "</td>"
+			+ "</tr>";
 		tbody.append(row);
         tmp=tmp+1;
 	}
@@ -40,21 +42,31 @@ function displayInventory(data) {
 
 function getInventoryReport() {
 	let url = getInventoryReportUrl();
+
 	$.ajax({
 		url: url,
-		type: 'GET',
+		type: "GET",
 		success: function (data) {
 			data = data.reverse();
-			let tsv = 'Brand	Category	Quantity\n';  
+			let tsv = "Brand	Category	Quantity\n"; 
+
 			for(row of data){
-				tsv+=Object.values(row).join('	');
-				tsv+='\n';
+				tsv+=Object.values(row).join("	");
+				tsv+="\n";
 			}  
-			let hiddenElement = document.createElement('a');  
-			hiddenElement.href = 'data:text/tsv;charset=utf-8,' + encodeURI(tsv);  
-			hiddenElement.target = '_blank';  
-			hiddenElement.download = 'inventory-report.tsv';  
+
+			const date = new Date();
+			let day = date.getDate();
+			let month = date.getMonth() + 1;
+			let year = date.getFullYear();
+			let currentDate = `${day}-${month}-${year}`;
+
+			let hiddenElement = document.createElement("a");  
+			hiddenElement.href = "data:text/tsv;charset=utf-8," + encodeURI(tsv);  
+			hiddenElement.target = "_blank";  
+			hiddenElement.download = "inventory-report-" + currentDate + ".tsv";  
 			hiddenElement.click();
+			hiddenElement.remove();
 		},
 		error: handleAjaxError
 	});
@@ -62,7 +74,7 @@ function getInventoryReport() {
 
 function init() {
 	getInventory();
-    $('#download-tsv-inventory-report').click(getInventoryReport);
+  $("#download-tsv-inventory-report").click(getInventoryReport);
 }
 
 $(document).ready(init);

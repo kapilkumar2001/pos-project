@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class posDaySalesDtoTest extends AbstractUnitTest{
     private PosDaySalesDao dao;
     
     @Test
-    public void testCreate() throws ApiException{
+    public void testCreate() throws ApiException, InterruptedException{
         BrandForm brandForm = new BrandForm();
         brandForm.setBrand("test brand 1");
         brandForm.setCategory("test category 1");
@@ -224,19 +225,17 @@ public class posDaySalesDtoTest extends AbstractUnitTest{
         assertEquals(StatusEnum.invoiced, orderPojos.get(1).getStatus());
         assertEquals(StatusEnum.created, orderPojos.get(2).getStatus());
 
+        TimeUnit.SECONDS.sleep(1);
         dto.create();
 
-        // TODO: check this 
-
-         List<PosDaySalesPojo> posDaySalesPojos = dao.selectAll();
-         // expected 37, 2, 7279.49
-         assertEquals(37, posDaySalesPojos.get(0).getInvoicedItemsCount());
-         assertEquals(2, posDaySalesPojos.get(0).getInvoicedOrdersCount());
-         assertEquals(7275.0, posDaySalesPojos.get(0).getTotalRevenue(),0);
+        List<PosDaySalesPojo> posDaySalesPojos = dao.selectAll();
+        assertEquals(37, posDaySalesPojos.get(0).getInvoicedItemsCount());
+        assertEquals(2, posDaySalesPojos.get(0).getInvoicedOrdersCount());
+        assertEquals(7275.0, posDaySalesPojos.get(0).getTotalRevenue(),0);
     }
 
     @Test
-    public void testGetAllDaySale() throws ApiException{
+    public void testGetAllDaySale() throws ApiException, InterruptedException{
         BrandForm brandForm = new BrandForm();
         brandForm.setBrand("test brand 1");
         brandForm.setCategory("test category 1");
@@ -419,14 +418,12 @@ public class posDaySalesDtoTest extends AbstractUnitTest{
         assertEquals(StatusEnum.invoiced, orderPojos.get(1).getStatus());
         assertEquals(StatusEnum.created, orderPojos.get(2).getStatus());
 
+        TimeUnit.SECONDS.sleep(1);
         dto.create();
 
-        // TODO: check this 
-
-         List<PosDaySalesData> posDaySalesDatas = dto.getAllDaySale();
-         // expected 37, 2, 7279.49
-         assertEquals(37, posDaySalesDatas.get(0).getInvoicedItemsCount());
-         assertEquals(2, posDaySalesDatas.get(0).getInvoicedOrdersCount());
-         assertEquals(7275.0, posDaySalesDatas.get(0).getTotalRevenue(),0);
+        List<PosDaySalesData> posDaySalesDatas = dto.getAllDaySale();
+        assertEquals(37, posDaySalesDatas.get(0).getInvoicedItemsCount());
+        assertEquals(2, posDaySalesDatas.get(0).getInvoicedOrdersCount());
+        assertEquals(7275.0, posDaySalesDatas.get(0).getTotalRevenue(),0);
     }
 }
