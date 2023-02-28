@@ -223,23 +223,23 @@ function addItemInList() {
 		return;
 	}
 
-	if(mapQuantity.has(barcode + sellingPrice)){
-    quantity = parseInt(quantity) + parseInt(mapQuantity.get(barcode + sellingPrice));
-    deleteItem(maptmpCreateOrderId.get(barcode + sellingPrice), barcode, sellingPrice);
+	if(mapQuantity.has(barcode + sellingPrice)) {
+		quantity = parseInt(quantity) + parseInt(mapQuantity.get(barcode + sellingPrice));
+		deleteItem(maptmpCreateOrderId.get(barcode + sellingPrice), barcode, sellingPrice);
 
-    mapQuantity.set(barcode + sellingPrice, quantity);
+		mapQuantity.set(barcode + sellingPrice, quantity);
 		maptmpCreateOrderId.set(barcode + sellingPrice, tmpCreateOrderId);
 
-    displayOrderItemList(barcode, quantity, sellingPrice, tmpCreateOrderId);
+		displayOrderItemList(barcode, quantity, sellingPrice, tmpCreateOrderId);
 		tmpCreateOrderId = tmpCreateOrderId + 1;
-  }
-  else {
-    mapQuantity.set(barcode + sellingPrice, quantity);
-    maptmpCreateOrderId.set(barcode + sellingPrice, tmpCreateOrderId);
+	}
+	else {
+		mapQuantity.set(barcode + sellingPrice, quantity);
+		maptmpCreateOrderId.set(barcode + sellingPrice, tmpCreateOrderId);
 
-    displayOrderItemList(barcode, quantity, sellingPrice, tmpCreateOrderId);
-    tmpCreateOrderId = tmpCreateOrderId + 1;
-  }
+		displayOrderItemList(barcode, quantity, sellingPrice, tmpCreateOrderId);
+		tmpCreateOrderId = tmpCreateOrderId + 1;
+	}
 
 	$("#add-order-item-form input[name=sellingPrice]").val("");
 	$("#add-order-item-form input[name=quantity]").val("");
@@ -256,23 +256,117 @@ function displayOrderItemList(barcode, quantity, sellingPrice, tmpId) {
 	}
 
 	let tbody = $('#order-item-table').find('tbody');
-	let buttonHtml = '<button onclick="deleteItem(' + tmpId + ',\'' + barcode + '\',' + sellingPrice + ')" class="border-0 bg-transparent"><i class=\'fa fa-trash-o text-danger\'></i></button>'
+	let buttonHtml = '<button onclick="createOrderEditOrSaveItem(' + tmpId + ')" class="border-0 bg-transparent mr-4" id="edit' + tmpId + '"><i class=\'fa fa-edit text-dark\'></i></button>'
+	buttonHtml += '<button onclick="deleteItem(' + tmpId + ',\'' + barcode + '\',' + sellingPrice + ')" class="border-0 bg-transparent"><i class=\'fa fa-trash-o text-danger\'></i></button>'
 	row = '<tr id="row' + tmpId + '">'
 		+ '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="barcode' + tmpId + '" id="barcode' + tmpId + '" placeholder="Enter Barcode" value="'+ barcode + '" readonly="true"></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpId + '" id="quantity' + tmpId + '" placeholder="Enter Quantity" value="'+ quantity + '" required></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="sellingPrice' + tmpId + '" id="sellingPrice' + tmpId + '" placeholder="Enter Price" value="'+ sellingPrice + '" required></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpId + '" id="quantity' + tmpId + '" placeholder="Enter Quantity" value="'+ quantity + '" readonly="true"></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="sellingPrice' + tmpId + '" id="sellingPrice' + tmpId + '" placeholder="Enter Price" value="'+ sellingPrice + '" readonly="true"></div> </td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
 	tbody.prepend(row);
 }
 
+let createOrderPreviousQuantity;
+let createOrderPreviousSellingPrice;
+
+function createOrderEditOrSaveItem(tmpId) {
+	event.preventDefault();
+
+	let barcodeTmpId = "barcode" + tmpId;
+	let quantityTmpId = "quantity" + tmpId;
+	let sellingPriceTmpId = "sellingPrice" + tmpId;
+	let editTmpId = "edit" + tmpId;
+
+	var button = document.getElementById(`${editTmpId}`);
+	if (button.innerHTML.includes("fa-edit")) {
+		button.innerHTML = "<i class='fa fa-save text-dark'></i>";
+	} else {
+		button.innerHTML = "<i class='fa fa-edit text-dark'></i>";
+	}
+	
+	if(document.getElementById(`${quantityTmpId}`).readOnly == true) {
+		createOrderPreviousQuantity =  document.getElementById(`${quantityTmpId}`).value;
+		createOrderPreviousSellingPrice = document.getElementById(`${sellingPriceTmpId}`).value;
+
+		document.getElementById(`${quantityTmpId}`).readOnly = false;
+		document.getElementById(`${sellingPriceTmpId}`).readOnly = false;
+	}
+	else {
+		currentQuantity =  document.getElementById(`${quantityTmpId}`).value;
+		currentSellingPrice = document.getElementById(`${sellingPriceTmpId}`).value;
+		currentBarcode = document.getElementById(`${barcodeTmpId}`).value;
+
+		document.getElementById(`${quantityTmpId}`).readOnly = true;
+		document.getElementById(`${sellingPriceTmpId}`).readOnly = true;
+
+		if(currentSellingPrice === createOrderPreviousSellingPrice) {
+			mapQuantity.set(currentBarcode + currentSellingPrice, currentQuantity);
+		}
+		else {
+			mapQuantity.delete(currentBarcode + createOrderPreviousSellingPrice);
+			let id = maptmpCreateOrderId.get(currentBarcode + createOrderPreviousSellingPrice)
+			maptmpCreateOrderId.delete(currentBarcode + createOrderPreviousSellingPrice);
+
+			mapQuantity.set(currentBarcode + currentSellingPrice, currentQuantity);
+			maptmpCreateOrderId.set(currentBarcode + currentSellingPrice, id);
+		}
+	}
+}
+
+let editOrderPreviousQuantity;
+let editOrderPreviousSellingPrice;
+
+function editOrderEditOrSaveItem(tmpId) {
+	event.preventDefault();
+
+	let barcodeTmpId = "editbarcode" + tmpId;
+	let quantityTmpId = "quantity" + tmpId;
+	let sellingPriceTmpId = "sellingPrice" + tmpId;
+	let editTmpId = "edit" + tmpId;
+
+	var button = document.getElementById(`${editTmpId}`);
+	if (button.innerHTML.includes("fa-edit")) {
+		button.innerHTML = "<i class='fa fa-save text-dark'></i>";
+	} else {
+		button.innerHTML = "<i class='fa fa-edit text-dark'></i>";
+	}
+	
+	if(document.getElementById(`${quantityTmpId}`).readOnly == true) {
+		editOrderPreviousQuantity =  document.getElementById(`${quantityTmpId}`).value;
+		editOrderPreviousSellingPrice = document.getElementById(`${sellingPriceTmpId}`).value;
+
+		document.getElementById(`${quantityTmpId}`).readOnly = false;
+		document.getElementById(`${sellingPriceTmpId}`).readOnly = false;
+	}
+	else {
+		currentQuantity =  document.getElementById(`${quantityTmpId}`).value;
+		currentSellingPrice = document.getElementById(`${sellingPriceTmpId}`).value;
+		currentBarcode = document.getElementById(`${barcodeTmpId}`).value;
+
+		document.getElementById(`${quantityTmpId}`).readOnly = true;
+		document.getElementById(`${sellingPriceTmpId}`).readOnly = true;
+
+		if(currentSellingPrice === editOrderPreviousSellingPrice) {
+			mapQuantityEditOrder.set(currentBarcode + currentSellingPrice, currentQuantity);
+		}
+		else {
+			mapQuantityEditOrder.delete(currentBarcode + editOrderPreviousSellingPrice);
+			let id = maptmpEditOrderId.get(currentBarcode + editOrderPreviousSellingPrice)
+			maptmpEditOrderId.delete(currentBarcode + editOrderPreviousSellingPrice);
+
+			mapQuantityEditOrder.set(currentBarcode + currentSellingPrice, currentQuantity);
+			maptmpEditOrderId.set(currentBarcode + currentSellingPrice, id);
+		}
+	}
+}
 
 function deleteItem(tmpId, barcode, sellingPrice) {
 	let rowTmpId = "row" + tmpId;
 	document.getElementById(`${rowTmpId}`).remove();
 
 	if(mapQuantity.has(barcode + sellingPrice))
-		mapQuantity.delete(barcode+sellingPrice);
+		mapQuantity.delete(barcode + sellingPrice);
 
 	if(mapQuantityEditOrder.has(barcode + sellingPrice))
 		mapQuantityEditOrder.delete(barcode + sellingPrice);
@@ -380,11 +474,12 @@ function editOrderItems(data) {
 	for (let i in data['orders']) {
 		let e = data['orders'][i];
 		let orderId = data['id'];
-		let buttonHtml = '<button onclick="deleteItem(' + tmpEditOrderId + ',\'' + e.barcode + '\',' + e.sellingPrice + ')" class="border-0 bg-transparent"><i class=\'fa fa-trash-o text-danger\'></i></button>';
+		let buttonHtml = '<button onclick="editOrderEditOrSaveItem(' + tmpEditOrderId + ')" class="border-0 bg-transparent mr-4" id="edit' + tmpEditOrderId + '"><i class=\'fa fa-edit text-dark\'></i></button>'
+		buttonHtml += '<button onclick="deleteItem(' + tmpEditOrderId + ',\'' + e.barcode + '\',' + e.sellingPrice + ')" class="border-0 bg-transparent"><i class=\'fa fa-trash-o text-danger\'></i></button>';
 		let row = '<tr id="row' + tmpEditOrderId + '">'
 			+ '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="editbarcode' + tmpEditOrderId + '" id="editbarcode' + tmpEditOrderId + '" value="' + e.barcode + '" readonly="true"></div> </td>'
-			+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpEditOrderId + '" id="quantity' + tmpEditOrderId + '" value="' + e.quantity + '" required></div> </td>'
-			+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="sellingPrice' + tmpEditOrderId + '" id="sellingPrice' + tmpEditOrderId + '" value="' + e.sellingPrice + '" required></div> </td>'
+			+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpEditOrderId + '" id="quantity' + tmpEditOrderId + '" value="' + e.quantity + '" readonly="true"></div> </td>'
+			+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="sellingPrice' + tmpEditOrderId + '" id="sellingPrice' + tmpEditOrderId + '" value="' + e.sellingPrice + '" readonly="true"></div> </td>'
 			+ '<td class="text-center">' + buttonHtml + '</td>'
 			+ '<td class="d-none"> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderItemId' + tmpEditOrderId + '" id="orderItemId' + tmpEditOrderId + '" value="' + e.orderItemId + '"></div> </td>'
 			+ '<td class="d-none"> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderId" id="orderId" value="' + orderId + '"></div> </td>'
@@ -474,18 +569,18 @@ function addIteminEditForm() {
 	}
 
 	if(mapQuantityEditOrder.has(barcode + sellingPrice)){
-    quantity = parseInt(quantity) + parseInt(mapQuantityEditOrder.get(barcode + sellingPrice));
+        quantity = parseInt(quantity) + parseInt(mapQuantityEditOrder.get(barcode + sellingPrice));
 		let quantityId = "quantity" + maptmpEditOrderId.get(barcode + sellingPrice); 
 		document.getElementById(`${quantityId}`).value  = quantity;
 		mapQuantityEditOrder.set(barcode + sellingPrice, quantity);
-  }
-  else{
-    mapQuantityEditOrder.set(barcode + sellingPrice, quantity);
-    maptmpEditOrderId.set(barcode + sellingPrice, tmpEditOrderId);
+	}
+	else{
+		mapQuantityEditOrder.set(barcode + sellingPrice, quantity);
+		maptmpEditOrderId.set(barcode + sellingPrice, tmpEditOrderId);
 
-    displayEditItemForm(barcode, quantity, sellingPrice, tmpEditOrderId);
-    tmpEditOrderId = tmpEditOrderId + 1;
-  }
+		displayEditItemForm(barcode, quantity, sellingPrice, tmpEditOrderId);
+		tmpEditOrderId = tmpEditOrderId + 1;
+	}
 
 	$("#edit-add-order-item-form input[name=sellingPrice]").val("");
 	$("#edit-add-order-item-form input[name=quantity]").val("");
@@ -494,11 +589,12 @@ function addIteminEditForm() {
 
 function displayEditItemForm(barcode, quantity, sellingPrice, tmpId){
 	let tbody = $('#edit-order-item-table').find('tbody');
-	let buttonHtml = '<button onclick="deleteItem(' + tmpId + ',\'' + barcode + '\',' + sellingPrice + ')" class="border-0 bg-transparent"><i class=\'fa fa-trash-o text-danger\'></i></button>';
+	let buttonHtml = '<button onclick="editOrderEditOrSaveItem(' + tmpId + ')" class="border-0 bg-transparent mr-4" id="edit' + tmpId + '"><i class=\'fa fa-edit text-dark\'></i></button>'
+	buttonHtml += '<button onclick="deleteItem(' + tmpId + ',\'' + barcode + '\',' + sellingPrice + ')" class="border-0 bg-transparent"><i class=\'fa fa-trash-o text-danger\'></i></button>';
 	let row = '<tr id="row' + tmpId + '">'
 	    + '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="barcode' + tmpId + '" id="barcode' + tmpId + '" value="' + barcode + '" readonly="true"></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpId + '" id="quantity' + tmpId + '" value="' + quantity + '"></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="sellingPrice' + tmpId + '" id="sellingPrice' + tmpId + '" value="' + sellingPrice + '"></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpId + '" id="quantity' + tmpId + '" value="' + quantity + '" readonly="true"></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="sellingPrice' + tmpId + '" id="sellingPrice' + tmpId + '" value="' + sellingPrice + '" readonly="true"></div> </td>'
 		+ '<td class="text-center">' + buttonHtml + '</td>'
 		+ '<td class="d-none"> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderItemId' + tmpId + '" id="orderItemId' + tmpId + '" value="0"></div></td>'
 		+ '<td class="d-none"> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderId" id="orderId" value="' + editOrderModelOrderId + '"></div></td>'
