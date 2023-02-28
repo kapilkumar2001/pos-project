@@ -30,7 +30,7 @@
 								</div>
 								<button type="button" class="btn btn-primary mt-2 ml-3" id="login-button">Login</button>	
 								<div class="mt-4 mb-2 text-center">
-									Don't have an account? <a th:href="@{/site/signup}">Sign up here</a>
+									Don't have an account? <a th:href="@{/site/signup}" class="text-primary">Sign up here</a>
 								</div>
 							</form>
 						</div>
@@ -46,7 +46,7 @@
 				  window.location.href = "http://localhost:9000/pos/ui/brands";
 			  </script>
 			</div>
-      <div th:case="'operator'">
+            <div th:case="'operator'">
 			  <script>
 				  window.location.href = "http://localhost:9000/pos/ui/brands";
 			  </script>

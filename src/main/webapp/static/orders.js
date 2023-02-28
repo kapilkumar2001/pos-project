@@ -174,15 +174,15 @@ function displayOrderList(data) {
 		let buttonHtml = '';
 		let status;
 		if (e.status === 'invoiced') {
-			status = '<span class="badge badge-success text-dark">INVOICED</span>';
+			status = '<span class="badge badge-success text-dark">Invoiced</span>';
 			buttonHtml += '<button onclick="viewOrder(' + e.id + ')" class="border-0 mr-4 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="View"><i class=\'fa fa-eye text-dark\'></i></button>'
 			buttonHtml += '<button onclick="getInvoice(' + e.id + ')" class="border-0 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="Download Invoice"><i class=\'fa fa-download text-dark\'></i></button>'
 		}
 		else if(e.status === 'cancelled'){
-			status = '<span class="badge badge-danger text-dark">CANCELLED</span>';
+			status = '<span class="badge badge-danger text-dark">Cancelled</span>';
 		}
 		else {
-			status = '<span class="badge badge-warning text-dark">CREATED</span>';
+			status = '<span class="badge badge-warning text-dark">Created</span>';
 			buttonHtml += '<button onclick="editOrder(' + e.id + ')" class="border-0 mr-4 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class=\'far fa-edit text-dark\'></i></button>'
 			buttonHtml += '<button onclick="generateInvoice(' + e.id + ')" class="border-0 bg-transparent" data-toggle="tooltip" data-placement="bottom" title="Generate Invoice"><i class=\'fa fa-file-text text-dark\'></i></button>'
 		}
