@@ -5,8 +5,8 @@ function getBrandsUrl(){
 
 function addBrand(){
 	if(($("#brand-form input[name=brand]").val()==="") || ($("#brand-form input[name=category]").val()==="")){
-    showError("Please fill all the fields");
-    return;
+		showError("Please fill all the fields");
+		return;
 	}
 
 	let form = $("#brand-form");

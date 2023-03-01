@@ -421,7 +421,7 @@ public class posDaySalesDtoTest extends AbstractUnitTest{
         TimeUnit.SECONDS.sleep(1);
         dto.create();
 
-        List<PosDaySalesData> posDaySalesDatas = dto.getAllDaySale();
+        List<PosDaySalesData> posDaySalesDatas = dto.getDaySale("", "");
         assertEquals(37, posDaySalesDatas.get(0).getInvoicedItemsCount());
         assertEquals(2, posDaySalesDatas.get(0).getInvoicedOrdersCount());
         assertEquals(7275.0, posDaySalesDatas.get(0).getTotalRevenue(),0);

@@ -30,11 +30,11 @@ function displayBrands(data){
 	for(let i in data){
 		let e = data[i];
 		let row = "<tr>"
-		+ "<td>" + serialNo + "</td>"
-		+ "<td>" + e.brand + "</td>"
-		+ "<td>"  + e.category + "</td>"
-		+ "</tr>";
-    tbody.append(row);
+			+ "<td>" + serialNo + "</td>"
+			+ "<td>" + e.brand + "</td>"
+			+ "<td>"  + e.category + "</td>"
+			+ "</tr>";
+        tbody.append(row);
 		serialNo+=1;
 	}
 }

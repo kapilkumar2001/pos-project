@@ -9,14 +9,13 @@ function getBrandUrl(){
 }
 
 function getSalesReport() {
-	let brandField = document.querySelector("#input-brand");
-	let brand = brandField.value;
-	let categoryField = document.querySelector("#input-category");
-	let category = categoryField.value;
-	let startDate = $("#sales-report-form input[name=startDate]").val();
-	let endDate = $("#sales-report-form input[name=endDate]").val();
+	let brand = $("#sales-report-form select[name=brand]").val();
+	let category = $("#sales-report-form select[name=category]").val();
+	let startDate = $("#sales-report-form input[name=start-date]").val();
+	let endDate = $("#sales-report-form input[name=end-date]").val();
 	let url = getSalesReportUrl() + "/?startdate=" + startDate + "&enddate=" + endDate + "&brand=" + brand + "&category=" + category;
 
+	console.log(url);
 	$.ajax({
 		url: url,
 		type: "GET",
@@ -55,12 +54,10 @@ function displaySalesReport(data) {
 }
 
 function downloadSalesReport(){
-	let brandField = document.querySelector("#input-brand");
-	let brand = brandField.value;
-	let categoryField = document.querySelector("#input-category");
-	let category = categoryField.value;
-	let startDate = $("#sales-report-form input[name=startDate]").val();
-	let endDate = $("#sales-report-form input[name=endDate]").val();
+	let brand = $("#sales-report-form select[name=brand]").val();
+	let category = $("#sales-report-form select[name=category]").val();
+	let startDate = $("#sales-report-form input[name=start-date]").val();
+	let endDate = $("#sales-report-form input[name=end-date]").val();
 	let url = getSalesReportUrl() + "/?startdate=" + startDate + "&enddate=" + endDate + "&brand=" + brand + "&category=" + category;
 	
 	$.ajax({
@@ -142,7 +139,7 @@ function displayCategoryList(data) {
 	}
 }
 
-function getDefaultDate(){
+function setDefaultDate(){
 	// today
 	let date = new Date();
 	let day = date.getDate();
@@ -156,8 +153,8 @@ function getDefaultDate(){
 		day = "0" + day;
 
 	let today = year + "-" + month + "-" + day;     
-	document.getElementById("input-end-date").setAttribute("max", today);
-	document.getElementById("input-end-date").value = today;
+	$("#sales-report-form input[name=end-date]").attr("max", today);
+	$("#sales-report-form input[name=end-date]").val(today);
 
 	// one month before today
 	let m = date.getMonth()+1;
@@ -178,15 +175,15 @@ function getDefaultDate(){
 		day = "0" + day;
 		
 	let monthAgo = year + "-" + month + "-" + day;      
-	document.getElementById("input-start-date").setAttribute("max", today);
-	document.getElementById("input-start-date").value = monthAgo;
+	$("#sales-report-form input[name=start-date]").attr("max", today);
+	$("#sales-report-form input[name=start-date]").val(monthAgo);
 }
 
 function init() {
-	getDefaultDate();
-	getSalesReport();
+	setDefaultDate();
 	getBrandsList();
 	getCategories();
+	getSalesReport();
 	$("#apply-filter").click(getSalesReport);
     $("#download-tsv-sales-report").click(downloadSalesReport);
 }

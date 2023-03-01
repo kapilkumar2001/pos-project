@@ -26,8 +26,8 @@ function displayPosDaySale(data) {
 }
 
 function getPosDaySaleByFilter(){
-	let startDate = $("#posdaysales-report-form input[name=startDate]").val();
-	let endDate = $("#posdaysales-report-form input[name=endDate]").val();
+	let startDate = $("#posdaysales-report-form input[name=start-date]").val();
+	let endDate = $("#posdaysales-report-form input[name=end-date]").val();
 
 	let url = getPosDaySaleReportUrl() + "?startdate=" + startDate + "&enddate=" + endDate;
 
@@ -42,8 +42,8 @@ function getPosDaySaleByFilter(){
 }
 
 function downloadPosDaySalesReport() {
-	let startDate = $("#posdaysales-report-form input[name=startDate]").val();
-	let endDate = $("#posdaysales-report-form input[name=endDate]").val();
+	let startDate = $("#posdaysales-report-form input[name=start-date]").val();
+	let endDate = $("#posdaysales-report-form input[name=end-date]").val();
 
 	let url = getPosDaySaleReportUrl() + "?startdate=" + startDate + "&enddate=" + endDate;
 
@@ -82,8 +82,8 @@ function getDefaultDate(){
     	day = "0" + day;
 
 	let today = year + "-" + month + "-" + day;      
-	document.getElementById("input-pos-end-date").setAttribute("max", today);
-	document.getElementById("input-pos-end-date").value = today;
+	$("#posdaysales-report-form input[name=end-date]").attr("max", today);
+	$("#posdaysales-report-form input[name=end-date]").val(today);
 
 	// one month before today
 	let m = date.getMonth()+1;
@@ -104,8 +104,8 @@ function getDefaultDate(){
     	day = "0" + day;
 
 	let monthAgo = year + "-" + month + "-" + day;      
-	document.getElementById("input-pos-start-date").setAttribute("max", today);
-	document.getElementById("input-pos-start-date").value = monthAgo;
+	$("#posdaysales-report-form input[name=start-date]").attr("max", today);
+	$("#posdaysales-report-form input[name=start-date]").val(monthAgo);
 }
 
 function init() {

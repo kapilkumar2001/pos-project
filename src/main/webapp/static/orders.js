@@ -204,9 +204,9 @@ let mapQuantity = new Map();
 let maptmpCreateOrderId = new Map();
 
 function addItemInList() {
-	let barcode = document.getElementById("input-barcode").value;
-	let quantity = document.getElementById("input-quantity").value;
-	let sellingPrice = document.getElementById("input-selling-price").value;
+	let barcode = $("#add-order-item-form select[name=barcode]").val();
+	let quantity = $("#add-order-item-form input[name=quantity]").val();
+	let sellingPrice = $("#add-order-item-form input[name=selling-price]").val();
 
 	if(barcode === '' || quantity === '' || sellingPrice === ''){
 		showError("Please fill all the fields!");
@@ -241,9 +241,9 @@ function addItemInList() {
 		tmpCreateOrderId = tmpCreateOrderId + 1;
 	}
 
-	$("#add-order-item-form input[name=sellingPrice]").val("");
+	$("#add-order-item-form input[name=selling-price]").val("");
 	$("#add-order-item-form input[name=quantity]").val("");
-	document.getElementById("input-barcode").selectedIndex = 0;
+	$("#add-order-item-form select[name=barcode]").prop("selectedIndex", 0);
 }
 
 function displayOrderItemList(barcode, quantity, sellingPrice, tmpId) {
@@ -261,7 +261,7 @@ function displayOrderItemList(barcode, quantity, sellingPrice, tmpId) {
 	row = '<tr id="row' + tmpId + '">'
 		+ '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="barcode' + tmpId + '" id="barcode' + tmpId + '" placeholder="Enter Barcode" value="'+ barcode + '" readonly="true"></div> </td>'
 		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpId + '" id="quantity' + tmpId + '" placeholder="Enter Quantity" value="'+ quantity + '" readonly="true"></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="sellingPrice' + tmpId + '" id="sellingPrice' + tmpId + '" placeholder="Enter Price" value="'+ sellingPrice + '" readonly="true"></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="selling-price' + tmpId + '" id="sellingPrice' + tmpId + '" placeholder="Enter Price" value="'+ sellingPrice + '" readonly="true"></div> </td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
 	tbody.prepend(row);
@@ -273,32 +273,35 @@ let createOrderPreviousSellingPrice;
 function createOrderEditOrSaveItem(tmpId) {
 	event.preventDefault();
 
-	let barcodeTmpId = "barcode" + tmpId;
-	let quantityTmpId = "quantity" + tmpId;
-	let sellingPriceTmpId = "sellingPrice" + tmpId;
-	let editTmpId = "edit" + tmpId;
+	if($("#quantity" + tmpId).prop("readonly") == true) {
+		createOrderPreviousQuantity =  $("#quantity" + tmpId).val();
+		createOrderPreviousSellingPrice = $("#sellingPrice" + tmpId).val();
 
-	var button = document.getElementById(`${editTmpId}`);
-	if (button.innerHTML.includes("fa-edit")) {
-		button.innerHTML = "<i class='fa fa-save text-dark'></i>";
-	} else {
-		button.innerHTML = "<i class='fa fa-edit text-dark'></i>";
-	}
-	
-	if(document.getElementById(`${quantityTmpId}`).readOnly == true) {
-		createOrderPreviousQuantity =  document.getElementById(`${quantityTmpId}`).value;
-		createOrderPreviousSellingPrice = document.getElementById(`${sellingPriceTmpId}`).value;
-
-		document.getElementById(`${quantityTmpId}`).readOnly = false;
-		document.getElementById(`${sellingPriceTmpId}`).readOnly = false;
+		$("#quantity" + tmpId).prop("readonly", false);
+		$("#sellingPrice" + tmpId).prop("readonly", false);
 	}
 	else {
-		currentQuantity =  document.getElementById(`${quantityTmpId}`).value;
-		currentSellingPrice = document.getElementById(`${sellingPriceTmpId}`).value;
-		currentBarcode = document.getElementById(`${barcodeTmpId}`).value;
+		currentQuantity =  $("#quantity" + tmpId).val();
+		currentSellingPrice = $("#sellingPrice" + tmpId).val();
+		currentBarcode = $("#barcode" + tmpId).val();
 
-		document.getElementById(`${quantityTmpId}`).readOnly = true;
-		document.getElementById(`${sellingPriceTmpId}`).readOnly = true;
+		if(currentQuantity==="" || currentSellingPrice==="") {
+			showError("Please fill all the fields!");
+		    return;
+		}
+
+		if(currentQuantity<=0){
+			showError("Quantity should be greater than 0");
+			return;
+		}
+	
+		if(currentSellingPrice<0){
+			showError("Selling Price should be greater than or equal to 0");
+			return;
+		}
+
+		$("#quantity" + tmpId).prop("readonly", true);
+		$("#sellingPrice" + tmpId).prop("readonly", true);
 
 		if(currentSellingPrice === createOrderPreviousSellingPrice) {
 			mapQuantity.set(currentBarcode + currentSellingPrice, currentQuantity);
@@ -312,6 +315,13 @@ function createOrderEditOrSaveItem(tmpId) {
 			maptmpCreateOrderId.set(currentBarcode + currentSellingPrice, id);
 		}
 	}
+
+	var button = $("#edit" + tmpId);
+	if (button.html().includes("fa-edit")) {
+		button.html("<i class='fa fa-save text-dark'></i>");
+	} else {
+		button.html("<i class='fa fa-edit text-dark'></i>");
+	}
 }
 
 let editOrderPreviousQuantity;
@@ -319,33 +329,36 @@ let editOrderPreviousSellingPrice;
 
 function editOrderEditOrSaveItem(tmpId) {
 	event.preventDefault();
-
-	let barcodeTmpId = "editbarcode" + tmpId;
-	let quantityTmpId = "quantity" + tmpId;
-	let sellingPriceTmpId = "sellingPrice" + tmpId;
-	let editTmpId = "edit" + tmpId;
-
-	var button = document.getElementById(`${editTmpId}`);
-	if (button.innerHTML.includes("fa-edit")) {
-		button.innerHTML = "<i class='fa fa-save text-dark'></i>";
-	} else {
-		button.innerHTML = "<i class='fa fa-edit text-dark'></i>";
-	}
 	
-	if(document.getElementById(`${quantityTmpId}`).readOnly == true) {
-		editOrderPreviousQuantity =  document.getElementById(`${quantityTmpId}`).value;
-		editOrderPreviousSellingPrice = document.getElementById(`${sellingPriceTmpId}`).value;
+	if($("#quantity" + tmpId).prop("readonly") == true) {
+		editOrderPreviousQuantity =  $("#quantity" + tmpId).val();
+		editOrderPreviousSellingPrice = $("#sellingPrice" + tmpId).val();
 
-		document.getElementById(`${quantityTmpId}`).readOnly = false;
-		document.getElementById(`${sellingPriceTmpId}`).readOnly = false;
+		$("#quantity" + tmpId).prop("readonly", false);
+		$("#sellingPrice" + tmpId).prop("readonly", false);
 	}
 	else {
-		currentQuantity =  document.getElementById(`${quantityTmpId}`).value;
-		currentSellingPrice = document.getElementById(`${sellingPriceTmpId}`).value;
-		currentBarcode = document.getElementById(`${barcodeTmpId}`).value;
+		currentQuantity =  $("#quantity" + tmpId).val();
+		currentSellingPrice = $("#sellingPrice" + tmpId).val();
+		currentBarcode = $("#barcode" + tmpId).val();
 
-		document.getElementById(`${quantityTmpId}`).readOnly = true;
-		document.getElementById(`${sellingPriceTmpId}`).readOnly = true;
+		if(currentQuantity==="" || currentSellingPrice==="") {
+			showError("Please fill all the fields!");
+		    return;
+		}
+
+		if(currentQuantity<=0){
+			showError("Quantity should be greater than 0");
+			return;
+		}
+	
+		if(currentSellingPrice<0){
+			showError("Selling Price should be greater than or equal to 0");
+			return;
+		}
+
+		$("#quantity" + tmpId).prop("readonly", true);
+		$("#sellingPrice" + tmpId).prop("readonly", true);
 
 		if(currentSellingPrice === editOrderPreviousSellingPrice) {
 			mapQuantityEditOrder.set(currentBarcode + currentSellingPrice, currentQuantity);
@@ -359,11 +372,17 @@ function editOrderEditOrSaveItem(tmpId) {
 			maptmpEditOrderId.set(currentBarcode + currentSellingPrice, id);
 		}
 	}
+
+	var button = $("#edit" + tmpId);
+	if (button.html().includes("fa-edit")) {
+		button.html("<i class='fa fa-save text-dark'></i>");
+	} else {
+		button.html("<i class='fa fa-edit text-dark'></i>");
+	}
 }
 
 function deleteItem(tmpId, barcode, sellingPrice) {
-	let rowTmpId = "row" + tmpId;
-	document.getElementById(`${rowTmpId}`).remove();
+	$("#row" + tmpId).remove();
 
 	if(mapQuantity.has(barcode + sellingPrice))
 		mapQuantity.delete(barcode + sellingPrice);
@@ -408,7 +427,7 @@ function displayBarcodesList(data) {
 // View order 
 function viewOrder(id) {
 	$('#view-order-modal').modal('toggle');
-	document.getElementById("view-order-modal-title").innerHTML = ("Order No. " + id);
+	$("#view-order-modal-title").html("Order No " + id);
 	getOrderItems(id);
 }
 
@@ -435,7 +454,7 @@ function viewOrderItems(data) {
 	}
 
 	totalAmount = parseFloat(totalAmount).toFixed(2);
-	document.getElementById("view-order-total-amount").innerHTML = ("Total Amount: " + totalAmount);
+	$("#view-order-total-amount").html("Total Amount : " + totalAmount);
 }
 
 
@@ -444,7 +463,7 @@ function editOrder(id) {
 	$('#edit-order-modal').modal('toggle');
 	getProductsList();
 
-	document.getElementById("edit-order-modal-title").innerHTML = ("Edit Order " + id);
+	$("#edit-order-modal-title").html("Edit Order " + id);
 	let url = getOrderUrl() + '/' + id;
 
 	$.ajax({
@@ -479,7 +498,7 @@ function editOrderItems(data) {
 		let row = '<tr id="row' + tmpEditOrderId + '">'
 			+ '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="editbarcode' + tmpEditOrderId + '" id="editbarcode' + tmpEditOrderId + '" value="' + e.barcode + '" readonly="true"></div> </td>'
 			+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpEditOrderId + '" id="quantity' + tmpEditOrderId + '" value="' + e.quantity + '" readonly="true"></div> </td>'
-			+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="sellingPrice' + tmpEditOrderId + '" id="sellingPrice' + tmpEditOrderId + '" value="' + e.sellingPrice + '" readonly="true"></div> </td>'
+			+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="selling-price' + tmpEditOrderId + '" id="sellingPrice' + tmpEditOrderId + '" value="' + e.sellingPrice + '" readonly="true"></div> </td>'
 			+ '<td class="text-center">' + buttonHtml + '</td>'
 			+ '<td class="d-none"> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderItemId' + tmpEditOrderId + '" id="orderItemId' + tmpEditOrderId + '" value="' + e.orderItemId + '"></div> </td>'
 			+ '<td class="d-none"> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderId" id="orderId" value="' + orderId + '"></div> </td>'
@@ -549,9 +568,9 @@ function updateConvert(data) {
 
 // Edit Order- add item in form
 function addIteminEditForm() {
-	let barcode = document.getElementById("input-barcode-edit-order").value;
-	let quantity = document.getElementById("input-quantity-edit-order").value;
-	let sellingPrice = document.getElementById("input-selling-price-edit-order").value;
+	let barcode = $("#edit-add-order-item-form select[name=barcode]").val();
+	let quantity = $("#edit-add-order-item-form input[name=quantity]").val();
+	let sellingPrice = $("#edit-add-order-item-form input[name=selling-price]").val();
 
 	if(barcode === '' || quantity === '' || sellingPrice === ''){
 		showError("Please fill all the fields!");
@@ -569,9 +588,8 @@ function addIteminEditForm() {
 	}
 
 	if(mapQuantityEditOrder.has(barcode + sellingPrice)){
-        quantity = parseInt(quantity) + parseInt(mapQuantityEditOrder.get(barcode + sellingPrice));
-		let quantityId = "quantity" + maptmpEditOrderId.get(barcode + sellingPrice); 
-		document.getElementById(`${quantityId}`).value  = quantity;
+        quantity = parseInt(quantity) + parseInt(mapQuantityEditOrder.get(barcode + sellingPrice)); 
+		$("#quantity" + maptmpEditOrderId.get(barcode + sellingPrice)).val(quantity);
 		mapQuantityEditOrder.set(barcode + sellingPrice, quantity);
 	}
 	else{
@@ -582,9 +600,9 @@ function addIteminEditForm() {
 		tmpEditOrderId = tmpEditOrderId + 1;
 	}
 
-	$("#edit-add-order-item-form input[name=sellingPrice]").val("");
+	$("#edit-add-order-item-form input[name=selling-price]").val("");
 	$("#edit-add-order-item-form input[name=quantity]").val("");
-	document.getElementById("input-barcode-edit-order").selectedIndex = 0;
+	$("#edit-add-order-item-form select[name=barcode]").prop("selectedIndex", 0);
 }
 
 function displayEditItemForm(barcode, quantity, sellingPrice, tmpId){
@@ -594,7 +612,7 @@ function displayEditItemForm(barcode, quantity, sellingPrice, tmpId){
 	let row = '<tr id="row' + tmpId + '">'
 	    + '<td> <div class="form-group"><input type="text" class="form-control form-control-sm" name="barcode' + tmpId + '" id="barcode' + tmpId + '" value="' + barcode + '" readonly="true"></div> </td>'
 		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="quantity' + tmpId + '" id="quantity' + tmpId + '" value="' + quantity + '" readonly="true"></div> </td>'
-		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="sellingPrice' + tmpId + '" id="sellingPrice' + tmpId + '" value="' + sellingPrice + '" readonly="true"></div> </td>'
+		+ '<td> <div class="form-group"><input type="number" class="form-control form-control-sm" name="selling-price' + tmpId + '" id="sellingPrice' + tmpId + '" value="' + sellingPrice + '" readonly="true"></div> </td>'
 		+ '<td class="text-center">' + buttonHtml + '</td>'
 		+ '<td class="d-none"> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderItemId' + tmpId + '" id="orderItemId' + tmpId + '" value="0"></div></td>'
 		+ '<td class="d-none"> <div class="form-group"><input type="hidden" class="form-control form-control-sm" name="orderId" id="orderId" value="' + editOrderModelOrderId + '"></div></td>'
@@ -610,9 +628,9 @@ function cancelCreate() {
 	let tbody = $('#order-item-table').find('tbody');
 	tbody.empty();
 
-	$("#add-order-item-form input[name=sellingPrice]").val("");
+	$("#add-order-item-form input[name=selling-price]").val("");
 	$("#add-order-item-form input[name=quantity]").val("");
-	document.getElementById("input-barcode").selectedIndex = 0;
+	$("#add-order-item-form select[name=barcode]").prop("selectedIndex", 0);
 	$('#create-order-modal').modal('hide');
 }
 

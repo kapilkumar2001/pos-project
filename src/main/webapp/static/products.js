@@ -10,10 +10,10 @@ function getBrandsUrl() {
 
 function addProduct(event) {
 	if(($("#product-form input[name=name]").val()==="") || ($("#product-form input[name=mrp]").val()==="") || 
-	  ($("#product-form input[name=barcode]").val()==="") || (document.getElementById("input-brand").selectedIndex === 0) || 
-		(document.getElementById("input-category").selectedIndex === 0)){
-      showError("Please fill all the fields");
-      return;
+	    ($("#product-form input[name=barcode]").val()==="") || ($("#product-form select[name=brand]").prop("selectedIndex") === 0) || 
+	    ($("#product-form select[name=category]").prop("selectedIndex") === 0)){
+			showError("Please fill all the fields");
+			return;
 	}
 
 	let form = $("#product-form");
@@ -33,10 +33,10 @@ function addProduct(event) {
 			$("#product-form input[name=name]").val("");
 			$("#product-form input[name=mrp]").val("");
 			$("#product-form input[name=barcode]").val("");
-			document.getElementById("input-brand").selectedIndex = 0;
-			document.getElementById("input-brand").innerHTML = "<option value='' disabled selected class='d-none'>Please Choose Brand</option>";
-			document.getElementById("input-category").selectedIndex = 0;
-			document.getElementById("input-category").innerHTML = "<option value='' disabled selected class='d-none'>Select Brand First</option>";
+		    $("#product-form select[name=brand]").prop("selectedIndex", 0);
+			$("#product-form select[name=brand]").html("<option value='' disabled selected class='d-none'>Please Choose Brand</option>");
+			$("#product-form select[name=category]").prop("selectedIndex", 0);
+			$("#product-form select[name=category]").html("<option value='' disabled selected class='d-none'>Select Brand First</option>");
 			$("#add-product-modal").modal("hide");
 		},
 		error: handleAjaxError
@@ -196,7 +196,7 @@ function displayProduct(data) {
 	$("#product-edit-form input[name=category]").val(data.category);
 	$("#product-edit-form input[name=brand]").val(data.brand);
 	$("#product-edit-form input[name=id]").val(data.id);
-	document.getElementById("edit-product-modal-title").innerHTML = ("Edit Product <span class=\"badge badge-secondary p-2 ml-2\">" + data.barcode + "</span>");
+	$("#edit-product-modal-title").html("Edit Product <span class=\"badge badge-secondary p-2 ml-2\">" + data.barcode + "</span>");
 	$("#edit-product-modal").modal("toggle");
 }
 

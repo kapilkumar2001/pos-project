@@ -77,11 +77,3 @@ function writeFileData(arr){
   tempLink.click(); 
   tempLink.remove();
 }
-
-function showNavbarDropdownMenu() {
-  document.getElementById("navbarDropdownMenu").style.display = "block";
-}
-
-function hideNavbarDropdownMenu() {
-  document.getElementById("navbarDropdownMenu").style.display = "none";
-}
