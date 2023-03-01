@@ -144,7 +144,7 @@ function processData(){
 	processCount = 0;
 	fileData = [];
 	errorData = [];
-	$("#download-errors").remove();
+	
 	let file = $("#brands-file")[0].files[0];
 
     if($("#brands-file")[0].files.length===0){
@@ -158,8 +158,13 @@ function processData(){
 function readFileDataCallback(results){
 	fileData = results.data;
 
-	if(fileData[0].brand===undefined || fileData[0].category===undefined){
-		showError("Invalid file");
+	if((results.meta.fields.length !== 2) || (results.meta.fields[0] !== "brand") || (results.meta.fields[1] !== "category")) {
+		showError("Invalid File");
+		return;
+	}
+
+	if(fileData.length === 0) {
+		showError("File is Empty");
 		return;
 	}
 
@@ -168,9 +173,9 @@ function readFileDataCallback(results){
 		return;
 	}
 
-	if($("#upload-modal-data-row").length==0){
+	if($("#upload-modal-data-row").length === 0){
 		let modalbody = $("#upload-brands-modal").find(".modal-body");
-		let row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
+		let row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"row-count\">0</span>, Processed: <span id=\"process-count\">0</span>, Errors: <span id=\"error-count\">0</span></p>";
 		modalbody.append(row);
 	}
 
@@ -236,15 +241,18 @@ function resetUploadDialog(){
 }
 
 function updateUploadDialog(){
-	$("#rowCount").html("" + fileData.length);
-	$("#processCount").html("" + processCount);
-	$("#errorCount").html("" + errorData.length);
+	$("#row-count").html("" + fileData.length);
+	$("#process-count").html("" + processCount);
+	$("#error-count").html("" + errorData.length);
 }
 
 function updateFileName(){
 	let file = $("#brands-file");
 	let fileName = file.val().split("\\")[2];
 	$("#brands-file-name").html(fileName);
+
+	$("#download-errors").remove();
+	$("#upload-modal-data-row").remove();
 }
 
 function displayUploadData(){

@@ -63,9 +63,9 @@ function downloadBrandsReport(){
 		success: function(data) { 
 			data.sort((a, b) => {
 				if (a.brand < b.brand) {
-					  return -1;
+					return -1;
 				} else if (a.brand > b.brand) {
-					  return 1;
+					return 1;
 				} else {
 					if (a.category < b.category) {
 						return -1;
@@ -76,7 +76,7 @@ function downloadBrandsReport(){
 					}
 				}
 			});
-			
+
 			let headers = "Brand	Category\n"; 
 			let tsv = "";
 			tsv += headers

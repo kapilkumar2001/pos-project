@@ -21,7 +21,6 @@ function getSalesReport() {
 
 	let url = getSalesReportUrl() + "/?startdate=" + startDate + "&enddate=" + endDate + "&brand=" + brand + "&category=" + category;
 
-	console.log(url);
 	$.ajax({
 		url: url,
 		type: "GET",
@@ -69,7 +68,7 @@ function downloadSalesReport(){
 		showError("Invalid Start Date or End Date");
 		return;
 	}
-	
+
 	let url = getSalesReportUrl() + "/?startdate=" + startDate + "&enddate=" + endDate + "&brand=" + brand + "&category=" + category;
 	
 	$.ajax({
@@ -116,6 +115,7 @@ function displayBrandList(data) {
 	let row = "<option value='' selected>All</option>";
 	select.append(row);
 	data = Array.from(new Set(data));
+	data.sort();
 
 	for (let i in data) {
 		let e = data[i];
@@ -124,25 +124,26 @@ function displayBrandList(data) {
 	}
 }
 
-function getCategories() {
+function getCategoriesList() {
 	let url = getBrandUrl()+ "/get-categories/";
 
 	$.ajax({
 		url: url,
 		type: "GET",
 		success: function (data) {
-			displayCategoryList(data);
+			displayCategoriesList(data);
 		},
 		error: handleAjaxError
 	});
 }
 
-function displayCategoryList(data) {
+function displayCategoriesList(data) {
 	let select1 = $("#input-category");
 	select1.empty();
 	let row = "<option value='' selected>All</option>";
 	select1.append(row);
 	data = Array.from(new Set(data));
+	data.sort();
 
 	for (let i in data) {
 		let e = data[i];
@@ -194,7 +195,7 @@ function setDefaultDate(){
 function init() {
 	setDefaultDate();
 	getBrandsList();
-	getCategories();
+	getCategoriesList();
 	getSalesReport();
 	$("#apply-filter").click(getSalesReport);
     $("#download-tsv-sales-report").click(downloadSalesReport);
