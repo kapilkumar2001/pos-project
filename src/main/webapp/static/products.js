@@ -147,6 +147,7 @@ function displayProductList(data) {
 		tbody.append(row);
 		serialNumber+=1;
 	}
+
 	$("[data-toggle='tooltip']").tooltip()
 }
 

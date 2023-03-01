@@ -13,6 +13,12 @@ function getSalesReport() {
 	let category = $("#sales-report-form select[name=category]").val();
 	let startDate = $("#sales-report-form input[name=start-date]").val();
 	let endDate = $("#sales-report-form input[name=end-date]").val();
+
+	if(startDate>endDate) {
+		showError("Invalid Start Date or End Date");
+		return;
+	}
+
 	let url = getSalesReportUrl() + "/?startdate=" + startDate + "&enddate=" + endDate + "&brand=" + brand + "&category=" + category;
 
 	console.log(url);
@@ -58,6 +64,12 @@ function downloadSalesReport(){
 	let category = $("#sales-report-form select[name=category]").val();
 	let startDate = $("#sales-report-form input[name=start-date]").val();
 	let endDate = $("#sales-report-form input[name=end-date]").val();
+
+	if(startDate>endDate) {
+		showError("Invalid Start Date or End Date");
+		return;
+	}
+	
 	let url = getSalesReportUrl() + "/?startdate=" + startDate + "&enddate=" + endDate + "&brand=" + brand + "&category=" + category;
 	
 	$.ajax({

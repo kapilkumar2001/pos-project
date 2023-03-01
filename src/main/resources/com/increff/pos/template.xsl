@@ -26,24 +26,23 @@
                     </fo:block>
                     <fo:block>&#160;</fo:block>
 
-                    <fo:block font-size="12pt" font-weight="bold" text-align-last="justify">
-                    <fo:inline space-after="5mm">
-                        Order No. 
-                    </fo:inline> 
-                    <fo:leader leader-pattern="space" />
-                    <fo:inline space-after="5mm">
-                        Date and Time
-                    </fo:inline>
+                    <fo:block font-size="12pt" text-align-last="justify">
+                        <fo:inline font-weight="bold" space-after="5mm">
+                            Order No:  
+                        </fo:inline>
+                        <fo:inline space-after="5mm">
+                            <xsl:value-of select="orderId"/> 
+                        </fo:inline> 
+                        <fo:leader leader-pattern="space" />
+                        <fo:inline font-weight="bold" space-after="5mm">
+                            Created On
+                        </fo:inline>
                     </fo:block>
 
-                    <fo:block font-size="12pt" text-align-last="justify">
-                    <fo:inline space-after="5mm">
-                        <xsl:value-of select="orderId"/>
-                    </fo:inline>
-                    <fo:leader leader-pattern="space" />
-                    <fo:inline space-after="5mm">
-                        <xsl:value-of select="time"/>
-                    </fo:inline>
+                    <fo:block font-size="12pt" text-align="right">
+                        <fo:inline space-after="5mm">
+                            <xsl:value-of select="time"/>
+                        </fo:inline>
                     </fo:block>
                     
                     <fo:block>&#160;</fo:block>

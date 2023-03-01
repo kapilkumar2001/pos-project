@@ -3,6 +3,27 @@ function getPosDaySaleReportUrl() {
 	return baseUrl + "/api/posdaysales-report/";
 }
 
+function getPosDaySaleByFilter(){
+	let startDate = $("#posdaysales-report-form input[name=start-date]").val();
+	let endDate = $("#posdaysales-report-form input[name=end-date]").val();
+
+	if(startDate>endDate) {
+		showError("Invalid Start Date or End Date");
+		return;
+	}
+
+	let url = getPosDaySaleReportUrl() + "?startdate=" + startDate + "&enddate=" + endDate;
+
+	$.ajax({
+		url: url,
+		type: "GET",
+		success: function (data) {
+			displayPosDaySale(data);
+		},
+		error: handleAjaxError
+	});
+}
+
 function displayPosDaySale(data) {
 	let thead = $("#posdaysales-report-table").find("thead");
 	thead.empty();
@@ -25,25 +46,14 @@ function displayPosDaySale(data) {
 	}
 }
 
-function getPosDaySaleByFilter(){
-	let startDate = $("#posdaysales-report-form input[name=start-date]").val();
-	let endDate = $("#posdaysales-report-form input[name=end-date]").val();
-
-	let url = getPosDaySaleReportUrl() + "?startdate=" + startDate + "&enddate=" + endDate;
-
-	$.ajax({
-		url: url,
-		type: "GET",
-		success: function (data) {
-			displayPosDaySale(data);
-		},
-		error: handleAjaxError
-	});
-}
-
 function downloadPosDaySalesReport() {
 	let startDate = $("#posdaysales-report-form input[name=start-date]").val();
 	let endDate = $("#posdaysales-report-form input[name=end-date]").val();
+
+	if(startDate>endDate) {
+		showError("Invalid Start Date or End Date");
+		return;
+	}
 
 	let url = getPosDaySaleReportUrl() + "?startdate=" + startDate + "&enddate=" + endDate;
 

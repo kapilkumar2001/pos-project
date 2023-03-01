@@ -25,7 +25,22 @@ function displayBrands(data){
 	let tbody = $("#brand-report-table").find("tbody");
 	tbody.empty();
 	let serialNo = 1;
-	data = data.reverse();
+
+	data.sort((a, b) => {
+		if (a.brand < b.brand) {
+		  	return -1;
+		} else if (a.brand > b.brand) {
+		  	return 1;
+		} else {
+			if (a.category < b.category) {
+				return -1;
+			} else if (a.category > b.category) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+	});
 
 	for(let i in data){
 		let e = data[i];
@@ -39,14 +54,29 @@ function displayBrands(data){
 	}
 }
 
-function getBrandsReport(){
+function downloadBrandsReport(){
 	let url = getBrandsUrl();
 
 	$.ajax({
 		url: url,
 		type: "GET",
 		success: function(data) { 
-			data = data.reverse();
+			data.sort((a, b) => {
+				if (a.brand < b.brand) {
+					  return -1;
+				} else if (a.brand > b.brand) {
+					  return 1;
+				} else {
+					if (a.category < b.category) {
+						return -1;
+					} else if (a.category > b.category) {
+						return 1;
+					} else {
+						return 0;
+					}
+				}
+			});
+			
 			let headers = "Brand	Category\n"; 
 			let tsv = "";
 			tsv += headers
@@ -75,7 +105,7 @@ function getBrandsReport(){
 
 function init(){
 	getBrands()
-	$("#download-tsv-brands-report").click(getBrandsReport);
+	$("#download-tsv-brands-report").click(downloadBrandsReport);
 }
 
 $(document).ready(init);

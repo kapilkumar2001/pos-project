@@ -54,13 +54,16 @@ function showOrHidePassword() {
 	var input = $($(this).attr("toggle"));
 
 	if (input.attr("type") == "password") {
+    $(this).attr("data-original-title", "Hide");
   	input.attr("type", "text");
 	} else {
+    $(this).attr("data-original-title", "Show");
 	  input.attr("type", "password");
 	}
 }
 
 function init(){
+  $("[data-toggle='tooltip']").tooltip()
 	$("#signup-button").click(signUp);
   $(".toggle-password").click(showOrHidePassword);
 }

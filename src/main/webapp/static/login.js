@@ -30,15 +30,18 @@ function login(){
 function showOrHidePassword() {
 	$(this).toggleClass("fa-eye fa-eye-slash");
 	var input = $($(this).attr("toggle"));
-  
+
 	if (input.attr("type") == "password") {
+		$(this).attr('data-original-title', 'Hide');
 	  	input.attr("type", "text");
 	} else {
+		$(this).attr('data-original-title', 'Show');
 	  	input.attr("type", "password");
 	}
 }
 
 function init(){
+	$("[data-toggle='tooltip']").tooltip()
 	$("#login-button").click(login);
 	$(".toggle-password").click(showOrHidePassword);
 }
