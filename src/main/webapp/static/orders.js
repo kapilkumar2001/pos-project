@@ -286,22 +286,22 @@ function createOrderEditOrSaveItem(tmpId) {
 		currentSellingPrice = $("#order-list-form input[name=selling-price" + tmpId + "]").val();
 		currentBarcode = $("#order-list-form input[name=barcode" + tmpId + "]").val();
 
-		if(currentQuantity==="" || currentSellingPrice==="") {
+		if(currentQuantity === "" || currentSellingPrice === "") {
 			showError("Please fill all the fields!");
 		    return;
 		}
 
-		if(currentQuantity<=0){
+		if(currentQuantity <= 0){
 			showError("Quantity should be greater than 0");
 			return;
 		}
 	
-		if(currentQuantity%1 !== 0){
+		if(currentQuantity % 1 !== 0){
 			showError("Quantity should be a integer value");
 			return;
 		}
 
-		if(currentSellingPrice<0){
+		if(currentSellingPrice < 0){
 			showError("Selling Price should be greater than or equal to 0");
 			return;
 		}
@@ -350,12 +350,12 @@ function editOrderEditOrSaveItem(tmpId) {
 		currentSellingPrice = $("#edit-order-list-form input[name=selling-price" + tmpId + "]").val();
 		currentBarcode = $("#edit-order-list-form input[name=barcode" + tmpId + "]").val();
 
-		if(currentQuantity==="" || currentSellingPrice==="") {
+		if(currentQuantity === "" || currentSellingPrice === "") {
 			showError("Please fill all the fields!");
 		    return;
 		}
 
-		if(currentQuantity<=0){
+		if(currentQuantity <= 0){
 			showError("Quantity should be greater than 0");
 			return;
 		}
@@ -365,7 +365,7 @@ function editOrderEditOrSaveItem(tmpId) {
 			return;
 		}
 	
-		if(currentSellingPrice<0){
+		if(currentSellingPrice < 0){
 			showError("Selling Price should be greater than or equal to 0");
 			return;
 		}
@@ -416,8 +416,10 @@ function deleteItem(tmpId, barcode, sellingPrice) {
 function displayBarcodesList(data) {
 	let select = $("#add-order-item-form select[name=barcode]");
 	select.empty();
+
 	let row = "<option value='' disabled selected class='d-none'>Select Barcode</option>";
 	select.append(row);
+
 	data = Array.from(new Set(data));
 	data.sort(function(a, b){return a.barcode-b.barcode});
     
@@ -661,6 +663,7 @@ function cancelCreate() {
 function getInvoice(id) {
 	let url = getInvoiceUrl() + "/" + id;
 	window.open(url, "_blank");
+
 	getOrdersList();
 }
 
