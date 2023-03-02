@@ -140,47 +140,6 @@ public class productDtoTest extends AbstractUnitTest{
     }
 
     @Test
-    public void testDelete() throws ApiException{
-        BrandForm brandForm = new BrandForm();
-        brandForm.setBrand("test brand 1");
-        brandForm.setCategory("test category 1");
-        brandDto.add(brandForm);
-
-        List<BrandPojo> brandPojos = brandDao.selectAll();
-
-        ProductForm productForm = new ProductForm();
-        productForm.setBarcode("testb1");
-        productForm.setBrand("test brand 1");
-        productForm.setCategory("test category 1");
-        productForm.setMrp("55.55");
-        productForm.setName("test product 1");
-        productDto.add(productForm);
-
-        productForm = new ProductForm();
-        productForm.setBarcode("testb2");
-        productForm.setBrand("test brand 1");
-        productForm.setCategory("test category 1");
-        productForm.setMrp("55.55");
-        productForm.setName("test product 2");
-        productDto.add(productForm);
-        
-        List<ProductData> productDataList = productDto.getAll();
-
-        assertEquals(2, productDataList.size());
-
-        int i = 1;
-        for(ProductData productData: productDataList){
-            assertEquals("testb"+i, productData.getBarcode());
-            assertEquals("test brand 1", productData.getBrand());
-            assertEquals("test category 1", productData.getCategory());
-            assertEquals("test product "+i, productData.getName());
-            assertEquals(brandPojos.get(0).getId(), productData.getBrandId());
-            assertEquals(55.55, productData.getMrp(), 0);
-            i++;
-        }
-    }
-
-    @Test
     public void testUpdate() throws ApiException{
         BrandForm brandForm = new BrandForm();
         brandForm.setBrand("test brand 1");
@@ -223,5 +182,37 @@ public class productDtoTest extends AbstractUnitTest{
         assertEquals("updated test product 1", productData.getName());
         assertEquals(brandPojos.get(0).getId(), productData.getBrandId());
         assertEquals(65.56, productData.getMrp(), 0);
+    }
+
+    @Test
+    public void testGetByBarcode() throws ApiException{
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("test brand 1");
+        brandForm.setCategory("test category 1");
+        brandDto.add(brandForm);
+
+        brandForm = new BrandForm();
+        brandForm.setBrand("test brand 2");
+        brandForm.setCategory("test category 2");
+        brandDto.add(brandForm);
+
+        ProductForm productForm = new ProductForm();
+        productForm.setBarcode("testb1");
+        productForm.setBrand("test brand 1");
+        productForm.setCategory("test category 1");
+        productForm.setMrp("55.55");
+        productForm.setName("test product 1");
+        productDto.add(productForm);
+
+        productForm = new ProductForm();
+        productForm.setBarcode("testb2");
+        productForm.setBrand("test brand 1");
+        productForm.setCategory("test category 1");
+        productForm.setMrp("55.55");
+        productForm.setName("test product 2");
+        productDto.add(productForm);
+
+        ProductData productData = productDto.getByBarcode("testb1");
+        assertEquals("test product 1", productData.getName());
     }
 }

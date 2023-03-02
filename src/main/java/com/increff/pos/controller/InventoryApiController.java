@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
-@RequestMapping("/api/inventory")//todo check this
+@RequestMapping("/api/inventory")
 public class InventoryApiController {
 
     @Autowired
@@ -31,7 +31,6 @@ public class InventoryApiController {
 
 	@ApiOperation(value = "Gets inventory by barcode")
 	@RequestMapping(path = "{barcode}", method = RequestMethod.GET)
-    // todo check this @GetMapping(path = "{barcode}")
 	public InventoryData get(@PathVariable String barcode) throws ApiException{
 		return dto.get(barcode);
 	}

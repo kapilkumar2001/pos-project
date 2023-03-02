@@ -10,12 +10,12 @@ import org.springframework.context.annotation.PropertySources;
 import com.increff.pos.spring.SpringConfig;
 
 @Configuration
-@ComponentScan(//
-		basePackages = { "com.increff.pos" }, //
-		excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = { SpringConfig.class })//
+@ComponentScan(
+	basePackages = { "com.increff.pos" }, 
+	excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = { SpringConfig.class })
 )
-@PropertySources({ //
-		@PropertySource(value = "classpath:./com/increff/pos/test.properties", ignoreResourceNotFound = true) //
+@PropertySources({ 
+	@PropertySource(value = "classpath:./com/increff/pos/test.properties", ignoreResourceNotFound = true)
 })
 public class QaConfig {
 

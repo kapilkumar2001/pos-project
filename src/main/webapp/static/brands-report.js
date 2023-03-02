@@ -7,12 +7,12 @@ function getBrands(){
 	let url = getBrandsUrl();
 
 	$.ajax({
-    url: url,
-    type: "GET",
-    success: function(data) {
-      displayBrands(data);  
-    },
-    error: handleAjaxError
+		url: url,
+		type: "GET",
+		success: function(data) {
+			displayBrands(data);  
+		},
+		error: handleAjaxError
 	});
 }
 
@@ -25,57 +25,87 @@ function displayBrands(data){
 	let tbody = $("#brand-report-table").find("tbody");
 	tbody.empty();
 	let serialNo = 1;
-	data = data.reverse();
+
+	data.sort((a, b) => {
+		if (a.brand < b.brand) {
+		  	return -1;
+		} else if (a.brand > b.brand) {
+		  	return 1;
+		} else {
+			if (a.category < b.category) {
+				return -1;
+			} else if (a.category > b.category) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+	});
 
 	for(let i in data){
 		let e = data[i];
 		let row = "<tr>"
-		+ "<td>" + serialNo + "</td>"
-		+ "<td>" + e.brand + "</td>"
-		+ "<td>"  + e.category + "</td>"
-		+ "</tr>";
-    tbody.append(row);
+			+ "<td>" + serialNo + "</td>"
+			+ "<td>" + e.brand + "</td>"
+			+ "<td>"  + e.category + "</td>"
+			+ "</tr>";
+        tbody.append(row);
 		serialNo+=1;
 	}
 }
 
-function getBrandsReport(){
+function downloadBrandsReport(){
 	let url = getBrandsUrl();
 
 	$.ajax({
-	  url: url,
-	  type: "GET",
-	  success: function(data) { 
-		  data = data.reverse();
-      let headers = "Brand	Category\n"; 
-      let tsv = "";
-      tsv += headers
+		url: url,
+		type: "GET",
+		success: function(data) { 
+			data.sort((a, b) => {
+				if (a.brand < b.brand) {
+					return -1;
+				} else if (a.brand > b.brand) {
+					return 1;
+				} else {
+					if (a.category < b.category) {
+						return -1;
+					} else if (a.category > b.category) {
+						return 1;
+					} else {
+						return 0;
+					}
+				}
+			});
 
-      for(row of data){
-        tsv+=(row.brand + "	" + row.category);
-        tsv+="\n";
-      }  
+			let headers = "Brand	Category\n"; 
+			let tsv = "";
+			tsv += headers
 
-      const date = new Date();
-      let day = date.getDate();
-      let month = date.getMonth() + 1;
-      let year = date.getFullYear();
-      let currentDate = `${day}-${month}-${year}`;
+			for(row of data){
+				tsv+=(row.brand + "	" + row.category);
+				tsv+="\n";
+			}  
 
-      let hiddenElement = document.createElement("a");  
-      hiddenElement.href = "data:text/tsv;charset=utf-8," + encodeURI(tsv);  
-      hiddenElement.target = "_blank";  
-      hiddenElement.download = "brands-report-" + currentDate + ".tsv";  
-      hiddenElement.click();  
-		  hiddenElement.remove();
-	  },
-	  error: handleAjaxError
+			const date = new Date();
+			let day = date.getDate();
+			let month = date.getMonth() + 1;
+			let year = date.getFullYear();
+			let currentDate = `${day}-${month}-${year}`;
+
+			let hiddenElement = document.createElement("a");  
+			hiddenElement.href = "data:text/tsv;charset=utf-8," + encodeURI(tsv);  
+			hiddenElement.target = "_blank";  
+			hiddenElement.download = "brands-report-" + currentDate + ".tsv";  
+			hiddenElement.click();  
+			hiddenElement.remove();
+		},
+		error: handleAjaxError
 	});
 }
 
 function init(){
-  getBrands()
-  $("#download-tsv-brands-report").click(getBrandsReport);
+	getBrands()
+	$("#download-tsv-brands-report").click(downloadBrandsReport);
 }
 
 $(document).ready(init);

@@ -3,6 +3,27 @@ function getPosDaySaleReportUrl() {
 	return baseUrl + "/api/posdaysales-report/";
 }
 
+function getPosDaySaleByFilter(){
+	let startDate = $("#posdaysales-report-form input[name=start-date]").val();
+	let endDate = $("#posdaysales-report-form input[name=end-date]").val();
+
+	if(startDate>endDate) {
+		showError("Invalid Start Date or End Date");
+		return;
+	}
+
+	let url = getPosDaySaleReportUrl() + "?startdate=" + startDate + "&enddate=" + endDate;
+
+	$.ajax({
+		url: url,
+		type: "GET",
+		success: function (data) {
+			displayPosDaySale(data);
+		},
+		error: handleAjaxError
+	});
+}
+
 function displayPosDaySale(data) {
 	let thead = $("#posdaysales-report-table").find("thead");
 	thead.empty();
@@ -25,25 +46,14 @@ function displayPosDaySale(data) {
 	}
 }
 
-function getPosDaySaleByFilter(){
-	let startDate = $("#posdaysales-report-form input[name=startDate]").val();
-	let endDate = $("#posdaysales-report-form input[name=endDate]").val();
-
-	let url = getPosDaySaleReportUrl() + "?startdate=" + startDate + "&enddate=" + endDate;
-
-	$.ajax({
-		url: url,
-		type: "GET",
-		success: function (data) {
-			displayPosDaySale(data);
-		},
-		error: handleAjaxError
-	});
-}
-
 function downloadPosDaySalesReport() {
-	let startDate = $("#posdaysales-report-form input[name=startDate]").val();
-	let endDate = $("#posdaysales-report-form input[name=endDate]").val();
+	let startDate = $("#posdaysales-report-form input[name=start-date]").val();
+	let endDate = $("#posdaysales-report-form input[name=end-date]").val();
+
+	if(startDate>endDate) {
+		showError("Invalid Start Date or End Date");
+		return;
+	}
 
 	let url = getPosDaySaleReportUrl() + "?startdate=" + startDate + "&enddate=" + endDate;
 
@@ -76,21 +86,21 @@ function getDefaultDate(){
 	let year = date.getFullYear();
 
 	if (month < 10)  
-    month = "0" + month;
+    	month = "0" + month;
 
 	if (day < 10) 
-    day = "0" + day;
+    	day = "0" + day;
 
 	let today = year + "-" + month + "-" + day;      
-	document.getElementById("input-pos-end-date").setAttribute("max", today);
-	document.getElementById("input-pos-end-date").value = today;
+	$("#posdaysales-report-form input[name=end-date]").attr("max", today);
+	$("#posdaysales-report-form input[name=end-date]").val(today);
 
 	// one month before today
 	let m = date.getMonth()+1;
 	date.setMonth(date.getMonth());
 
 	if (date.getMonth() === m) 
-    date.setDate(0);
+   		date.setDate(0);
 
 	date.setHours(0, 0, 0, 0);
 	day = date.getDate();
@@ -98,21 +108,21 @@ function getDefaultDate(){
 	year = date.getFullYear();
 
 	if (month < 10) 
-    month = "0" + month;
+    	month = "0" + month;
 
 	if (day < 10) 
-    day = "0" + day;
+    	day = "0" + day;
 
 	let monthAgo = year + "-" + month + "-" + day;      
-	document.getElementById("input-pos-start-date").setAttribute("max", today);
-	document.getElementById("input-pos-start-date").value = monthAgo;
+	$("#posdaysales-report-form input[name=start-date]").attr("max", today);
+	$("#posdaysales-report-form input[name=start-date]").val(monthAgo);
 }
 
 function init() {
 	getDefaultDate();
-  getPosDaySaleByFilter();
+  	getPosDaySaleByFilter();
 	$("#apply-filter").click(getPosDaySaleByFilter);
-  $("#download-tsv-posdaysales-report").click(downloadPosDaySalesReport);
+ 	$("#download-tsv-posdaysales-report").click(downloadPosDaySalesReport);
 }
 
 $(document).ready(init);

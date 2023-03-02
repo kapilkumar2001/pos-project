@@ -22,12 +22,6 @@ public class PosDaySalesController {
     @Autowired
     private PosDaySalesDto dto;
     
-    @ApiOperation(value = "Gets list of every day sales")
-	@RequestMapping(path = "/api/posdaysales-report", method = RequestMethod.GET)
-	public List<PosDaySalesData> getAll() throws ApiException {
-		return dto.getAllDaySale();
-	}
-
 	@ApiOperation(value = "Gets day sales data by date range")
     @RequestMapping(path = "/api/posdaysales-report/", method = RequestMethod.GET)
     public List<PosDaySalesData> get(

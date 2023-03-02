@@ -25,7 +25,22 @@ function displayInventory(data) {
 	let tbody = $("#inventory-report-table").find("tbody");
 	tbody.empty();
     let tmp = 1;
-	data = data.reverse();
+	
+	data.sort((a, b) => {
+		if (a.brand < b.brand) {
+		  	return -1;
+		} else if (a.brand > b.brand) {
+		  	return 1;
+		} else {
+			if (a.category < b.category) {
+				return -1;
+			} else if (a.category > b.category) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+	});
 
 	for (let i in data) {
 		let e = data[i];
@@ -40,14 +55,30 @@ function displayInventory(data) {
 	}
 }
 
-function getInventoryReport() {
+function downloadInventoryReport() {
 	let url = getInventoryReportUrl();
 
 	$.ajax({
 		url: url,
 		type: "GET",
 		success: function (data) {
-			data = data.reverse();
+			
+			data.sort((a, b) => {
+				if (a.brand < b.brand) {
+					  return -1;
+				} else if (a.brand > b.brand) {
+					  return 1;
+				} else {
+					if (a.category < b.category) {
+						return -1;
+					} else if (a.category > b.category) {
+						return 1;
+					} else {
+						return 0;
+					}
+				}
+			});
+
 			let tsv = "Brand	Category	Quantity\n"; 
 
 			for(row of data){
@@ -74,7 +105,7 @@ function getInventoryReport() {
 
 function init() {
 	getInventory();
-  $("#download-tsv-inventory-report").click(getInventoryReport);
+    $("#download-tsv-inventory-report").click(downloadInventoryReport);
 }
 
 $(document).ready(init);

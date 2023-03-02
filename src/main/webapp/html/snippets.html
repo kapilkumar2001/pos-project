@@ -39,7 +39,7 @@
       <li class="nav-item">
         <a class="nav-link" th:href="@{/ui/orders}">Orders</a>
       </li>
-      <li class="nav-item dropdown" onmouseover="showNavbarDropdownMenu()" onmouseout="hideNavbarDropdownMenu()">
+      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Reports
         </a>
@@ -52,19 +52,11 @@
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item dropdown pe-auto">
-        <a
-          class="nav-link dropdown-toggle"
-          role="button"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           [[${info.getEmail()}]]
         </a>
-        <div
-          class="dropdown-menu"
-          aria-labelledby="navbarDropdown"
-          id="navbarDropdownMenu">
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="navbarDropdownMenu">
           <a class="dropdown-item" th:href="@{/session/logout}">Logout</a>
         </div>
       </li>

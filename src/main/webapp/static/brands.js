@@ -5,8 +5,8 @@ function getBrandsUrl(){
 
 function addBrand(){
 	if(($("#brand-form input[name=brand]").val()==="") || ($("#brand-form input[name=category]").val()==="")){
-    showError("Please fill all the fields");
-    return;
+		showError("Please fill all the fields");
+		return;
 	}
 
 	let form = $("#brand-form");
@@ -14,20 +14,20 @@ function addBrand(){
 	let url = getBrandsUrl();
 
 	$.ajax({
-    url: url,
-    type: "POST",
-    data: json,
-    headers: {
-        "Content-Type": "application/json"
-      },	   
-    success: function(response) {
-    showSuccess("Brand added succesfully!");
-      getBrandsList();  
-    $("#brand-form input[name=brand]").val("");
-    $("#brand-form input[name=category]").val("");
-    $("#add-brand-modal").modal("hide");
-    },
-    error: handleAjaxError
+		url: url,
+		type: "POST",
+		data: json,
+		headers: {
+			"Content-Type": "application/json"
+		},	   
+		success: function(response) {
+			showSuccess("Brand added succesfully!");
+			getBrandsList();  
+			$("#brand-form input[name=brand]").val("");
+			$("#brand-form input[name=category]").val("");
+			$("#add-brand-modal").modal("hide");
+		},
+		error: handleAjaxError
 	});
 }
 
@@ -35,7 +35,7 @@ function updateBrand(){
 	if(($("#brand-edit-form input[name=brand]").val()==="") || ($("#brand-edit-form input[name=category]").val()==="")){
 		showError("Please fill all the fields");
 		return;
-  }
+    }
 
 	let id = $("#brand-edit-form input[name=id]").val();	
 	let url = getBrandsUrl() + "/" + id;
@@ -43,18 +43,18 @@ function updateBrand(){
 	let json = toJson(form);
 
 	$.ajax({
-	  url: url,
-	  type: "PUT",
-	  data: json,
-	  headers: {
-      "Content-Type": "application/json"
-    },	   
-	  success: function(response) {
-		  showSuccess("Brand updated succesfully!");
-	   	getBrandsList();  
+		url: url,
+		type: "PUT",
+		data: json,
+		headers: {
+			"Content-Type": "application/json"
+        },	   
+	    success: function(response) {
+		  	showSuccess("Brand updated succesfully!");
+	   		getBrandsList();  
 			$("#edit-brand-modal").modal("hide");
-	  },
-	  error: handleAjaxError
+	 	},
+	    error: handleAjaxError
 	});
 }
 
@@ -62,12 +62,12 @@ function getBrandsList(){
 	let url = getBrandsUrl();
 
 	$.ajax({
-	  url: url,
-	  type: "GET",
-	  success: function(data) {
-	  	displayBrandsList(data);  
-	  },
-	  error: handleAjaxError
+		url: url,
+		type: "GET",
+		success: function(data) {
+			displayBrandsList(data);  
+		},
+		error: handleAjaxError
 	});
 }
 
@@ -92,15 +92,18 @@ function displayBrandsList(data){
 	for(let i in data){
 		let e = data[i];
 		let buttonHtml = "";
+
 		if(userRole==="supervisor"){
 			buttonHtml += "<button onclick='displayEditBrand(" + e.id + ")' class='border-0 bg-transparent' data-toggle='tooltip' data-placement='bottom' title='Edit'><i class='far fa-edit text-dark'></i></button>"
 		} 
+
 		let row = "<tr>"
 		+ "<td>" + serialNumber + "</td>"
 		+ "<td>" + e.brand + "</td>"
 		+ "<td>"  + e.category + "</td>"
 		+ "<td class='text-center'>" + buttonHtml + "</td>"
 		+ "</tr>";
+
 		tbody.append(row);
 		serialNumber+=1;
 	}
@@ -111,12 +114,12 @@ function displayEditBrand(id){
 	let url = getBrandsUrl() + "/" + id;
 
 	$.ajax({
-    url: url,
-    type: "GET",
-    success: function(data) {
-      displayBrand(data);   
-    },
-    error: handleAjaxError
+		url: url,
+		type: "GET",
+		success: function(data) {
+		displayBrand(data);   
+		},
+		error: handleAjaxError
 	});	
 }
 
@@ -141,12 +144,12 @@ function processData(){
 	processCount = 0;
 	fileData = [];
 	errorData = [];
-	$("#download-errors").remove();
+	
 	let file = $("#brands-file")[0].files[0];
 
-  if($("#brands-file")[0].files.length===0){
-    showError("Please Choose File");
-    return;
+    if($("#brands-file")[0].files.length===0){
+		showError("Please Choose File");
+		return;
 	}
 
 	readFileData(file, readFileDataCallback);
@@ -155,8 +158,13 @@ function processData(){
 function readFileDataCallback(results){
 	fileData = results.data;
 
-	if(fileData[0].brand===undefined || fileData[0].category===undefined){
-		showError("Invalid file");
+	if((results.meta.fields.length !== 2) || (results.meta.fields[0] !== "brand") || (results.meta.fields[1] !== "category")) {
+		showError("Invalid File");
+		return;
+	}
+
+	if(fileData.length === 0) {
+		showError("File is Empty");
 		return;
 	}
 
@@ -165,9 +173,9 @@ function readFileDataCallback(results){
 		return;
 	}
 
-	if($("#upload-modal-data-row").length==0){
+	if($("#upload-modal-data-row").length === 0){
 		let modalbody = $("#upload-brands-modal").find(".modal-body");
-		let row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
+		let row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"row-count\">0</span>, Processed: <span id=\"process-count\">0</span>, Errors: <span id=\"error-count\">0</span></p>";
 		modalbody.append(row);
 	}
 
@@ -198,20 +206,20 @@ function uploadRows(){
 	let url = getBrandsUrl();
 
 	$.ajax({
-    url: url,
-    type: "POST",
-    data: json,
-    headers: {
-      "Content-Type": "application/json"
-      },	   
-    success: function(response) {
-      uploadRows();  
-    },
-    error: function(response){
-      row.error=response.responseJSON["message"];
-      errorData.push(row);
-      uploadRows();
-    }
+		url: url,
+		type: "POST",
+		data: json,
+		headers: {
+			"Content-Type": "application/json"
+		},	   
+		success: function(response) {
+			uploadRows();  
+		},
+		error: function(response){
+			row.error=response.responseJSON["message"];
+			errorData.push(row);
+			uploadRows();
+		}
 	});
 }
 
@@ -233,15 +241,18 @@ function resetUploadDialog(){
 }
 
 function updateUploadDialog(){
-	$("#rowCount").html("" + fileData.length);
-	$("#processCount").html("" + processCount);
-	$("#errorCount").html("" + errorData.length);
+	$("#row-count").html("" + fileData.length);
+	$("#process-count").html("" + processCount);
+	$("#error-count").html("" + errorData.length);
 }
 
 function updateFileName(){
 	let file = $("#brands-file");
 	let fileName = file.val().split("\\")[2];
 	$("#brands-file-name").html(fileName);
+
+	$("#download-errors").remove();
+	$("#upload-modal-data-row").remove();
 }
 
 function displayUploadData(){

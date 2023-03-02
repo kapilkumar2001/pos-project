@@ -10,10 +10,10 @@ function getBrandsUrl() {
 
 function addProduct(event) {
 	if(($("#product-form input[name=name]").val()==="") || ($("#product-form input[name=mrp]").val()==="") || 
-	  ($("#product-form input[name=barcode]").val()==="") || (document.getElementById("input-brand").selectedIndex === 0) || 
-		(document.getElementById("input-category").selectedIndex === 0)){
-      showError("Please fill all the fields");
-      return;
+	    ($("#product-form input[name=barcode]").val()==="") || ($("#product-form select[name=brand]").prop("selectedIndex") === 0) || 
+	    ($("#product-form select[name=category]").prop("selectedIndex") === 0)){
+			showError("Please fill all the fields");
+			return;
 	}
 
 	let form = $("#product-form");
@@ -33,10 +33,10 @@ function addProduct(event) {
 			$("#product-form input[name=name]").val("");
 			$("#product-form input[name=mrp]").val("");
 			$("#product-form input[name=barcode]").val("");
-			document.getElementById("input-brand").selectedIndex = 0;
-			document.getElementById("input-brand").innerHTML = "<option value='' disabled selected class='d-none'>Please Choose Brand</option>";
-			document.getElementById("input-category").selectedIndex = 0;
-			document.getElementById("input-category").innerHTML = "<option value='' disabled selected class='d-none'>Select Brand First</option>";
+		    $("#product-form select[name=brand]").prop("selectedIndex", 0);
+			$("#product-form select[name=brand]").html("<option value='' disabled selected class='d-none'>Please Choose Brand</option>");
+			$("#product-form select[name=category]").prop("selectedIndex", 0);
+			$("#product-form select[name=category]").html("<option value='' disabled selected class='d-none'>Select Brand First</option>");
 			$("#add-product-modal").modal("hide");
 		},
 		error: handleAjaxError
@@ -147,6 +147,7 @@ function displayProductList(data) {
 		tbody.append(row);
 		serialNumber+=1;
 	}
+
 	$("[data-toggle='tooltip']").tooltip()
 }
 
@@ -156,6 +157,7 @@ function displayBrandList(data) {
 	let row = "<option value='' disabled selected class='d-none'>Please Choose Brand</option>";
 	select.append(row);
 	data = Array.from(new Set(data));
+	data.sort();
 
 	for (let i in data) {
 		let e = data[i];
@@ -169,6 +171,7 @@ function displayCategoryList(data) {
 	select1.empty();
 	let row = "<option value='' disabled selected class='d-none'>Please Choose</option>";
 	select1.append(row);
+	data.sort();
 
 	for (let i in data) {
 		let e = data[i];
@@ -196,7 +199,7 @@ function displayProduct(data) {
 	$("#product-edit-form input[name=category]").val(data.category);
 	$("#product-edit-form input[name=brand]").val(data.brand);
 	$("#product-edit-form input[name=id]").val(data.id);
-	document.getElementById("edit-product-modal-title").innerHTML = ("Edit Product <span class=\"badge badge-secondary p-2 ml-2\">" + data.barcode + "</span>");
+	$("#edit-product-modal-title").html("Edit Product <span class=\"badge badge-secondary p-2 ml-2\">" + data.barcode + "</span>");
 	$("#edit-product-modal").modal("toggle");
 }
 
@@ -215,8 +218,7 @@ function processData() {
 	processCount = 0;
 	fileData = [];
 	errorData = [];
-	$("#download-errors").remove();
-
+	
 	let file = $("#product-file")[0].files[0];
 
 	if($("#product-file")[0].files.length===0){
@@ -230,8 +232,13 @@ function processData() {
 function readFileDataCallback(results) {
 	fileData = results.data;
 
-	if(fileData[0].barcode===undefined || fileData[0].brand===undefined || fileData[0].category===undefined || fileData[0].name===undefined || fileData[0].mrp===undefined){
-		showError("Invalid file");
+	if((results.meta.fields.length !== 5) || (results.meta.fields[0] !== "barcode") || (results.meta.fields[1] !== "brand") || (results.meta.fields[2] !== "category") || (results.meta.fields[3] !== "name") || (results.meta.fields[4] !== "mrp")) {
+		showError("Invalid File");
+		return;
+	}
+
+	if(fileData.length === 0) {
+		showError("File is Empty");
 		return;
 	}
 
@@ -240,9 +247,9 @@ function readFileDataCallback(results) {
 		return;
 	}
 
-	if($("#upload-modal-data-row").length===0){
+	if($("#upload-modal-data-row").length === 0){
 		let modalbody = $("#upload-product-modal").find(".modal-body");
-		let row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"rowCount\">0</span>, Processed: <span id=\"processCount\">0</span>, Errors: <span id=\"errorCount\">0</span></p>";
+		let row = "<p id=\"upload-modal-data-row\"> Rows: <span id=\"row-count\">0</span>, Processed: <span id=\"process-count\">0</span>, Errors: <span id=\"error-count\">0</span></p>";
 		modalbody.append(row);
 	}
 
@@ -308,15 +315,18 @@ function resetUploadDialog() {
 }
 
 function updateUploadDialog() {
-	$("#rowCount").html("" + fileData.length);
-	$("#processCount").html("" + processCount);
-	$("#errorCount").html("" + errorData.length);
+	$("#row-count").html("" + fileData.length);
+	$("#process-count").html("" + processCount);
+	$("#error-count").html("" + errorData.length);
 }
 
 function updateFileName() {
 	let file = $("#product-file");
 	let fileName = file.val().split("\\")[2];
 	$("#product-file-name").html(fileName);
+
+	$("#download-errors").remove();
+	$("#upload-modal-data-row").remove();
 }
 
 function displayUploadData() {

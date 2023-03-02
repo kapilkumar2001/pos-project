@@ -64,16 +64,6 @@ public class PosDaySalesDto {
     }
 
     @Transactional
-    public List<PosDaySalesData> getAllDaySale(){
-        List<PosDaySalesData> posDaySalesDataList = new ArrayList<>();
-        List<PosDaySalesPojo> posDaySalesPojoList = api.getAll();
-        for(PosDaySalesPojo posDaySalesPojo: posDaySalesPojoList){
-            posDaySalesDataList.add(PosDaySalesHelper.convert(posDaySalesPojo));
-        }    
-        return posDaySalesDataList;
-    }
-
-    @Transactional
     public List<PosDaySalesData> getDaySale(String startDate, String endDate){
         List<PosDaySalesData> posDaySalesDataList = new ArrayList<>();
 
