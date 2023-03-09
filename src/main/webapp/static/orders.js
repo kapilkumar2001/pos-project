@@ -156,7 +156,7 @@ function getProductsList() {
 function displayOrdersList(data) {
 	let thead = $("#order-table").find("thead");
 	thead.empty();
-	let header = "<tr> <th scope='col' class='text-center'>Order ID</th> <th scope='col' class='text-center'>Created At</th> <th scope='col' class='text-center'>Updated At</th> <th scope='col' class='text-center'>Status</th> <th scope='col' class='text-center'>Actions</th> </tr>";
+	let header = "<tr> <th scope='col'>Order ID</th> <th scope='col' class='text-center'>Created At</th> <th scope='col' class='text-center'>Updated At</th> <th scope='col' class='text-center'>Status</th> <th scope='col' class='text-center'>Actions</th> </tr>";
 	thead.append(header);
 
 	let tbody = $("#order-table").find("tbody");
@@ -179,10 +179,10 @@ function displayOrdersList(data) {
 		else {
 			status = "<span class='badge badge-warning text-dark'>Created</span>";
 			buttonHtml += "<button onclick='editOrder(" + e.id + ")' class='border-0 mr-4 bg-transparent' data-toggle='tooltip' data-placement='bottom' title='Edit' id='edit-order" + e.id + "'><i class='far fa-edit text-dark'></i></button>"
-			buttonHtml += "<button onclick='generateInvoice(" + e.id + ")' class='border-0 bg-transparent' data-toggle='tooltip' data-placement='bottom' title='Generate Invoice'><i class='fa fa-file-text text-dark'></i></button>"
+			buttonHtml += "<button onclick='generateInvoice(" + e.id + ")' class='border-0 bg-transparent' data-toggle='tooltip' data-placement='bottom' title='Generate Invoice'><i class='fa fa-file-text-o text-dark'></i></button>"
 		}
 		let row = "<tr>"
-			+ "<td class='text-center'>" + e.id + "</td>"
+			+ "<td>" + e.id + "</td>"
 			+ "<td class='text-center'>" + e.createdAt + "</td>"
 			+ "<td class='text-center'>" + e.updatedAt + "</td>"
 			+ "<td class='text-center'>" + status + "</td>"
@@ -190,7 +190,7 @@ function displayOrdersList(data) {
 			+ "</tr>";
 		tbody.append(row);
 	}
-	$("[data-toggle='tooltip']").tooltip()
+	$("[data-toggle='tooltip']").tooltip({trigger : "hover"})
 }
 
 // Create Order - Add items to the order list 
