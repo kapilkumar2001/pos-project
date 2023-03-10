@@ -35,14 +35,11 @@
 		<jetty.http.port>9000</jetty.http.port>
 		<jetty.context>/pos</jetty.context>
 		<failOnMissingWebXml>false</failOnMissingWebXml>
-
-
 	</properties>
 
 	<dependencies>
 
 		<!-- SPRING -->
-		
 		<dependency>
     		<groupId>org.springframework</groupId>
 		    <artifactId>spring-context</artifactId>
@@ -68,12 +65,12 @@
 			<artifactId>spring-security-config</artifactId>
 			<version>4.2.13.RELEASE</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
 			<version>4.2.13.RELEASE</version>
 		</dependency>
-
 
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-orm -->
 		<dependency>
@@ -82,13 +79,13 @@
 			<version>${spring.version}</version>
 		</dependency>
 
-
 		<!-- Using Swagger for REST API documentation -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
 			<version>${swagger.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
@@ -139,13 +136,13 @@
 			<artifactId>commons-dbcp</artifactId>
 			<version>1.4</version>
 		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.6</version>
 		</dependency>
-
 
 		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
 		<dependency>
@@ -176,7 +173,6 @@
 			<version>${h2.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 
 		<!-- Provided -->
 		<dependency>
@@ -224,8 +220,6 @@
 			<version>1.18.26</version>
 			<scope>provided</scope>
 		</dependency>
-
-
 	</dependencies>
 
 	<build>
@@ -252,7 +246,6 @@
 					</webApp>
 				</configuration>
 			</plugin>
-
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -282,16 +275,12 @@
 			</plugin>
 			
 			<plugin>
-    				<groupId>org.apache.maven.plugins</groupId>
-    				<artifactId>maven-war-plugin</artifactId>
-    				<version>3.3.1</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.3.1</version>
 			</plugin>			
-
 		</plugins>
-
-
 	</build>
-
 
 	<reporting>
 		<plugins>
@@ -304,9 +293,6 @@
 				</configuration>
 			</plugin>
 			
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-jxr-plugin</artifactId> 
-				<version>3.0.0</version> </plugin> -->
 		</plugins>
 	</reporting>
-
 </project>

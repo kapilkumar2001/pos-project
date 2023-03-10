@@ -8,9 +8,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-/*
-https://stackoverflow.com/questions/4664893/how-to-manually-set-an-authenticated-user-in-spring-security-springmvc
-*/
 public class SecurityUtil {
 
 	public static void createContext(HttpSession session) {
@@ -30,5 +27,4 @@ public class SecurityUtil {
 		Authentication token = getAuthentication();
 		return Objects.isNull(token) ? null : (UserPrincipal) getAuthentication().getPrincipal();
 	}
-
 }
